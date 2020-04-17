@@ -1,0 +1,451 @@
+2020-03-30 Monday 21:49:07 Functions.py[line:55] INFO ###FindOR program starts running###
+2020-03-30 Monday 21:49:07 Functions.py[line:27] INFO function platform_info() is running
+2020-03-30 Monday 21:49:07 Functions.py[line:31] INFO platform_info use 0.003 seconds
+2020-03-30 Monday 21:49:07 Functions.py[line:27] INFO function proc_nhmmer_out() is running
+2020-03-30 Monday 21:49:07 Functions.py[line:368] ERROR NHMMER tool output 'strand' column only '+' or '-'
+2020-03-30 Monday 21:49:55 Functions.py[line:55] INFO ###FindOR program starts running###
+2020-03-30 Monday 21:49:55 Functions.py[line:27] INFO function platform_info() is running
+2020-03-30 Monday 21:49:55 Functions.py[line:31] INFO platform_info use 0.004 seconds
+2020-03-30 Monday 21:49:55 Functions.py[line:27] INFO function proc_nhmmer_out() is running
+2020-03-30 Monday 21:49:55 Functions.py[line:31] INFO proc_nhmmer_out use 0.012 seconds
+2020-03-30 Monday 21:49:55 Functions.py[line:27] INFO function extract_cds() is running
+2020-03-30 Monday 21:50:26 Functions.py[line:31] INFO extract_cds use 30.371 seconds
+2020-03-30 Monday 21:50:26 Functions.py[line:27] INFO function find_cds() is running
+2020-03-30 Monday 21:50:26 Functions.py[line:31] INFO find_cds use 0.771 seconds
+2020-03-30 Monday 21:52:14 Functions.py[line:55] INFO ###FindOR program starts running###
+2020-03-30 Monday 21:52:14 Functions.py[line:27] INFO function platform_info() is running
+2020-03-30 Monday 21:52:14 Functions.py[line:31] INFO platform_info use 0.007 seconds
+2020-03-30 Monday 21:52:14 Functions.py[line:27] INFO function proc_nhmmer_out() is running
+2020-03-30 Monday 21:52:14 Functions.py[line:31] INFO proc_nhmmer_out use 0.024 seconds
+2020-03-30 Monday 21:52:14 Functions.py[line:27] INFO function extract_cds() is running
+2020-03-30 Monday 21:52:45 Functions.py[line:31] INFO extract_cds use 31.013 seconds
+2020-03-30 Monday 21:52:45 Functions.py[line:27] INFO function find_cds() is running
+2020-03-30 Monday 21:52:45 Functions.py[line:31] INFO find_cds use 0.771 seconds
+2020-03-30 Monday 21:52:46 FindOR.py[line:119] INFO ###The program runs as follows###
+2020-03-30 Monday 21:52:46 FindOR.py[line:120] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-03-30 Monday 21:52:46 FindOR.py[line:121] INFO 46 cds filtered out by pattern match.
+2020-03-30 Monday 21:52:46 FindOR.py[line:122] INFO 576 outliers cds were found.
+2020-03-30 Monday 21:52:46 FindOR.py[line:123] INFO 864 functional cds were found;
+2020-03-30 Monday 21:52:46 FindOR.py[line:124] INFO generating 1256 functional ORs;
+2020-03-30 Monday 21:52:46 FindOR.py[line:125] INFO including 392 isoforms
+2020-03-30 Monday 21:52:46 FindOR.py[line:126] INFO ###Program finish###
+2020-04-01 Wednesday 11:40:28 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 11:40:28 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 11:40:28 Functions.py[line:32] INFO platform_info use 0.005 seconds
+2020-04-01 Wednesday 11:40:28 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 11:40:28 Functions.py[line:32] INFO proc_nhmmer_out use 0.021 seconds
+2020-04-01 Wednesday 11:40:28 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 11:40:57 Functions.py[line:32] INFO extract_cds use 29.754 seconds
+2020-04-01 Wednesday 11:40:57 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 11:40:58 Functions.py[line:32] INFO find_cds use 0.835 seconds
+2020-04-01 Wednesday 11:47:27 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 11:47:27 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 11:47:27 Functions.py[line:32] INFO platform_info use 0.004 seconds
+2020-04-01 Wednesday 11:47:27 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 11:47:27 Functions.py[line:32] INFO proc_nhmmer_out use 0.035 seconds
+2020-04-01 Wednesday 11:47:27 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 11:47:57 Functions.py[line:32] INFO extract_cds use 29.799 seconds
+2020-04-01 Wednesday 11:47:57 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 11:47:58 Functions.py[line:32] INFO find_cds use 0.775 seconds
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:149] INFO ###The program runs as follows###
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:150] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:151] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:152] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:153] INFO 864 functional cds were found;
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:154] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:155] INFO including 392 isoforms
+2020-04-01 Wednesday 11:47:58 FindOR.py[line:156] INFO ###Program finish###
+2020-04-01 Wednesday 12:57:06 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 12:57:06 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 12:57:06 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-01 Wednesday 12:57:06 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 12:57:06 Functions.py[line:32] INFO proc_nhmmer_out use 0.041 seconds
+2020-04-01 Wednesday 12:57:06 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 12:57:36 Functions.py[line:32] INFO extract_cds use 30.591 seconds
+2020-04-01 Wednesday 12:57:36 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 12:57:37 Functions.py[line:32] INFO find_cds use 0.777 seconds
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:149] INFO ###The program runs as follows###
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:150] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:151] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:152] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:153] INFO 864 functional cds were found;
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:154] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:155] INFO including 392 isoforms
+2020-04-01 Wednesday 12:57:37 FindOR.py[line:156] INFO ###Program finish###
+2020-04-01 Wednesday 13:12:06 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 13:12:06 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 13:12:06 Functions.py[line:32] INFO platform_info use 0.004 seconds
+2020-04-01 Wednesday 13:12:06 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 13:12:06 Functions.py[line:32] INFO proc_nhmmer_out use 0.040 seconds
+2020-04-01 Wednesday 13:12:06 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 13:12:36 Functions.py[line:32] INFO extract_cds use 30.610 seconds
+2020-04-01 Wednesday 13:12:36 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 13:12:37 Functions.py[line:32] INFO find_cds use 0.776 seconds
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:149] INFO ###The program runs as follows###
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:150] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:151] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:152] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:153] INFO 864 functional cds were found;
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:154] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:155] INFO including 392 isoforms
+2020-04-01 Wednesday 13:12:37 FindOR.py[line:156] INFO ###Program finish###
+2020-04-01 Wednesday 13:12:47 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 13:12:47 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 13:12:47 Functions.py[line:32] INFO platform_info use 0.008 seconds
+2020-04-01 Wednesday 13:12:47 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 13:12:47 Functions.py[line:32] INFO proc_nhmmer_out use 0.032 seconds
+2020-04-01 Wednesday 13:12:47 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 13:13:17 Functions.py[line:32] INFO extract_cds use 30.180 seconds
+2020-04-01 Wednesday 13:13:17 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 13:13:18 Functions.py[line:32] INFO find_cds use 0.772 seconds
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:149] INFO ###The program runs as follows###
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:150] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:151] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:152] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:153] INFO 864 functional cds were found;
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:154] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:155] INFO including 392 isoforms
+2020-04-01 Wednesday 13:13:18 FindOR.py[line:156] INFO ###Program finish###
+2020-04-01 Wednesday 13:15:52 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 13:15:52 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 13:15:52 Functions.py[line:32] INFO platform_info use 0.006 seconds
+2020-04-01 Wednesday 13:15:52 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 13:15:52 Functions.py[line:32] INFO proc_nhmmer_out use 0.036 seconds
+2020-04-01 Wednesday 13:15:52 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 13:16:22 Functions.py[line:32] INFO extract_cds use 29.932 seconds
+2020-04-01 Wednesday 13:16:22 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 13:16:23 Functions.py[line:32] INFO find_cds use 0.776 seconds
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:149] INFO ###The program runs as follows###
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:150] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:151] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:152] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:153] INFO 864 functional cds were found;
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:154] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:155] INFO including 392 isoforms
+2020-04-01 Wednesday 13:16:23 FindOR.py[line:156] INFO ###Program finish###
+2020-04-01 Wednesday 14:15:26 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 14:15:26 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 14:15:26 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-01 Wednesday 14:15:26 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 14:15:26 Functions.py[line:32] INFO proc_nhmmer_out use 0.035 seconds
+2020-04-01 Wednesday 14:15:26 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 14:15:56 Functions.py[line:32] INFO extract_cds use 29.971 seconds
+2020-04-01 Wednesday 14:15:56 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 14:15:57 Functions.py[line:32] INFO find_cds use 0.775 seconds
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:149] INFO ###The program runs as follows###
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:150] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:151] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:152] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:153] INFO 864 functional cds were found;
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:154] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:155] INFO including 392 isoforms
+2020-04-01 Wednesday 14:15:57 FindOR.py[line:156] INFO ###Program finish###
+2020-04-01 Wednesday 15:41:23 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 15:41:23 Functions.py[line:28] INFO function platform_info() is running
+2020-04-01 Wednesday 15:41:23 Functions.py[line:32] INFO platform_info use 0.006 seconds
+2020-04-01 Wednesday 15:41:23 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 15:41:23 Functions.py[line:32] INFO proc_nhmmer_out use 0.033 seconds
+2020-04-01 Wednesday 15:41:23 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-01 Wednesday 15:41:53 Functions.py[line:32] INFO extract_cds use 30.157 seconds
+2020-04-01 Wednesday 15:41:53 Functions.py[line:28] INFO function find_cds() is running
+2020-04-01 Wednesday 15:41:54 Functions.py[line:32] INFO find_cds use 0.779 seconds
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:143] INFO ###The program runs as follows###
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:144] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:145] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:146] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:147] INFO 864 functional cds were found;
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:148] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:149] INFO including 392 isoforms
+2020-04-01 Wednesday 15:41:54 FindOR.py[line:150] INFO ###Program finish###
+2020-04-01 Wednesday 20:05:14 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 20:05:14 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 20:05:14 Functions.py[line:33] INFO platform_info use 0.007 seconds
+2020-04-01 Wednesday 20:05:14 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 20:05:14 Functions.py[line:33] INFO proc_nhmmer_out use 0.040 seconds
+2020-04-01 Wednesday 20:05:14 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 20:05:45 Functions.py[line:33] INFO extract_cds use 30.183 seconds
+2020-04-01 Wednesday 20:05:45 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 20:05:45 Functions.py[line:33] INFO find_cds use 0.832 seconds
+2020-04-01 Wednesday 20:05:46 Functions.py[line:592] INFO ###The result as follows###
+2020-04-01 Wednesday 20:05:46 Functions.py[line:593] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 20:05:46 Functions.py[line:594] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 20:05:46 Functions.py[line:595] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 20:05:46 Functions.py[line:596] INFO 864 functional cds were found;
+2020-04-01 Wednesday 20:05:46 Functions.py[line:597] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 20:05:46 Functions.py[line:598] INFO including 392 isoforms
+2020-04-01 Wednesday 20:05:46 Functions.py[line:599] INFO ###The program finish###
+2020-04-01 Wednesday 21:11:19 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 21:11:19 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 21:11:19 Functions.py[line:33] INFO platform_info use 0.006 seconds
+2020-04-01 Wednesday 21:11:19 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 21:11:19 Functions.py[line:33] INFO proc_nhmmer_out use 0.049 seconds
+2020-04-01 Wednesday 21:11:19 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 21:11:49 Functions.py[line:33] INFO extract_cds use 30.328 seconds
+2020-04-01 Wednesday 21:11:49 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 21:11:50 Functions.py[line:33] INFO find_cds use 0.842 seconds
+2020-04-01 Wednesday 21:14:23 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 21:14:23 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 21:14:23 Functions.py[line:33] INFO platform_info use 0.006 seconds
+2020-04-01 Wednesday 21:14:23 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 21:14:23 Functions.py[line:33] INFO proc_nhmmer_out use 0.034 seconds
+2020-04-01 Wednesday 21:14:23 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 21:14:53 Functions.py[line:33] INFO extract_cds use 30.313 seconds
+2020-04-01 Wednesday 21:14:53 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 21:14:54 Functions.py[line:33] INFO find_cds use 0.789 seconds
+2020-04-01 Wednesday 21:14:54 Functions.py[line:585] INFO ###The result as follows###
+2020-04-01 Wednesday 21:14:54 Functions.py[line:586] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 21:14:54 Functions.py[line:587] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 21:14:54 Functions.py[line:588] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 21:14:54 Functions.py[line:589] INFO 864 functional cds were found;
+2020-04-01 Wednesday 21:14:54 Functions.py[line:590] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 21:14:54 Functions.py[line:591] INFO including 392 isoforms
+2020-04-01 Wednesday 21:14:54 Functions.py[line:592] INFO ###The program finish###
+2020-04-01 Wednesday 21:22:25 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 21:22:25 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 21:22:25 Functions.py[line:33] INFO platform_info use 0.039 seconds
+2020-04-01 Wednesday 21:22:25 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 21:22:25 Functions.py[line:33] INFO proc_nhmmer_out use 0.039 seconds
+2020-04-01 Wednesday 21:22:25 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 21:22:55 Functions.py[line:33] INFO extract_cds use 30.139 seconds
+2020-04-01 Wednesday 21:22:55 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 21:22:56 Functions.py[line:33] INFO find_cds use 0.776 seconds
+2020-04-01 Wednesday 21:22:56 Functions.py[line:585] INFO ###The result as follows###
+2020-04-01 Wednesday 21:22:56 Functions.py[line:586] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 21:22:56 Functions.py[line:587] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 21:22:56 Functions.py[line:588] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 21:22:56 Functions.py[line:589] INFO 864 functional cds were found;
+2020-04-01 Wednesday 21:22:56 Functions.py[line:590] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 21:22:56 Functions.py[line:591] INFO including 392 isoforms
+2020-04-01 Wednesday 21:22:56 Functions.py[line:592] INFO ###The program finish###
+2020-04-01 Wednesday 21:58:59 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 21:58:59 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 21:58:59 Functions.py[line:33] INFO platform_info use 0.084 seconds
+2020-04-01 Wednesday 21:58:59 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 21:58:59 Functions.py[line:33] INFO proc_nhmmer_out use 0.036 seconds
+2020-04-01 Wednesday 21:58:59 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 21:59:29 Functions.py[line:33] INFO extract_cds use 30.334 seconds
+2020-04-01 Wednesday 21:59:29 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 21:59:30 Functions.py[line:33] INFO find_cds use 0.854 seconds
+2020-04-01 Wednesday 21:59:30 Functions.py[line:595] INFO ###The result as follows###
+2020-04-01 Wednesday 21:59:30 Functions.py[line:596] INFO ORannotation processing completed
+2020-04-01 Wednesday 21:59:30 Functions.py[line:597] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 21:59:30 Functions.py[line:598] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 21:59:30 Functions.py[line:599] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 21:59:30 Functions.py[line:600] INFO 864 functional cds were found;
+2020-04-01 Wednesday 21:59:30 Functions.py[line:601] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 21:59:30 Functions.py[line:602] INFO including 392 isoforms
+2020-04-01 Wednesday 21:59:30 Functions.py[line:603] INFO ###The program finish###
+2020-04-01 Wednesday 22:08:32 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 22:08:32 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 22:08:32 Functions.py[line:33] INFO platform_info use 0.006 seconds
+2020-04-01 Wednesday 22:08:32 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 22:08:32 Functions.py[line:33] INFO proc_nhmmer_out use 0.035 seconds
+2020-04-01 Wednesday 22:08:32 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 22:09:02 Functions.py[line:33] INFO extract_cds use 30.384 seconds
+2020-04-01 Wednesday 22:09:02 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 22:09:03 Functions.py[line:33] INFO find_cds use 0.779 seconds
+2020-04-01 Wednesday 22:09:03 Functions.py[line:598] INFO ###The result as follows###
+2020-04-01 Wednesday 22:09:03 Functions.py[line:599] INFO ORannotation processing completed
+2020-04-01 Wednesday 22:09:03 Functions.py[line:600] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 22:09:03 Functions.py[line:601] INFO 58 cds filtered out by pattern match.
+2020-04-01 Wednesday 22:09:03 Functions.py[line:602] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 22:09:03 Functions.py[line:603] INFO 864 functional cds were found;
+2020-04-01 Wednesday 22:09:03 Functions.py[line:604] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 22:09:03 Functions.py[line:605] INFO including 392 isoforms
+2020-04-01 Wednesday 22:09:03 Functions.py[line:606] INFO ###The program finish###
+2020-04-01 Wednesday 23:22:48 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 23:22:48 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 23:22:48 Functions.py[line:33] INFO platform_info use 0.003 seconds
+2020-04-01 Wednesday 23:22:48 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 23:22:48 Functions.py[line:33] INFO proc_nhmmer_out use 0.037 seconds
+2020-04-01 Wednesday 23:22:48 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 23:23:19 Functions.py[line:33] INFO extract_cds use 30.227 seconds
+2020-04-01 Wednesday 23:23:19 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 23:23:19 Functions.py[line:33] INFO find_cds use 0.785 seconds
+2020-04-01 Wednesday 23:31:16 Functions.py[line:57] INFO ###FindOR program starts running###
+2020-04-01 Wednesday 23:31:16 Functions.py[line:29] INFO function platform_info() is running
+2020-04-01 Wednesday 23:31:16 Functions.py[line:33] INFO platform_info use 0.007 seconds
+2020-04-01 Wednesday 23:31:16 Functions.py[line:29] INFO function proc_nhmmer_out() is running
+2020-04-01 Wednesday 23:31:16 Functions.py[line:33] INFO proc_nhmmer_out use 0.037 seconds
+2020-04-01 Wednesday 23:31:16 Functions.py[line:29] INFO function extract_cds() is running
+2020-04-01 Wednesday 23:31:47 Functions.py[line:33] INFO extract_cds use 31.013 seconds
+2020-04-01 Wednesday 23:31:47 Functions.py[line:29] INFO function find_cds() is running
+2020-04-01 Wednesday 23:31:48 Functions.py[line:33] INFO find_cds use 0.778 seconds
+2020-04-01 Wednesday 23:31:48 Functions.py[line:29] INFO function Writer() is running
+2020-04-01 Wednesday 23:31:48 Functions.py[line:33] INFO Writer use 0.023 seconds
+2020-04-01 Wednesday 23:31:48 Functions.py[line:29] INFO function Writer() is running
+2020-04-01 Wednesday 23:31:48 Functions.py[line:33] INFO Writer use 0.002 seconds
+2020-04-01 Wednesday 23:31:48 Functions.py[line:29] INFO function Writer() is running
+2020-04-01 Wednesday 23:31:48 Functions.py[line:33] INFO Writer use 0.002 seconds
+2020-04-01 Wednesday 23:31:48 Functions.py[line:29] INFO function Writer() is running
+2020-04-01 Wednesday 23:31:48 Functions.py[line:33] INFO Writer use 0.001 seconds
+2020-04-01 Wednesday 23:31:48 Functions.py[line:29] INFO function Writer() is running
+2020-04-01 Wednesday 23:31:48 Functions.py[line:33] INFO Writer use 0.001 seconds
+2020-04-01 Wednesday 23:31:48 Functions.py[line:621] INFO ###The result as follows###
+2020-04-01 Wednesday 23:31:48 Functions.py[line:622] INFO musk_modi processing completed
+2020-04-01 Wednesday 23:31:48 Functions.py[line:623] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-01 Wednesday 23:31:48 Functions.py[line:624] INFO 576 outliers cds were found.
+2020-04-01 Wednesday 23:31:48 Functions.py[line:625] INFO 864 functional cds were found;
+2020-04-01 Wednesday 23:31:48 Functions.py[line:626] INFO generating 1256 functional ORs;
+2020-04-01 Wednesday 23:31:48 Functions.py[line:627] INFO including 392 isoforms
+2020-04-01 Wednesday 23:31:48 Functions.py[line:628] INFO ###The program finish###
+2020-04-05 Sunday 00:23:19 Functions.py[line:59] INFO ###FindOR program starts running###
+2020-04-05 Sunday 00:23:19 Functions.py[line:31] INFO function platform_info() is running
+2020-04-05 Sunday 00:23:19 Functions.py[line:35] INFO platform_info use 0.007 seconds
+2020-04-05 Sunday 00:23:19 Functions.py[line:31] INFO function proc_nhmmer_out() is running
+2020-04-05 Sunday 00:23:19 Functions.py[line:35] INFO proc_nhmmer_out use 0.041 seconds
+2020-04-05 Sunday 00:23:19 Functions.py[line:31] INFO function extract_cds() is running
+2020-04-05 Sunday 00:23:49 Functions.py[line:35] INFO extract_cds use 29.836 seconds
+2020-04-05 Sunday 00:23:49 Functions.py[line:31] INFO function find_cds() is running
+2020-04-05 Sunday 00:23:50 Functions.py[line:35] INFO find_cds use 0.770 seconds
+2020-04-05 Sunday 00:23:50 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:23:50 Functions.py[line:35] INFO Writer use 0.018 seconds
+2020-04-05 Sunday 00:23:50 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:23:50 Functions.py[line:35] INFO Writer use 0.004 seconds
+2020-04-05 Sunday 00:23:50 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:23:50 Functions.py[line:35] INFO Writer use 0.002 seconds
+2020-04-05 Sunday 00:23:50 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:23:50 Functions.py[line:35] INFO Writer use 0.001 seconds
+2020-04-05 Sunday 00:23:50 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:23:50 Functions.py[line:35] INFO Writer use 0.001 seconds
+2020-04-05 Sunday 00:23:50 Functions.py[line:653] INFO ###The result as follows###
+2020-04-05 Sunday 00:23:50 Functions.py[line:654] INFO musk_modi2 processing completed
+2020-04-05 Sunday 00:23:50 Functions.py[line:655] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-05 Sunday 00:23:50 Functions.py[line:656] INFO 576 outliers cds were found.
+2020-04-05 Sunday 00:23:50 Functions.py[line:657] INFO 864 functional cds were found;
+2020-04-05 Sunday 00:23:50 Functions.py[line:658] INFO generating 1256 functional ORs;
+2020-04-05 Sunday 00:23:50 Functions.py[line:659] INFO including 392 isoforms
+2020-04-05 Sunday 00:23:50 Functions.py[line:660] INFO ###The program finish###
+2020-04-05 Sunday 00:33:39 Functions.py[line:59] INFO ###FindOR program starts running###
+2020-04-05 Sunday 00:33:39 Functions.py[line:31] INFO function platform_info() is running
+2020-04-05 Sunday 00:33:39 Functions.py[line:35] INFO platform_info use 0.006 seconds
+2020-04-05 Sunday 00:33:39 Functions.py[line:31] INFO function proc_nhmmer_out() is running
+2020-04-05 Sunday 00:33:39 Functions.py[line:35] INFO proc_nhmmer_out use 0.039 seconds
+2020-04-05 Sunday 00:33:39 Functions.py[line:31] INFO function extract_cds() is running
+2020-04-05 Sunday 00:34:09 Functions.py[line:35] INFO extract_cds use 29.893 seconds
+2020-04-05 Sunday 00:34:09 Functions.py[line:31] INFO function find_cds() is running
+2020-04-05 Sunday 00:34:10 Functions.py[line:35] INFO find_cds use 0.773 seconds
+2020-04-05 Sunday 00:34:10 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:34:10 Functions.py[line:35] INFO Writer use 0.004 seconds
+2020-04-05 Sunday 00:34:10 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:34:10 Functions.py[line:35] INFO Writer use 0.003 seconds
+2020-04-05 Sunday 00:34:10 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:34:10 Functions.py[line:35] INFO Writer use 0.003 seconds
+2020-04-05 Sunday 00:34:10 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:34:10 Functions.py[line:35] INFO Writer use 0.002 seconds
+2020-04-05 Sunday 00:34:10 Functions.py[line:31] INFO function Writer() is running
+2020-04-05 Sunday 00:34:10 Functions.py[line:35] INFO Writer use 0.002 seconds
+2020-04-05 Sunday 00:34:10 Functions.py[line:653] INFO ###The result as follows###
+2020-04-05 Sunday 00:34:10 Functions.py[line:654] INFO musk_modi2 processing completed
+2020-04-05 Sunday 00:34:10 Functions.py[line:655] INFO 1440 OR CDS found by nhmmer. Among them.
+2020-04-05 Sunday 00:34:10 Functions.py[line:656] INFO 576 outliers cds were found.
+2020-04-05 Sunday 00:34:10 Functions.py[line:657] INFO 864 functional cds were found;
+2020-04-05 Sunday 00:34:10 Functions.py[line:658] INFO generating 1256 functional ORs;
+2020-04-05 Sunday 00:34:10 Functions.py[line:659] INFO including 392 isoforms
+2020-04-05 Sunday 00:34:10 Functions.py[line:660] INFO ###The program finish###
+2020-04-13 Monday 21:59:50 Functions.py[line:56] INFO ###nhmmer program starts running###
+2020-04-13 Monday 21:59:50 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 21:59:50 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 21:59:50 Functions.py[line:28] INFO function run_nhmmer() is running
+2020-04-13 Monday 21:59:50 Functions.py[line:32] INFO run_nhmmer use 0.047 seconds
+2020-04-13 Monday 21:59:50 nhmmer.py[line:48] INFO ###Program finish###
+2020-04-13 Monday 22:00:35 Functions.py[line:56] INFO ###nhmmer program starts running###
+2020-04-13 Monday 22:00:35 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:00:35 Functions.py[line:32] INFO platform_info use 0.006 seconds
+2020-04-13 Monday 22:00:35 Functions.py[line:28] INFO function run_nhmmer() is running
+2020-04-13 Monday 22:01:50 Functions.py[line:32] INFO run_nhmmer use 75.217 seconds
+2020-04-13 Monday 22:01:50 nhmmer.py[line:48] INFO ###Program finish###
+2020-04-13 Monday 22:04:39 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:04:39 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:04:39 Functions.py[line:32] INFO platform_info use 0.004 seconds
+2020-04-13 Monday 22:04:39 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:04:39 Functions.py[line:32] INFO proc_nhmmer_out use 0.008 seconds
+2020-04-13 Monday 22:04:39 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:08:29 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:08:29 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:08:29 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 22:08:29 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:08:29 Functions.py[line:32] INFO proc_nhmmer_out use 0.011 seconds
+2020-04-13 Monday 22:08:29 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:11:23 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:11:23 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:11:23 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 22:11:23 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:11:23 Functions.py[line:32] INFO proc_nhmmer_out use 0.033 seconds
+2020-04-13 Monday 22:11:23 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:15:51 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:15:51 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:15:51 Functions.py[line:32] INFO platform_info use 0.008 seconds
+2020-04-13 Monday 22:15:51 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:15:51 Functions.py[line:32] INFO proc_nhmmer_out use 0.011 seconds
+2020-04-13 Monday 22:15:51 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:19:03 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:19:03 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:19:03 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 22:19:03 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:19:03 Functions.py[line:32] INFO proc_nhmmer_out use 0.018 seconds
+2020-04-13 Monday 22:19:03 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:20:50 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:20:50 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:20:50 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 22:20:50 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:20:50 Functions.py[line:32] INFO proc_nhmmer_out use 0.016 seconds
+2020-04-13 Monday 22:20:50 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:21:39 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:21:39 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:21:39 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 22:21:39 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:21:39 Functions.py[line:32] INFO proc_nhmmer_out use 0.016 seconds
+2020-04-13 Monday 22:21:39 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:24:19 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:24:19 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:24:19 Functions.py[line:32] INFO platform_info use 0.007 seconds
+2020-04-13 Monday 22:24:19 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:24:19 Functions.py[line:32] INFO proc_nhmmer_out use 0.018 seconds
+2020-04-13 Monday 22:24:19 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:24:49 Functions.py[line:32] INFO extract_cds use 30.320 seconds
+2020-04-13 Monday 22:24:49 Functions.py[line:28] INFO function find_cds() is running
+2020-04-13 Monday 22:24:50 Functions.py[line:32] INFO find_cds use 0.443 seconds
+2020-04-13 Monday 22:28:30 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:28:30 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:28:30 Functions.py[line:32] INFO platform_info use 0.008 seconds
+2020-04-13 Monday 22:28:30 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:28:30 Functions.py[line:32] INFO proc_nhmmer_out use 0.018 seconds
+2020-04-13 Monday 22:28:30 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:29:01 Functions.py[line:32] INFO extract_cds use 30.396 seconds
+2020-04-13 Monday 22:29:01 Functions.py[line:28] INFO function find_cds() is running
+2020-04-13 Monday 22:29:01 Functions.py[line:32] INFO find_cds use 0.500 seconds
+2020-04-13 Monday 22:32:47 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:32:47 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:32:47 Functions.py[line:32] INFO platform_info use 0.006 seconds
+2020-04-13 Monday 22:32:47 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:32:47 Functions.py[line:32] INFO proc_nhmmer_out use 0.018 seconds
+2020-04-13 Monday 22:32:47 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:33:17 Functions.py[line:32] INFO extract_cds use 30.294 seconds
+2020-04-13 Monday 22:33:17 Functions.py[line:28] INFO function find_cds() is running
+2020-04-13 Monday 22:33:18 Functions.py[line:32] INFO find_cds use 0.493 seconds
+2020-04-13 Monday 22:33:18 Functions.py[line:941] INFO ###The result as follows###
+2020-04-13 Monday 22:33:18 Functions.py[line:942] INFO cervus processing completed
+2020-04-13 Monday 22:33:18 Functions.py[line:943] INFO 933 OR CDS found by nhmmer. Among them.
+2020-04-13 Monday 22:33:18 Functions.py[line:944] INFO 445 outliers cds were found.
+2020-04-13 Monday 22:33:18 Functions.py[line:945] INFO 488 functional cds were found;
+2020-04-13 Monday 22:33:18 Functions.py[line:946] INFO generating 722 functional ORs;
+2020-04-13 Monday 22:33:18 Functions.py[line:947] INFO including 234 isoforms
+2020-04-13 Monday 22:33:18 Functions.py[line:948] INFO ###The program finish###
+2020-04-13 Monday 22:43:17 Functions.py[line:56] INFO ###FindOR program starts running###
+2020-04-13 Monday 22:43:17 Functions.py[line:28] INFO function platform_info() is running
+2020-04-13 Monday 22:43:17 Functions.py[line:32] INFO platform_info use 0.006 seconds
+2020-04-13 Monday 22:43:17 Functions.py[line:28] INFO function proc_nhmmer_out() is running
+2020-04-13 Monday 22:43:17 Functions.py[line:32] INFO proc_nhmmer_out use 0.017 seconds
+2020-04-13 Monday 22:43:17 Functions.py[line:28] INFO function extract_cds() is running
+2020-04-13 Monday 22:43:47 Functions.py[line:32] INFO extract_cds use 30.335 seconds
+2020-04-13 Monday 22:43:47 Functions.py[line:28] INFO function find_cds() is running
+2020-04-13 Monday 22:43:48 Functions.py[line:32] INFO find_cds use 0.489 seconds
+2020-04-13 Monday 22:43:48 Functions.py[line:942] INFO ###The result as follows###
+2020-04-13 Monday 22:43:48 Functions.py[line:943] INFO cervus2 processing completed
+2020-04-13 Monday 22:43:48 Functions.py[line:944] INFO 933 OR CDS found by nhmmer. Among them.
+2020-04-13 Monday 22:43:48 Functions.py[line:945] INFO 446 outliers cds were found.
+2020-04-13 Monday 22:43:48 Functions.py[line:946] INFO 487 functional cds were found;
+2020-04-13 Monday 22:43:48 Functions.py[line:947] INFO generating 721 functional ORs;
+2020-04-13 Monday 22:43:48 Functions.py[line:948] INFO including 234 isoforms
+2020-04-13 Monday 22:43:48 Functions.py[line:949] INFO ###The program finish###
