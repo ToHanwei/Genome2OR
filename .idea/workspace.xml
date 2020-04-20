@@ -2,162 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7635621a-d5f6-4dc9-9455-dfa382a5bcae" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/hanwe.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/hpc2-Genome2OR.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/HuOR_E60SecondE60Res_OR_sequence-lengfilter280.fas" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/N-term_length.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/N-term_length.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/OR_pattern_match.eps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/OR_pattern_match.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/OR_pattern_match.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/ORs_pattern_match_distribution.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/ORs_pattern_match_distribution.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/or5an1.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_H8.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_H8.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_N-term.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_N-term.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_ecl1.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_ecl1.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_ecl2.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_ecl2.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_ecl3.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_ecl3.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_icl1.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_icl1.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_icl2.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_icl2.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_icl3.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_icl3.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_nterm.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_nterm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_pattern_match.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_pattern_match.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm1.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm1.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm2.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm2.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm3.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm3.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm4.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm4.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm5.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm5.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm6.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm6.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/statistic_tm7.tab" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistic_tm7.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/ORannotation_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/ORannotation_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/ORannotation_match_position.tab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/ORannotation_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/ORannotation_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/ORannotation_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/match_pos" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi2_ORs_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi2_ORs_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi2_match_position.tab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi2_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi2_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi_ORs_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi_ORs_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi_match_position.tab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/musk_modi_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test.fas" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test2_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test2_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test2_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test2_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test2_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/test_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cervus_func_ors.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cervus_pseu_ors.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Bos_indicus_hybrid_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Bos_indicus_hybrid_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Bos_indicus_hybrid_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Bos_indicus_hybrid_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Bos_indicus_hybrid_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Oryctolagus_cuniculus_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Oryctolagus_cuniculus_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Oryctolagus_cuniculus_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Oryctolagus_cuniculus_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Oryctolagus_cuniculus_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Panthera_tigris_altaica-Panthera_tigris_altaica_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Panthera_tigris_altaica-Panthera_tigris_altaica_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Panthera_tigris_altaica-Panthera_tigris_altaica_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Panthera_tigris_altaica-Panthera_tigris_altaica_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Panthera_tigris_altaica-Panthera_tigris_altaica_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Propithecus_coquereli-Propithecus_coquereli_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Propithecus_coquereli-Propithecus_coquereli_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Propithecus_coquereli-Propithecus_coquereli_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Propithecus_coquereli-Propithecus_coquereli_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Propithecus_coquereli-Propithecus_coquereli_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Suricata_suricatta-Suricata_suricatta_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Suricata_suricatta-Suricata_suricatta_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Suricata_suricatta-Suricata_suricatta_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Suricata_suricatta-Suricata_suricatta_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/findout/Suricata_suricatta-Suricata_suricatta_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/func_ors.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Ailuropoda_melanoleuca-Ailuropoda_melanoleuca.ailMel1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Bos_indicus_hybrid.UOA_Brahman_1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Canis_lupus_dingo-Canis_lupus_dingo.ASM325472v1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Castor_canadensis.C.can_genome_v1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Choloepus_hoffmanni.choHof1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Equus_asinus_asinus.ASM303372v1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Felis_catus-Felis_catus.Felis_catus_9.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Gorilla_gorilla-Gorilla_gorilla.gorGor4.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Homo_sapiens-Homo_sapiens.GRCh38.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Mesocricetus_auratus.MesAur1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Mus_musculus.GRCm38.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Mustela_putorius_furo-Mustela_putorius_furo.MusPutFur1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Myotis_lucifugus-Myotis_lucifugus.Myoluc2.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Notamacropus_eugenii-Notamacropus_eugenii.Meug_1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Ornithorhynchus_anatinus-Ornithorhynchus_anatinus.OANA5.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Oryctolagus_cuniculus.OryCun2.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Otolemur_garnettii-Otolemur_garnettii.OtoGar3.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Pan_paniscus-Pan_paniscus.panpan1.1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Panthera_pardus-Panthera_pardus.PanPar1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Panthera_tigris_altaica-Panthera_tigris_altaica.PanTig1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Propithecus_coquereli-Propithecus_coquereli.Pcoq_1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Sarcophilus_harrisii-Sarcophilus_harrisii.DEVIL7.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Suricata_suricatta-Suricata_suricatta.meerkat_22Aug2017_6uvM2_HiC.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Sus_scrofa.Sscrofa11.1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Ursus_americanus-Ursus_americanus.ASM334442v1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Ursus_maritimus-Ursus_maritimus.UrsMar_1.0.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Vicugna_pacos.vicPac1.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/nhmmout/Vombatus_ursinus-Vombatus_ursinus.bare-nosed_wombat_genome_assembly.dna.toplevel.fa.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/pseu_ors.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Loxodonta_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Loxodonta_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Loxodonta_out.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Loxodonta_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Loxodonta_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Loxodonta_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Mus_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Mus_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Mus_nhmmout.tblout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Mus_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Mus_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/Mus_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/human_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/human_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/human_out.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/human_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/human_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/human_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/musk_func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/musk_func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/musk_outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/musk_pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/temp/musk_summary_cds.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/test.fas" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/test.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Nucleotide.fas" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Nucleotide.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Nucleotide.hmm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/To-Hanwei_find_OR_cds-v2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/func_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/func_OR_pro.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/match_pos" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/musk.OR.nhmmer.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/musk_or.linsi.hmm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/outliers_dna.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/pseudo_OR_DNA.fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/summary_cds.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -183,7 +29,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -322,7 +168,10 @@
       <workItem from="1585535539715" duration="79068000" />
       <workItem from="1585796635528" duration="32529000" />
       <workItem from="1586317388237" duration="154468000" />
-      <workItem from="1587105866361" duration="4415000" />
+      <workItem from="1587105866361" duration="6591000" />
+      <workItem from="1587270131157" duration="4375000" />
+      <workItem from="1587274592141" duration="412000" />
+      <workItem from="1587355690635" duration="324000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;add Recore file&quot;">
       <created>1585579206014</created>
