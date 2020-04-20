@@ -13,7 +13,8 @@ Annotate Olfactory receptor CDS from genome
 
 ## Abstract
 [Genome2OR](https://github.com/ToHanwei/Genome2OR.git) is a genetic annotation tool based on 
-[HMMER](http://hmmer.org).  
+[HMMER](http://hmmer.org), [MAFFT](https://mafft.cbrc.jp/alignment/software/) and 
+[CD-HIT](http://weizhongli-lab.org/cd-hit/).  
 [HMMER](http://hmmer.org) searches biological sequence databases for
 homologous sequences, using either single sequences or multiple
 sequence alignments as queries. HMMER implements a technology called
