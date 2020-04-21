@@ -933,9 +933,9 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
         .format(num_cds)
     outlie = "{} outliers cds were found." \
         .format(num_out)
-    funcds = "{} functional cds were found;" \
+    funcds = "{} latent functional cds were found;" \
         .format(num_fun_cds)
-    funor = "generating {} functional ORs;" \
+    funor = "latent generating {} functional ORs;" \
         .format(num_fun_OR)
     isoform = "including {} isoforms".format(num_iso)
     logging.info("###The result as follows###")

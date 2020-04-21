@@ -33,20 +33,22 @@ tasks and aids in understanding the data structure and correct the bias within a
 1. Execute nhmmer.py
     ```
    cd YouDir/Genome2OR/scripts
-   python nhmmer.py profile.hmm genome.fasta output -v
+   python nhmmer.py ../template/Mammalia.hmm genome.fasta nhmmer_out.tblout -v
     ```
    
 2. Execute FindOR.py
     ```
    cd YourDir/Genome2OR/scripts
-   python FindOR.py nhmmer_out.tblout genome.fasta -v 
+   python FindOR.py nhmmer_out.tblout genome.fasta -o ../output -o ORannotation -v 
     ```
    
 3. Execute IdentityFunc.py
     ```
    cd YourDir/Genome2OR/scripts
-   python IdentityFunc.py hitfile -v
+   python IdentityFunc.py ../output/ORannotation_ORs_pro.fa -o ../output -p Identity -v
     ```
+   After running 1,2,3, you will find file Identity_func_ORs.fasta in directory 
+   ../output, which is the Olfactory receptor we finally found
    
 4. Execute batch.py
     ```
