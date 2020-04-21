@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7635621a-d5f6-4dc9-9455-dfa382a5bcae" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -170,7 +170,7 @@
       <workItem from="1587105866361" duration="6591000" />
       <workItem from="1587270131157" duration="4375000" />
       <workItem from="1587274592141" duration="412000" />
-      <workItem from="1587355690635" duration="729000" />
+      <workItem from="1587355690635" duration="1963000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;add Recore file&quot;">
       <created>1585579206014</created>
