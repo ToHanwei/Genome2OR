@@ -77,12 +77,6 @@ CODON_TABLE = {
 
 # Olfactory receptor template sequence
 ORfile = "../template/template.fasta"
-# temporary directory name
-TEMP = "../temp"
-# temporary OR sequence file name
-TEMP_OR = "temp.fasta"
-# temporary OR alignment file name
-TEMP_ALIGN = TEMP + "/" + "temp.fas"
 
 # nhmmer tool path 
 NHMMER = "../tools/nhmmer"

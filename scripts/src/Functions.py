@@ -4,6 +4,7 @@ import re
 import os
 import time
 import logging
+import tempfile
 import platform
 from collections import Counter
 from collections import defaultdict
@@ -510,7 +511,7 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
     return fun, outliers
 
 
-def sequence_align(indir, seqf, alignf):
+def sequence_align(seqf, alignf):
     """
     Function:
         sequence_align
@@ -521,7 +522,6 @@ def sequence_align(indir, seqf, alignf):
     Return: None
     """
 
-    seqf = os.path.join(indir, seqf)
     command = MAFFT \
               + " --localpair " \
               + "--maxiterate 1000 " \
@@ -623,11 +623,19 @@ def refact_list(template, hit_dict):
             head = ">" + head
             templist.extend([head, seq])
         aligns = template + templist
-        Writer(TEMP, TEMP_OR, aligns)
-        sequence_align(TEMP, TEMP_OR, TEMP_ALIGN)
-        seq_list = ReadSampleFasta(TEMP_ALIGN)
+		# temporary OR sequence file name
+		TempOR = tempfile.NamedTemporaryFile('w+t')
+		TempOR.writeline(aligns)
+		TempName = TempOR.name
+		# temporary OR alignment file name
+		TempAlign = TempName + '.fas'
+        sequence_align(TempName, TempAlign)
+        seq_list = ReadSampleFasta(TempAlign)
         # drop some template OR sequence, retain OR5AN1 only
-        seq_list = seq_list[0:1] + seq_list[4:]
+		index = len(template)
+        seq_list = seq_list[0:1] + seq_list[index:]
+		os.remove(TempAlign)
+		TempOR.close()
         yield seq_list
 
 

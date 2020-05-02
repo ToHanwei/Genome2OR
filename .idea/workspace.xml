@@ -28,7 +28,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CDS_MSA" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -172,6 +172,7 @@
       <workItem from="1587274592141" duration="412000" />
       <workItem from="1587355690635" duration="7103000" />
       <workItem from="1587480607488" duration="148000" />
+      <workItem from="1587965601719" duration="618000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;add Recore file&quot;">
       <created>1585579206014</created>
