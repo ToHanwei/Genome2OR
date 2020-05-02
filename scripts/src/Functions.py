@@ -531,6 +531,28 @@ def sequence_align(seqf, alignf):
               + alignf
     os.system(command)
 
+def ParseSeq(seqf):
+    """
+    Function:
+        ParseSeq
+        parse sequence file Class
+    Parameter:
+        seqf: sequence file class
+    Return:
+        return type -> List
+        seq_list, [(name1, seq1), (name2, seq2), ...]
+    """
+    seq_list = [] 
+    text = seqf.read().replace('\r', '')
+    seqs = text.split('>')[1:]
+    for seq in seqs:
+        lines = seq.split('\n')
+        name = lines[0] + "\n"
+        aads = ''.join(lines[1:]) + "\n"
+        aads = aads.replace('*', '')
+        seq_list.append((name, aads))
+    return seq_list
+
 
 def ReadSampleFasta(seqfile):
     """
@@ -545,16 +567,8 @@ def ReadSampleFasta(seqfile):
         seq_list, [(name1, seq1), (name2, seq2), ...]
     """
 
-    seq_list = []
     with open(seqfile) as seqf:
-        text = seqf.read().replace('\r', '')
-        seqs = text.split('>')[1:]
-        for seq in seqs:
-            lines = seq.split('\n')
-            name = lines[0] + "\n"
-            aads = ''.join(lines[1:]) + "\n"
-            aads = aads.replace('*', '')
-            seq_list.append((name, aads))
+        seq_list = ParseSeq(seqf)
     return seq_list
 
 
@@ -623,19 +637,20 @@ def refact_list(template, hit_dict):
             head = ">" + head
             templist.extend([head, seq])
         aligns = template + templist
-		# temporary OR sequence file name
-		TempOR = tempfile.NamedTemporaryFile('w+t')
-		TempOR.writeline(aligns)
-		TempName = TempOR.name
-		# temporary OR alignment file name
-		TempAlign = TempName + '.fas'
+        # temporary OR sequence file name
+        TempOR = tempfile.NamedTemporaryFile('w+t')
+        TempName = TempOR.name
+        TempOR.writelines(aligns)
+        TempOR.seek(0)
+        # temporary OR alignment file name
+        TempAlign = TempName + '.fas'
         sequence_align(TempName, TempAlign)
         seq_list = ReadSampleFasta(TempAlign)
         # drop some template OR sequence, retain OR5AN1 only
-		index = len(template)
+        index = int(len(template)/2)
         seq_list = seq_list[0:1] + seq_list[index:]
-		os.remove(TempAlign)
-		TempOR.close()
+        os.remove(TempAlign)
+        TempOR.close()
         yield seq_list
 
 

@@ -35,7 +35,9 @@ tasks and aids in understanding the data structure and correct the bias within a
    cd YouDir/Genome2OR/scripts
    python nhmmer.py ../template/Mammalia.hmm genome.fasta nhmmer_out.tblout -v
     ```
-   
+   Mammalia.hmm is the HMM profile for mammalia. You can find more species of HMM profile in YouDir/Genome2OR/template directory if needed.
+   genome.fasta is genome(DNA) that needs annotation.
+
 2. Execute FindOR.py
     ```
    cd YourDir/Genome2OR/scripts
@@ -55,6 +57,7 @@ tasks and aids in understanding the data structure and correct the bias within a
    cd YourDir/Genome2OR/scripts
    python batch.py profile.hmm inputdir nhmmeroutdir outputdir -v
     ```
+   For batch annotation of genomes.
 
 ## Download script
 1. Download script from github
@@ -195,6 +198,9 @@ http://zhaolab.shanghaitech.edu.cn/
     * ParseArgs: Command line parsing module.
     * CodeMessages: Error message module.
     * config: Configuration module.
+* Genome2OR/template
+    * '*.hmm' file, HMM profiles
+    * 'template.fasta' is template OR sequence file.You can replace it with your template file, but the first sequence(OR5AN1) cannot be change.Note that too many squences in 'template.fasta' will cause the program to run slowly, typically no more than five sequenses. 
 
 ## Example
 
