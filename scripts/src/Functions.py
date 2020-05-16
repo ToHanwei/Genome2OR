@@ -970,6 +970,24 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
     logging.info(isoform)
     logging.info("###The program finish###")
 
+def test_nhmmer_evalue(nhmmout):
+    """
+    Function:
+        test_nhmmer_evalue
+    Parameter:
+        nhmmout: nhmmer tblout format file
+    Return:
+        return type -> string
+        name, species name
+        return type -> int
+        nhits, number of nhmmer hits
+    """
+    
+    name = nhmmout.split('-')[0]
+    with open(nhmmout) as nhmmf:
+        nhits = sum(1 for line in nhmmf if line[0] != '#')
+    return name, nhits
+
 
 if __name__ == "__main__":
     platform_info(True)

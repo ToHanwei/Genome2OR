@@ -209,6 +209,59 @@ class ParseCommand(object):
 		args = parser.parse_args()
 		return args
 
+	def testparse(self):
+		"""nhmmer_evalue_test.py command line parse"""
+
+		parser = argparse.ArgumentParser(prog="nhmmer_evalue_test.py",
+										 description="Test the number of nhmmer hits",
+										 epilog="http://zhaolab.shanghaitech.edu.cn/"
+										 )
+		# positional arguments
+		parser.add_argument('profile',
+							help="String, profile nhmmer need(hmm, [un]alignment file).\
+							Notice: A group of genomes share a profile."
+							)
+		parser.add_argument('inputdir',
+							help="String, genomic directory.",
+							)
+		parser.add_argument("nhmmerout",
+							help="String, run nhmmer program result.",
+							)
+
+		# optional arguments
+		parser.add_argument('-e', '--EvalueLimit',
+							type=float,
+							help="Float, Sequence similarity threshold.\
+								 (default:1e-60)",
+							# An empirical value
+							default=1e-60,
+							metavar='',
+							)
+		parser.add_argument('-o', '--output',
+							type=str,
+							help="String, output file name. default:nhmmer_hits_test.csv",
+							# The OR sequence length is approximately 310
+							default="nhmmer_hits_test.csv",
+							metavar='',
+							)
+		parser.add_argument('-c', '--cpus',
+							type=int,
+							help="number of parallel CPU workers to use. \
+								 (default='2/3 of all cores')",
+							default=int(cpu_count() * 2 / 3),
+							metavar='',
+							)
+		parser.add_argument('-v', '--verbose',
+							action='count',
+							help="Print verbose information.",
+							)
+		parser.add_argument('-V', '--version',
+							action='version',
+							help='Show version message and exit.',
+							version=VERSION,
+							)
+		args = parser.parse_args()
+		return args
 
 if __name__ == "__main__":
 	parse = ParseCommand()
