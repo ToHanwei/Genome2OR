@@ -52,7 +52,7 @@ hmmout_seq = extract_cds(hmmout, gefile)
 
 if verbose:
     print("\033[1;32mFind ATG and STOP codons for each sequence...\033[0m")
-functional, pseudos, outliers = find_cds(hmmout, hmmout_seq)
+functional, pseudos, outliers = find_cds(hmmout, hmmout_seq, SeqLengthLimit)
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")

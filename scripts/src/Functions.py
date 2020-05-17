@@ -420,13 +420,14 @@ def proc_nhmmer_out(file, EvalueLimit):
     return hmmout
 
 
-def find_stop_codons(seq):
+def find_stop_codons(seq, SeqLengthLimit):
     """
     Function:
         find_stop_codons
         Find stop codons in seq, no matter what reading frame is
     Parameter:
         seq, DNA sequence without header
+        SeqLengthLimit, artificially set OR's sequence length threshold
     Return:
         return type -> List
         All 'stop codon' of seq(input DNA sequence)
@@ -437,13 +438,12 @@ def find_stop_codons(seq):
     stop_taa = find_all('(?=(TAA))', seq)
     stops = stop_tag + stop_tga + stop_taa
     # Filter stop long enough
-    # stops = sorted(i for i in stops if i > SeqLengthLimit)
-    stops = sorted(stops)
+    stops = sorted(i for i in stops if i > SeqLengthLimit)
     return stops
 
 
 @logfun
-def find_cds(hmmout, hmmout_seq):
+def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
     """
     Function:
         find_cds
@@ -471,29 +471,32 @@ def find_cds(hmmout, hmmout_seq):
     pseudos = {}
     outliers = {}
     for gname in hmmout_seq:
-        processed = False
+        pseudogene = True
         raw_cds = hmmout_seq[gname]
         len_cds = len(raw_cds)
         [sca, _a, _b, fr, to, strand, _c, _d, _e] = hmmout[gname]
         atgs = find_all('(?=(ATG))', raw_cds)
-        starts = sorted(atgs)
-        stops = find_stop_codons(raw_cds)
+        starts = sorted(i for i in atgs if i < len_cds - SeqLengthLimit)
+        stops = find_stop_codons(raw_cds, SeqLengthLimit)
         iso = 1
         for iatg in starts:
             for istop in stops:
-                if iatg >= istop:
-                    # Can not be function or pseudo genes
-                    processed = True
-                    continue
                 klen = istop - iatg
-                # CDS must be multiple of 3
-                if klen % 3 != 0: continue
+                if klen < SeqLengthLimit:
+                    # Can not be function or pseudo genes, too short.
+                    pseudogene = False
+                    continue
+                if klen % 3 != 0:
+                    # CDS must be multiple of 3
+                    # Insert or delete codon (pseudogene)
+                    pseudogene = True
+                    continue
                 fine_cds = raw_cds[iatg:istop]
                 a_list = re.findall('...', fine_cds)
-                # interrupting stop codon
-                if 'TAG' in a_list: continue
-                if 'TGA' in a_list: continue
-                if 'TAA' in a_list: continue
+                if ('TAG' in a_list) or ('TGA' in a_list) or ('TAA' in a_list):
+                    # Interrupting stop codon (pseudogene)
+                    pseudogene = True
+                    continue
                 if strand == '+':
                     real_fr = int(fr) + iatg
                     real_to = int(fr) + istop + 3
@@ -518,8 +521,9 @@ def find_cds(hmmout, hmmout_seq):
                     ]
                     iso += 1
                     break
-                processed = True
-        if (not processed) and ('N' not in raw_cds):
+                # Temporarily judged as functions OR
+                pseudogene = False
+        if pseudogene and ('N' not in raw_cds):
             pseudos[gname] = raw_cds
         else:
             outliers[gname] = raw_cds
