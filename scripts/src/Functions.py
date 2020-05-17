@@ -2,6 +2,8 @@
 
 import re
 import os
+import stat
+import sys
 import time
 import logging
 import tempfile
@@ -75,16 +77,17 @@ def run_nhmmer(evalue, cpus, output, profile, genome, verbose):
         generate an output file and return exit status
     """
 
-    commandline = "time " \
-                  + NHMMER \
-                  + " -E " \
-                  + str(evalue) \
-                  + " --dna --cpu " \
-                  + str(cpus) \
-                  + " --tblout " \
-                  + output \
-                  + " " + profile \
-                  + " " + genome
+    commandline = ("time "
+                   + NHMMER
+                   + " -E "
+                   + str(evalue)
+                   + " --dna --cpu "
+                   + str(cpus)
+                   + " --tblout "
+                   + output
+                   + " " + profile
+                   + " " + genome
+                   )
     if not verbose:
         commandline += " > /dev/null"
     code = os.system(commandline)
@@ -291,13 +294,14 @@ def extract_cds_match(scaf, hmmout, dna):
             cutseq = dna[new_fr:new_to].upper()
             seq_replace = ''
             for s in cutseq:
+                # Other non-standard bases are converted to N
                 if s in ['A', 'T', 'C', 'G', 'N']:
                     seq_replace += s
                 else:
                     seq_replace += 'N'
             if cutseq != seq_replace:
                 cutseq = seq_replace
-                logging.error('Illegal letters appear in the genome!')
+                logging.warning('Illegal letters appear in the genome!')
             if sign == '-':
                 cutseq = reverse_complement(cutseq)
             outdict[hit] = cutseq
@@ -312,7 +316,7 @@ def extract_cds(hmmout, gefile):
          Extract cds from genomic file
     Parameter:
          hmmout, funtion 'proc_nhmmer_out' output
-         hitnames, hit names
+         gefile, genome sequence file
     Return:
         return type -> Dict
         key   -> hit gene name
@@ -321,23 +325,28 @@ def extract_cds(hmmout, gefile):
     hmmout_seq = {}
     fin = open(gefile)
 
-    ss, seq_line, flag = '', '', False
+    header, seq_line, flag = '', '', False
     line = fin.readline()
     if line[0] != '>':
-        logging.error("Your file start with '{0}'"
+        logging.error("Your file start with '{0}', FASTA format?"
                       .format(line[0]))
         raise FastaFormatError(line[0])
     while line:
         if line[0:1] == '>':
             if flag:
-                d = extract_cds_match(ss, hmmout, seq_line)
-                hmmout_seq.update(d)
+                cds = extract_cds_match(header, hmmout, seq_line)
+                hmmout_seq.update(cds)
+                flag = False
             seq_line = ''
-            ss = line[1:].split()[0]
+            header = line[1:].split()[0]
         else:
             flag = True
             seq_line += line.strip()
         line = fin.readline()
+    # Process last sequence in genome
+    cds = extract_cds_match(header, hmmout, seq_line)
+    hmmout_seq.update(cds)
+
     fin.close()
     return hmmout_seq
 
@@ -359,17 +368,16 @@ def proc_nhmmer_out(file, EvalueLimit):
         return type (hmmout) -> Dictionary
         key   -> gene_name, hit gene name
         value -> a out list
-        return type (hitname) -> List
-        hit name (genome sequence name)
     """
 
     with open(file) as f:
+        # Filter the header and tail
         linelist = [line for line in f if line[0:1] != '#']
 
     hmmout = {}
-    hitname, hmmfr, hmmto, sqlen, evalue = [], [], [], [], []
     for line in linelist:
         temp = line.split()
+        # Extract information from NHMMER outfile
         sca = temp[0]
         hmmfr = int(temp[4])
         hmmto = int(temp[5])
@@ -380,40 +388,39 @@ def proc_nhmmer_out(file, EvalueLimit):
         sign = temp[11]
         evalue = float(temp[12])
         gene_name = sca + '_' + str(envfr) + '_' + str(envto) + '_' + sign
-        extend = 1000 - abs(envto - envfr)
-        # sequence similarity and length up to grade
-        if (evalue < EvalueLimit) and (hmmlen > 599):
-            hitname.append(sca)
-            if sign == '+':
-                new_to = min(envto + extend, slen)
-                if envfr < extend:
-                    new_fr = 0
-                else:
-                    new_fr = envfr - extend - 1
-                hmmout[gene_name] = [
-                    sca, envfr, envto, new_fr,
-                    new_to, sign, evalue, slen, hmmlen
-                ]
-            elif sign == '-':
-                new_fr = max(0, envto - extend - 1)
-                if (slen - envfr) < extend + 1:
-                    new_to = slen
-                else:
-                    new_to = envfr + extend
-                hmmout[gene_name] = [
-                    sca, envto, envfr, new_fr,
-                    new_to, sign, evalue, slen, hmmlen
-                ]
-            else:
-                # sign(strand) must be '+' or '-'
-                logging.error("NHMMER tool output 'strand' "
-                              + "column only '+' or '-'")
-                raise StrandError(sign)
+        extend = EXTEND_LENGTH - abs(envto - envfr)
+        if extend > 0:
+            stop_extend = int(0.5 * extend)
+            start_extend = EXTEND_LENGTH - stop_extend
+        else:
+            stop_extend = 0
+            start_extend = 0
+        # sequence similarity filter
+        if evalue > EvalueLimit: continue
+        if sign == '+':
+            new_fr = max(envfr - start_extend - 1, 0)
+            new_to = min(envto + stop_extend, slen)
+            hmmout[gene_name] = [
+                sca, envfr, envto, new_fr,
+                new_to, sign, evalue, slen, hmmlen
+            ]
+        elif sign == '-':
+            # The chain of antisense needs to be reversed
+            new_fr = max(envto - start_extend - 1, 0)
+            new_to = min(envfr + stop_extend, slen)
+            hmmout[gene_name] = [
+                sca, envto, envfr, new_fr,
+                new_to, sign, evalue, slen, hmmlen
+            ]
+        else:
+            # sign(strand) must be '+' or '-'
+            logging.error("NHMMER tool output 'strand' "
+                          + "column only '+' or '-'")
+            raise StrandError(sign)
+    return hmmout
 
-    return hmmout, hitname
 
-
-def find_stop_codons(seq, SeqLengthLimit):
+def find_stop_codons(seq):
     """
     Function:
         find_stop_codons
@@ -430,12 +437,13 @@ def find_stop_codons(seq, SeqLengthLimit):
     stop_taa = find_all('(?=(TAA))', seq)
     stops = stop_tag + stop_tga + stop_taa
     # Filter stop long enough
-    stops = sorted(i for i in stops if i > SeqLengthLimit)
+    # stops = sorted(i for i in stops if i > SeqLengthLimit)
+    stops = sorted(stops)
     return stops
 
 
 @logfun
-def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
+def find_cds(hmmout, hmmout_seq):
     """
     Function:
         find_cds
@@ -447,68 +455,76 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
         hmmout_seq, function 'extract_cds' outpuy
         SeqLengthLimit, artificially set OR's sequence length threshold
     Return:
-    return type(fun) -> Dictory
+    return type(cdsdict) -> Dictory
     key   -> hit gene name
-    value -> function OR CDS
+    value -> assume that OR CDS
+    return type(pseudos) -> Dictory
+    key   -> hit gene name
+    value -> assume that OR pseudogenes
     return type(outliers) -> Dictory
     key   -> hit gene name
     value -> outlier OR CDS
     """
 
     hit = 1
-    fun = {}
+    cdsdict = {}
+    pseudos = {}
     outliers = {}
     for gname in hmmout_seq:
-        processed = 0
+        processed = False
         raw_cds = hmmout_seq[gname]
         len_cds = len(raw_cds)
-        # The CDS length is too short
-        if len_cds < SeqLengthLimit:
-            outliers[gname] = raw_cds
-            continue
-        [sca, ori_fr, ori_to, fr, to, strand, evalue, slen, hmmlen] = hmmout[gname]
+        [sca, _a, _b, fr, to, strand, _c, _d, _e] = hmmout[gname]
         atgs = find_all('(?=(ATG))', raw_cds)
-        starts = sorted(i for i in atgs if i < len_cds - SeqLengthLimit)
-        stops = find_stop_codons(raw_cds, SeqLengthLimit)
+        starts = sorted(atgs)
+        stops = find_stop_codons(raw_cds)
         iso = 1
         for iatg in starts:
             for istop in stops:
+                if iatg >= istop:
+                    # Can not be function or pseudo genes
+                    processed = True
+                    continue
                 klen = istop - iatg
-                if (klen > SeqLengthLimit) and (klen % 3 == 0):
-                    fine_cds = raw_cds[iatg:istop]
-                    a_list = re.findall('...', fine_cds)
-                    # interrupting stop codon
-                    if ('TAG' in a_list) \
-                            or ('TGA' in a_list) \
-                            or ('TAA' in a_list):
-                        continue
-                    processed = 1
-                    if strand == '+':
-                        real_fr = int(fr) + iatg
-                        real_to = int(fr) + istop + 3
-                    elif strand == '-':
-                        real_fr = int(to) - istop - 3
-                        real_to = int(to) - iatg
-                    if 'N' in raw_cds[iatg:istop]:
-                        outliers[gname] = raw_cds
-                    else:
-                        hits = "hit" + str(hit)
-                        new_name = sca + '_' \
-                                   + str(real_fr) + '_' \
-                                   + str(real_to) + '_' \
-                                   + strand + '_iso' \
-                                   + str(iso)
-                        final_cds = raw_cds[iatg:(istop + 3)]
-                        fun[new_name] = [
-                            hits, gname, iso, final_cds,
-                            real_fr, real_to, strand
-                        ]
-                        iso += 1
-                        break
-        if processed == 0:
+                # CDS must be multiple of 3
+                if klen % 3 != 0: continue
+                fine_cds = raw_cds[iatg:istop]
+                a_list = re.findall('...', fine_cds)
+                # interrupting stop codon
+                if 'TAG' in a_list: continue
+                if 'TGA' in a_list: continue
+                if 'TAA' in a_list: continue
+                if strand == '+':
+                    real_fr = int(fr) + iatg
+                    real_to = int(fr) + istop + 3
+                elif strand == '-':
+                    real_fr = int(to) - istop - 3
+                    real_to = int(to) - iatg
+                # 'N' in CDS means sequencing was wrong
+                if 'N' in fine_cds:
+                    outliers[gname] = raw_cds
+                else:
+                    hits = "hit" + str(hit)
+                    new_name = (sca + '_'
+                                + str(real_fr) + '_'
+                                + str(real_to) + '_'
+                                + strand + '_iso'
+                                + str(iso)
+                                )
+                    final_cds = raw_cds[iatg:(istop + 3)]
+                    cdsdict[new_name] = [
+                        hits, gname, iso, final_cds,
+                        real_fr, real_to, strand
+                    ]
+                    iso += 1
+                    break
+                processed = True
+        if (not processed) and ('N' not in raw_cds):
+            pseudos[gname] = raw_cds
+        else:
             outliers[gname] = raw_cds
         hit += 1
-    return fun, outliers
+    return cdsdict, pseudos, outliers
 
 
 def sequence_align(seqf, alignf):
@@ -522,14 +538,16 @@ def sequence_align(seqf, alignf):
     Return: None
     """
 
-    command = MAFFT \
-              + " --localpair " \
-              + "--maxiterate 1000 " \
-              + "--quiet " \
-              + seqf \
-              + " > " \
-              + alignf
+    command = (MAFFT
+               + " --localpair "
+               + "--maxiterate 1000 "
+               + "--quiet "
+               + seqf
+               + " > "
+               + alignf
+               )
     os.system(command)
+
 
 def ParseSeq(seqf):
     """
@@ -542,7 +560,7 @@ def ParseSeq(seqf):
         return type -> List
         seq_list, [(name1, seq1), (name2, seq2), ...]
     """
-    seq_list = [] 
+    seq_list = []
     text = seqf.read().replace('\r', '')
     seqs = text.split('>')[1:]
     for seq in seqs:
@@ -647,7 +665,7 @@ def refact_list(template, hit_dict):
         sequence_align(TempName, TempAlign)
         seq_list = ReadSampleFasta(TempAlign)
         # drop some template OR sequence, retain OR5AN1 only
-        index = int(len(template)/2)
+        index = int(len(template) / 2)
         seq_list = seq_list[0:1] + seq_list[index:]
         os.remove(TempAlign)
         TempOR.close()
@@ -670,7 +688,7 @@ def tm_cut(seq_list):
                    value -> TM sequence
     """
     iaad = 0
-    tm1, tm2, tm3, tm4, ecl2, tm5, tm6, tm7 = [],[],[],[],[],[],[],[]
+    tm1, tm2, tm3, tm4, ecl2, tm5, tm6, tm7 = [], [], [], [], [], [], [], []
     for i in range(len(seq_list[0][1])):
         aad = seq_list[0][1][i]
         if aad != "-":
@@ -678,19 +696,19 @@ def tm_cut(seq_list):
         else:
             continue
         if iaad == TM_boundary[0]: tm1.append(i)
-        if iaad == TM_boundary[1]: tm1.append(i+1)
+        if iaad == TM_boundary[1]: tm1.append(i + 1)
         if iaad == TM_boundary[2]: tm2.append(i)
-        if iaad == TM_boundary[3]: tm2.append(i+1)
+        if iaad == TM_boundary[3]: tm2.append(i + 1)
         if iaad == TM_boundary[4]: tm3.append(i)
-        if iaad == TM_boundary[5]: tm3.append(i+1)
+        if iaad == TM_boundary[5]: tm3.append(i + 1)
         if iaad == TM_boundary[6]: tm4.append(i)
-        if iaad == TM_boundary[7]: tm4.append(i+1)
+        if iaad == TM_boundary[7]: tm4.append(i + 1)
         if iaad == TM_boundary[8]: tm5.append(i)
-        if iaad == TM_boundary[9]: tm5.append(i+1)
+        if iaad == TM_boundary[9]: tm5.append(i + 1)
         if iaad == TM_boundary[10]: tm6.append(i)
-        if iaad == TM_boundary[11]: tm6.append(i+1)
+        if iaad == TM_boundary[11]: tm6.append(i + 1)
         if iaad == TM_boundary[12]: tm7.append(i)
-        if iaad == TM_boundary[13]: tm7.append(i+1)
+        if iaad == TM_boundary[13]: tm7.append(i + 1)
     icl1, icl2, icl3 = [], [], []
     ecl1, ecl2, ecl3 = [], [], []
     name_list, cut_list, nterm_list = [], [], []
@@ -778,7 +796,7 @@ def Nterm_length(nterms):
             area_c1.append((name, length))
         elif 17 <= length <= 19:
             area_b1.append((name, length))
-        elif 20 <= length <=25:
+        elif 20 <= length <= 25:
             area_a.append((name, length))
         elif 26 <= length <= 35:
             area_b2.append((name, length))
@@ -789,7 +807,7 @@ def Nterm_length(nterms):
 
     # Processing area A
     if len(area_a) != 0:
-        a_shift = [(n, abs(l-22)) for n, l in area_a]
+        a_shift = [(n, abs(l - 22)) for n, l in area_a]
         a_name = sorted(a_shift, key=lambda x: x[1])[0][0]
         funcs.append(a_name)
     # Processing area B
@@ -901,7 +919,7 @@ def Writer(outdir, filename, datalist):
         outf.writelines(datalist)
 
 
-def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
+def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout):
     """
     Function:
         Writer
@@ -909,7 +927,8 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
     Parameter:
         outdir, the directory where the output file is saved
         prefix, output file prefix.
-        funcs, find_cds() return, function OR dict
+        funcs, find_cds() return, assume function OR dict
+        pseudos, assume pseudos olfactory receptor genes
         outliers, find_cds() return
         hmmout_seq, extract_cds() return
         hmmout, proc_nhmmer_out() return
@@ -918,7 +937,7 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
     """
 
     count = 0
-    dna_list, pro_list, summary_list = [], [], []
+    dna_list, summary_list = [], []
     s_header = 'count\tsca\tfr\tto\treal_fr\treal_to\tstrand\tevalue\thmmlen\tlen_cds\n'
     summary_list.append(s_header)
     for index in funcs:
@@ -928,7 +947,6 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
         header = "_".join(header)
         seq = dna_translation(cds)
         dna_list.append('>' + header + '\n' + cds + '\n')
-        pro_list.append('>' + header + '\n' + seq + '\n')
         count += 1
         summary_line = [
             count, sca,
@@ -940,10 +958,11 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
         summary_line = "\t".join([str(line) for line in summary_line])
         summary_list.append(summary_line + "\n")
     outlier_list = ['>' + name + '\n' + line + '\n' for name, line in outliers.items()]
+    pseudos_list = ['>' + name + '\n' + line + '\n' for name, line in pseudos.items()]
 
     Writer(outdir, prefix + "_ORs_DNA.fa", dna_list)
-    Writer(outdir, prefix + "_ORs_pro.fa", pro_list)
     Writer(outdir, prefix + "_outliers_dna.fa", outlier_list)
+    Writer(outdir, prefix + "_pseudos_dna.fa", outlier_list)
     Writer(outdir, prefix + "_summary_cds.txt", summary_list)
 
     # result write to log file
@@ -952,23 +971,14 @@ def writer2file(outdir, prefix, funcs, outliers, hmmout_seq, hmmout):
     num_fun_cds = len(hmmout_seq) - len(outliers)
     num_fun_OR = len(funcs)
     num_iso = num_fun_OR - num_fun_cds
-    cds = "{} OR CDS found by nhmmer. Among them." \
-        .format(num_cds)
-    outlie = "{} outliers cds were found." \
-        .format(num_out)
-    funcds = "{} latent functional cds were found;" \
-        .format(num_fun_cds)
-    funor = "latent generating {} functional ORs;" \
-        .format(num_fun_OR)
-    isoform = "including {} isoforms".format(num_iso)
+    cds = "{} OR CDS found by nhmmer. Among them.".format(num_cds)
+    outlie = "{} outliers cds were found.".format(num_out)
     logging.info("###The result as follows###")
     logging.info(prefix + " processing completed")
     logging.info(cds)
     logging.info(outlie)
-    logging.info(funcds)
-    logging.info(funor)
-    logging.info(isoform)
     logging.info("###The program finish###")
+
 
 def test_nhmmer_evalue(nhmmout):
     """
@@ -982,11 +992,31 @@ def test_nhmmer_evalue(nhmmout):
         return type -> int
         nhits, number of nhmmer hits
     """
-    
+
     name = nhmmout.split('-')[0]
     with open(nhmmout) as nhmmf:
         nhits = sum(1 for line in nhmmf if line[0] != '#')
     return name, nhits
+
+
+def chmod(path):
+    """
+    Function:
+        chmod
+        Change file permission
+    Parameter:
+        path, file/folder path
+    """
+    if not os.path.exists(path):
+        logging.error(path + " not exists!")
+        sys.exit()
+    elif os.path.isfile(path):
+        os.chmod(path, stat.S_IRWXO+stat.S_IRWXG+stat.S_IRWXU)
+    elif os.path.isdir(path):
+        for _file in os.listdir(path):
+            os.chmod(_file, stat.S_IRWXO + stat.S_IRWXG + stat.S_IRWXU)
+    else:
+        logging.info("chmod() nothing to do.")
 
 
 if __name__ == "__main__":

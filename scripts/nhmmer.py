@@ -5,9 +5,11 @@ import sys
 import logging
 
 from src.Functions import logger
+from src.Functions import chmod
 from src.Functions import platform_info
 from src.Functions import run_nhmmer
 from src.ParseArgs import ParseCommand
+from src.config import NHMMER
 
 
 if len(sys.argv) == 1:
@@ -36,6 +38,8 @@ logger('nhmmer')
 # check platform
 platform_info(verbose)
 
+# change nhmmer permission
+chmod(NHMMER)
 
 # Run the nhmmer program
 if verbose:
