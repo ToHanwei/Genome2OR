@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="abfd10bb-d205-410b-9c99-48f3f0833c3b" name="mylab" url="http://10.19.27.113">
+        <fileTransfer host="10.19.27.113" port="22" rootFolder="/Data/hpc2-Genome2OR" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

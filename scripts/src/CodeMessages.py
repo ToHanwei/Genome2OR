@@ -36,6 +36,11 @@ ntermerror = """
 Your N-term list is empty. 
 """
 
+file_error = """
+\033[1;31mFile Not ExistsError\033[0m
+There is no {0} irectory {1}.
+Have you changed the {0} file name?
+"""
 
 class StrandError(Exception):
 
@@ -86,3 +91,13 @@ class NtermError(Exception):
 
 	def __str__(self):
 		return ntermerror
+
+
+class FileNotExists(Exception):
+
+	def __init__(self, filen, dirname):
+		self.filen = filen
+		self.dirname = dirname
+
+	def __str__(self):
+		return file_error.format(self.filen, self.dirname)

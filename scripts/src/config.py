@@ -10,8 +10,8 @@ VERSION = "Genome2OR 1.0"
 CompBase = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C',
             'N': 'N', }
 
-# Olfactory receptor protein pattern
-PATTERNS = [
+# Olfactory receptor protein pattern. (out of use)
+PATTERNS_old = [
     r'[YFC].....[GAS]N..[ILMV]',  # TM1
     r'L..PMY..[LI]',  # TM2
     r'[IL]....C..Q',  # TM3-1
@@ -32,6 +32,7 @@ TM_boundary = [
 ]
 
 
+# Olfactory receptor protein pattern
 TM1 = r'[YF].....[GAESW]N'
 TM2_1 = r'[MK][YF].[FL][LIV]'
 TM2_2 = r'[LF]...[DEN]........P'
@@ -46,14 +47,27 @@ ICL1 = r'L..P'
 ICL2 = r'Y...[MLVI]'
 ECL2 = r'[CYFRHS].........C.........[CSYA]'
 
-patterns = [
+PATTERNS = [
     TM1, TM2_1, TM2_2,
     TM3_1, TM3_2, TM5,
     TM6, TM7, ICL1,
     ICL2, ECL2, Nterm, H8
 ]
 
-# The standard location of the pattern
+# N-terminal length interval partition
+C1 = 12
+C2 = 48
+B1 = 16
+B2 = 36
+A1 = 19
+A2 = 26
+PEAK = 22
+
+# The region of transmembrane helix parameter
+TM_WITH_GAPS = 2
+TM_GAPS_TOTAL = 5
+
+# The standard location of the pattern (out of use)
 GOLD_POS = [34, 54, 91, 117, 124, 168, 216, 235, 282]
 
 # The threshold for matching the number of patterns
@@ -61,7 +75,7 @@ PATTERN_THRESHOLD = 10
 
 # The extend length.
 # If CDS shorted than EXTEND_LENGTH will be extended to that length
-EXTEND_LENGTH = 1200
+EXTEND_LENGTH = 1000
 
 # Codon mapping table
 CODON_TABLE = {
@@ -81,7 +95,7 @@ CODON_TABLE = {
 }
 
 # Olfactory receptor template sequence
-ORfile = "../template/template.fasta"
+OR_TEMPLATE = "../template/template.fasta"
 
 # nhmmer tool path 
 NHMMER = "../tools/nhmmer"
