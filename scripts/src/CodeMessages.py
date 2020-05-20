@@ -38,9 +38,11 @@ Your N-term list is empty.
 
 file_error = """
 \033[1;31mFile Not ExistsError\033[0m
-There is no {0} irectory {1}.
+There is no {0} directory {1}.
 Have you changed the {0} file name?
+Or, you move it to other directory. 
 """
+
 
 class StrandError(Exception):
 

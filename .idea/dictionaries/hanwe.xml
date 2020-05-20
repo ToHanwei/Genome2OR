@@ -13,11 +13,15 @@
       <w>klen</w>
       <w>missense</w>
       <w>nhmmer</w>
+      <w>noali</w>
+      <w>pextend</w>
+      <w>popen</w>
       <w>prepseuf</w>
       <w>pseu</w>
       <w>pseudogene</w>
       <w>pseudogenes</w>
       <w>refact</w>
+      <w>tblout</w>
       <w>uniprot</w>
     </words>
   </dictionary>

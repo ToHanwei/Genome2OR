@@ -56,7 +56,7 @@ hit_list = refact_list(template, hit_dict)
 
 if verbose:
     print("\033[1;32mIdentity functions\\pseudogenes...\033[0m")
-funcs = []
+pseus, funcs = []
 for seq_list in hit_list:
     # Some pseudogenes were filtered out by pattern matching
     pseu1, nterms, tm_list = tm_pattern(seq_list)
@@ -66,17 +66,16 @@ for seq_list in hit_list:
     # Some pseudogenoes were filtered out by TM gaps
     func2, pseu3 = tm_gaps_filter(tm_list)
     seq_dict = dict(seq_list)
-    pseu_names = pseu1 + pseu2 + pseu3
     for func in func2:
         seq_func = ">" + func + seq_dict[func].replace('-', '')
         funcs.append(seq_func)
-    #for pseu in pseu1 + pseu2 + pseu3:
-    #    seq_pseu = ">" + pseu + seq_dict[pseu].replace('-', '')
-    #    pseus.append(seq_pseu)
+    for pseu in pseu1 + pseu2 + pseu3:
+        seq_pseu = ">" + pseu + seq_dict[pseu].replace('-', '')
+        pseus.append(seq_pseu)
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")
-func_file, pseu_file = identity_writer(hitpro, outputdir, prefix, funcs, pseu_names)
+func_file, pseu_file = identity_writer(hitpro, outputdir, prefix, funcs, pseus)
 
 if verbose:
     print("\033[1;32mCD-HIT filter redundant sequence...\033[0m")

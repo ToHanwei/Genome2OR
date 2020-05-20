@@ -83,6 +83,9 @@ def run_nhmmer(evalue, cpus, output, profile, genome, verbose):
                    + str(evalue)
                    + " --dna --cpu "
                    + str(cpus)
+                   + " --noali"
+                   + " --popen 0.02"  # default 0.02
+                   + " --pextend 0.4"  # default 0.4
                    + " --tblout "
                    + output
                    + " " + profile
@@ -474,9 +477,6 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
         funcgene = False
         raw_cds = hmmout_seq[gname]
         len_cds = len(raw_cds)
-        #if len_cds < SeqLengthLimit:
-        #    outliers[gname] = raw_cds
-        #    continue
         [sca, _a, _b, fr, to, strand, _c, _d, _e] = hmmout[gname]
         atgs = find_all('(?=(ATG))', raw_cds)
         starts = sorted(i for i in atgs if i < len_cds - SeqLengthLimit)
@@ -801,64 +801,62 @@ def Nterm_length(nterms):
     area_c1, area_c2 = [], []
     for name, nterm in nterms:
         length = len(nterm)
-        if C1 < length <= B1:
+        if 13 <= length <= 16:
             area_c1.append((name, length))
-        elif B1 < length <= A1:
+        elif 17 <= length <= 19:
             area_b1.append((name, length))
-        elif A1 < length < A2:
+        elif 20 <= length <= 25:
             area_a.append((name, length))
-        elif A2 <= length < B2:
+        elif 26 <= length <= 35:
             area_b2.append((name, length))
-        elif B2 <= length < C2:
+        elif 36 <= length <= 47:
             area_c2.append((name, length))
         else:
             other.append(name)
-    # Priority: area_a > (area_b1 = area_b2) > (area_c1 = area_c2)
+
     # Processing area A
-    if area_a:
-        a_shift = [(n, abs(l - PEAK)) for n, l in area_a]
+    if len(area_a) != 0:
+        a_shift = [(n, abs(l - 22)) for n, l in area_a]
         a_name = sorted(a_shift, key=lambda x: x[1])[0][0]
         funcs.append(a_name)
     # Processing area B
-    elif area_b1 or area_b2:
-        if area_b1 and area_b2:
+    elif len(area_b1) or len(area_b2):
+        if (len(area_b1) > 0) and (len(area_b2) > 0):
             b2 = sorted(area_b2, key=lambda x: x[1])[0]
             b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
-            if abs(b2[1] - A2) <= abs(b1[1] - A1):
+            if abs(b2[1] - 25) <= abs(b1[1] - 20):
                 funcs.append(b2[0])
             else:
                 funcs.append(b1[0])
-        elif area_b1:
+        elif (len(area_b1) > 0) and (len(area_b2) == 0):
             b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
             funcs.append(b1[0])
         else:
             b2 = sorted(area_b2, key=lambda x: x[1])[0]
             funcs.append(b2[0])
     # Processing area C
-    elif area_c1 or area_c2:
-        if area_c1 and area_c2:
+    elif len(area_c1) or len(area_c2):
+        if (len(area_c1) > 0) and (len(area_c2) > 0):
             c2 = sorted(area_c2, key=lambda x: x[1])[0]
             c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
-            if abs(c2[1] - B2) <= abs(c1[1] - B1):
+            if abs(c2[1] - 35) <= abs(c1[1] - 17):
                 funcs.append(c2[0])
             else:
                 funcs.append(c1[0])
-        elif area_c1:
+        elif (len(area_c1) > 0) and (len(area_c2) == 0):
             c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
             funcs.append(c1[0])
         else:
             c2 = sorted(area_c2, key=lambda x: x[1])[0]
             funcs.append(c2[0])
-    elif other:
+    elif len(other):
         other = str(other)
         logging.info("{0}'s N-term out of range!".format(other))
     else:
         logging.info("process an empty list!")
 
     if len(funcs) == 0:
-        # all hits N-term are short, means this fragment is pseudo
         pseus = [name for name, _ in nterms]
-        pseus.extend(other)
     return funcs, pseus
 
 
@@ -1013,7 +1011,7 @@ def identity_writer(hitfile, outputdir, prefix, funcs, pseus):
     with open(func_file, 'w') as funcf:
         funcf.writelines(funcs)
 
-    prepseu = hitfile.split('_')[0] + "_Pre-pseudos_dna.fa"
+    prepseu = hitfile[:-14] + "Pre-pseudos_dna.fa"
     if not os.path.exists(prepseu):
         raise FileNotExists(prepseu, outputdir)
     with open(prepseu) as prepseuf:
