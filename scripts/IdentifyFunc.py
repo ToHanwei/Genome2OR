@@ -56,7 +56,7 @@ hit_list = refact_list(template, hit_dict)
 
 if verbose:
     print("\033[1;32mIdentity functions\\pseudogenes...\033[0m")
-pseus, funcs = []
+pseus, funcs = [], []
 for seq_list in hit_list:
     # Some pseudogenes were filtered out by pattern matching
     pseu1, nterms, tm_list = tm_pattern(seq_list)

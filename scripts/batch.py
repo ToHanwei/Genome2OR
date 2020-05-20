@@ -52,36 +52,40 @@ for infile in files:
     nhmmout = os.path.join(nhmmerout, infile + ".tblout")
     prefix = infile.split('.')[0]
     # run nhmmer program
-    hmmcom = "python nhmmer.py " \
-             + pofile + " " \
-             + genome + " " \
-             + nhmmout \
-             + " -e " + EvalueLimit \
-             + " -c " + cpus
+    hmmcom = ("python nhmmer.py "
+              + pofile + " "
+              + genome + " "
+              + nhmmout
+              + " -e " + EvalueLimit
+              + " -c " + cpus
+              )
     if verbose:
         hmmcom += " -v"
     os.system(hmmcom)
 
     # run FindOR program
-    findcom = "time python FindOR.py " \
-              + nhmmout + " "\
-              + genome \
-              + " -o " + findoutdir \
-              + " -p " + prefix \
-              + " -e " + EvalueLimit \
-              + " -l " + SeqLengthLimit
+    findcom = ("time python FindOR.py "
+               + nhmmout + " "
+               + genome
+               + " -o " + findoutdir
+               + " -p " + prefix
+               + " -e " + EvalueLimit
+               + " -l " + SeqLengthLimit
+               )
     if verbose:
         findcom += " -v"
     os.system(findcom)
 
     # run IdentityFunc program
-    findout = prefix + '_ORs_pro.fa'
-    findout = os.path.join(findoutdir, findout)
-    print(findout)
-    identitycom = "time python IdentifyFunc.py " \
-                  + findout + \
-                  " -o " + identityout + \
-                  " -p " + prefix
+    profile = prefix + '_Pre-ORs_pro.fa'
+    dnafile = prefix + "_Pre-ORs_dna.fa"
+    profile = os.path.join(findoutdir, profile)
+    identitycom = ("time python IdentifyFunc.py "
+                   + profile + " "
+                   + dnafile
+                   + " -o " + identityout
+                   + " -p " + prefix
+                   )
     if verbose:
         identityout += " -v"
     os.system(identitycom)
