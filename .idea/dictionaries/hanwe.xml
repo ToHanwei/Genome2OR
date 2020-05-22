@@ -1,25 +1,39 @@
 <component name="ProjectDictionaryState">
   <dictionary name="hanwe">
     <words>
+      <w>cds</w>
       <w>cdsdict</w>
+      <w>cdslist</w>
       <w>codon</w>
       <w>codons</w>
       <w>dictory</w>
+      <w>fasta</w>
+      <w>filerlist</w>
+      <w>filterlist</w>
+      <w>funcgene</w>
+      <w>funcomm</w>
       <w>funtion</w>
+      <w>gname</w>
       <w>hitfile</w>
       <w>hmmout</w>
       <w>iatg</w>
+      <w>interrfilter</w>
       <w>istop</w>
       <w>klen</w>
+      <w>lengfilter</w>
       <w>missense</w>
       <w>nhmmer</w>
       <w>noali</w>
+      <w>nonredun</w>
       <w>pextend</w>
       <w>popen</w>
       <w>prepseuf</w>
       <w>pseu</w>
+      <w>pseucomm</w>
       <w>pseudogene</w>
       <w>pseudogenes</w>
+      <w>pseudogenoes</w>
+      <w>pseudogenos</w>
       <w>refact</w>
       <w>tblout</w>
       <w>uniprot</w>

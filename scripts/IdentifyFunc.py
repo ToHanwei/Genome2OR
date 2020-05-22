@@ -60,7 +60,7 @@ pseus, funcs = [], []
 for seq_list in hit_list:
     # Some pseudogenes were filtered out by pattern matching
     pseu1, nterms, tm_list = tm_pattern(seq_list)
-    # Some pseudogenos were filtered out by N-term length
+    # Some pseudogenoes were filtered out by N-term length
     func1, pseu2 = Nterm_length(nterms)
     tm_list = [(n, seq) for n, seq in tm_list if n in func1]
     # Some pseudogenoes were filtered out by TM gaps

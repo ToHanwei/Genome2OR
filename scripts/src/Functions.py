@@ -445,6 +445,57 @@ def find_stop_codons(seq, SeqLengthLimit):
     return stops
 
 
+def cds_length_filter(cdslist, SeqLengthLimit):
+    """
+    Function:
+        cds_length_filter
+        Determine if all CDS's meet the length limit
+    Parameter:
+        cdslist, cds list from a DNA fragment
+    Return:
+        return type -> list
+        Filtered cdslist
+    """
+    filterlist = [cds for cds in cdslist if len(cds[2]) >= SeqLengthLimit]
+    return filterlist
+
+
+def insert_filter(cdslist):
+    """
+    Function:
+        insert_filter
+        Determine if all CDS's ware inserted or deleted
+    Parameter:
+        cdslist, cds list from a DNA fragment
+    Return:
+        return type -> list
+        Filtered cdslist
+    """
+    filterlist = [cds for cds in cdslist if len(cds[2]) % 3 == 0]
+    return filterlist
+
+
+def interrupt_stop_codon(cdslist):
+    """
+    Function:
+        interrupt_stop_codon
+        Determine if all CDS ware interrupting stop codon
+    Parameter:
+        cdslist, cds list from a DNA fragment
+    Return:
+        return type -> list
+        Filtered cdslist
+    """
+    filterlist = []
+    for cds in cdslist:
+        codons = re.findall('...', cds[2])
+        if 'TAG' in codons: continue
+        if 'TGA' in codons: continue
+        if 'TAA' in codons: continue
+        filterlist.append(cds)
+    return filterlist
+
+
 @logfun
 def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
     """
@@ -473,54 +524,65 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
     cdsdict = {}
     pseudos = {}
     outliers = {}
+    lengfilter = 0
+    insertfilter = 0
+    interrfilter = 0
     for gname in hmmout_seq:
+        iso = 1
+        temp_pseu = []
         funcgene = False
+        real_fr, real_to = '', ''
         raw_cds = hmmout_seq[gname]
         len_cds = len(raw_cds)
         [sca, _a, _b, fr, to, strand, _c, _d, _e] = hmmout[gname]
-        atgs = find_all('(?=(ATG))', raw_cds)
-        starts = sorted(i for i in atgs if i < len_cds - SeqLengthLimit)
+        starts = find_all('(?=(ATG))', raw_cds)
+        starts = sorted(i for i in starts if i < len_cds - SeqLengthLimit)
         stops = find_stop_codons(raw_cds, SeqLengthLimit)
-        iso = 1
-        temp_pseu = []
-        for iatg in starts:
-            for istop in stops:
-                klen = istop - iatg
-                fine_cds = raw_cds[iatg:istop]
-                a_list = re.findall('...', fine_cds)
-                if klen < SeqLengthLimit:
-                    # Can not be function or pseudo genes, too short.
-                    continue
-                if klen % 3 != 0:
-                    # CDS must be multiple of 3
-                    # Insert or delete codon (pseudogene)
-                    temp_pseu.append(fine_cds)
-                    continue
-                if ('TAG' in a_list) or ('TGA' in a_list) or ('TAA' in a_list):
-                    # Interrupting stop codon (pseudogene)
-                    temp_pseu.append(fine_cds)
-                    continue
-                if strand == '+':
-                    real_fr = int(fr) + iatg
-                    real_to = int(fr) + istop + 3
-                elif strand == '-':
-                    real_fr = int(to) - istop - 3
-                    real_to = int(to) - iatg
-                if 'N' not in fine_cds:
-                    hits = "hit" + str(hit)
-                    new_name = (sca + '_'
-                                + str(real_fr) + '_'
-                                + str(real_to) + '_'
-                                + strand + '_iso'
-                                + str(iso)
-                                )
-                    final_cds = raw_cds[iatg:(istop + 3)]
-                    cdsdict[new_name] = [
-                        hits, gname, iso, final_cds,
-                        real_fr, real_to, strand
-                    ]
-                    funcgene = True
-                    iso += 1
+        cdslist = [(i, j, raw_cds[i:j]) for i in starts for j in stops]
+        # Determine if all CDS's meet the length limit
+        cdslist = cds_length_filter(cdslist, SeqLengthLimit)
+        if cdslist:
+            # Insert or delete codon (pseudogene)
+            cdslist = insert_filter(cdslist)
+            if cdslist:
+                # Interrupting stop codon (pseudogene)
+                cdslist = interrupt_stop_codon(cdslist)
+                if cdslist:
+                    for cds in cdslist:
+                        iatg, istop, cds_seq = cds
+                        if strand == '+':
+                            real_fr = int(fr) + iatg
+                            real_to = int(fr) + istop + 3
+                        elif strand == '-':
+                            real_fr = int(to) - istop - 3
+                            real_to = int(to) - iatg
+                        if 'N' not in cds_seq:
+                            hits = "hit" + str(hit)
+                            new_name = (sca + '_'
+                                        + str(real_fr) + '_'
+                                        + str(real_to) + '_'
+                                        + strand + '_iso'
+                                        + str(iso)
+                                        )
+                            final_cds = raw_cds[iatg:(istop + 3)]
+                            cdsdict[new_name] = [
+                                hits, gname, iso, final_cds,
+                                real_fr, real_to, strand
+                            ]
+                            funcgene = True
+                            iso += 1
+                else:
+                    # all cds fragment has interrupt stop codon
+                    interrfilter += 1
+                    temp_pseu += [cds[2] for cds in cdslist]
+            else:
+                # all cds fragment can not be multiple by 3
+                insertfilter += 1
+                temp_pseu += [cds[2] for cds in cdslist]
+        else:
+            # all cds fragment length too short
+            lengfilter += 1
+            continue
         if not funcgene:
             temp_pseu = [ps for ps in temp_pseu if 'N' not in ps]
             if temp_pseu:
