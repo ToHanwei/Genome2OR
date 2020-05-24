@@ -594,7 +594,8 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
                 pseudos[gname] = raw_cds
         else:
             hit += 1
-    return cdsdict, pseudos, outliers
+        pseunum = (lengfilter, insertfilter, interrfilter)
+    return cdsdict, pseudos, outliers, pseunum
 
 
 def sequence_align(seqf, alignf):
@@ -991,7 +992,7 @@ def Writer(outdir, filename, datalist):
         outf.writelines(datalist)
 
 
-def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout):
+def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout, pseunum):
     """
     Function:
         Writer
