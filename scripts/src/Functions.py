@@ -841,7 +841,7 @@ def tm_pattern(seq_list):
             pseu.append(k)
         else:
             nterms.append((k, nterm[k]))
-            tm_lists.append((k, tms))
+            tm_lists.append((k, tms, n))
     return pseu, nterms, tm_lists
 
 
@@ -937,7 +937,7 @@ def tm_gaps_filter(seq_list):
     """
 
     func, pseu = [], []
-    for name, tms in seq_list:
+    for name, tms, _ in seq_list:
         gaps = [tm.count('-') for tm in tms if tm.count('-') > 0]
         gap_tms = len(gaps)
         gap_total = sum(gaps)
@@ -992,7 +992,7 @@ def Writer(outdir, filename, datalist):
         outf.writelines(datalist)
 
 
-def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout, pseunum):
+def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout):
     """
     Function:
         Writer

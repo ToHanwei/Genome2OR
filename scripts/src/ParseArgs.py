@@ -190,7 +190,6 @@ class ParseCommand(object):
                                  hit sequence from genome"
                             )
 
-
         # optional arguments
         parser.add_argument('-o', '--outputdir',
                             help="String, Result save directory.(default:../output)",
@@ -268,8 +267,8 @@ class ParseCommand(object):
         args = parser.parse_args()
         return args
 
+
 if __name__ == "__main__":
     parse = ParseCommand()
     args = parse.nhmmerparse()
     print(args)
-

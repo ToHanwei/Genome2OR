@@ -56,6 +56,6 @@ functional, pseudos, outliers, pseunum = find_cds(hmmout, hmmout_seq, SeqLengthL
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")
-writer2file(outputdir, prefix, functional, pseudos, outliers, hmmout_seq, hmmout, pseunum)
+writer2file(outputdir, prefix, functional, pseudos, outliers, hmmout_seq, hmmout)
 
 logging.info("###Program FindOR.py finish###")

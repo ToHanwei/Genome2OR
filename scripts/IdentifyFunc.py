@@ -62,7 +62,7 @@ for seq_list in hit_list:
     pseu1, nterms, tm_list = tm_pattern(seq_list)
     # Some pseudogenoes were filtered out by N-term length
     func1, pseu2 = Nterm_length(nterms)
-    tm_list = [(n, seq) for n, seq in tm_list if n in func1]
+    tm_list = [tm for tm in tm_list if tm[0] in func1]
     # Some pseudogenoes were filtered out by TM gaps
     func2, pseu3 = tm_gaps_filter(tm_list)
     seq_dict = dict(seq_list)
