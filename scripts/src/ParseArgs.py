@@ -39,9 +39,9 @@ class ParseCommand(object):
         parser.add_argument('-e', '--EvalueLimit',
                             type=float,
                             help="Float, Sequence similarity threshold.\
-                                 (default:1e-60)",
+                                 (default:1e-20)",
                             # An empirical value
-                            default=1e-60,
+                            default=1e-20,
                             metavar='',
                             )
         parser.add_argument('-l', '--SeqLengthLimit',
@@ -86,9 +86,9 @@ class ParseCommand(object):
         parser.add_argument('-e', '--EvalueLimit',
                             type=float,
                             help="Float, Sequence similarity threshold.\
-                                 (default:1e-10)",
+                                 (default:1e-20)",
                             # An empirical value
-                            default=1e-10,
+                            default=1e-20,
                             metavar='',
                             )
         parser.add_argument('-c', '--cpus',
@@ -141,9 +141,9 @@ class ParseCommand(object):
         parser.add_argument('-e', '--EvalueLimit',
                             type=float,
                             help="Float, Sequence similarity threshold.\
-                                 (default:1e-60)",
+                                 (default:1e-20)",
                             # An empirical value
-                            default=1e-60,
+                            default=1e-20,
                             metavar='',
                             )
         parser.add_argument('-l', '--SeqLengthLimit',
@@ -201,6 +201,12 @@ class ParseCommand(object):
                             default="Identity",
                             metavar='',
                             )
+        parser.add_argument('-k', '--keepfile',
+                            help="bool, whether to keep intermediate file.(default:True)",
+                            default=True,
+                            metavar='',
+                            type=bool,
+                            )
         parser.add_argument('-v', '--verbose',
                             action='count',
                             help="Print verbose information.",
@@ -236,9 +242,9 @@ class ParseCommand(object):
         parser.add_argument('-e', '--EvalueLimit',
                             type=float,
                             help="Float, Sequence similarity threshold.\
-                                 (default:1e-60)",
+                                 (default:1e-20)",
                             # An empirical value
-                            default=1e-60,
+                            default=1e-20,
                             metavar='',
                             )
         parser.add_argument('-o', '--output',

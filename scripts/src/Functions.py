@@ -289,26 +289,37 @@ def extract_cds_match(scaf, hmmout, dna):
     """
 
     outdict = {}
+    sourdict = {}
     for hit in hmmout:
         if hmmout[hit][0] == scaf:
+            fr, to = sorted(hmmout[hit][1:3])
             new_fr = hmmout[hit][3]
             new_to = hmmout[hit][4]
             sign = hmmout[hit][5]
             cutseq = dna[new_fr:new_to].upper()
+            sourseq = dna[fr:to].upper()
             seq_replace = ''
+            sour_replace = ''
             for s in cutseq:
                 # Other non-standard bases are converted to N
                 if s in ['A', 'T', 'C', 'G', 'N']:
                     seq_replace += s
                 else:
                     seq_replace += 'N'
-            if cutseq != seq_replace:
-                cutseq = seq_replace
-                logging.warning('Illegal letters appear in the genome!')
+            for s in sourseq:
+                # Other non-standard bases are converted to N
+                if s in ['A', 'T', 'C', 'G', 'N']:
+                    sour_replace += s
+                else:
+                    sour_replace += 'N'
+            cutseq = seq_replace
+            sourseq = sour_replace
             if sign == '-':
                 cutseq = reverse_complement(cutseq)
+                sourseq = reverse_complement(sourseq)
             outdict[hit] = cutseq
-    return outdict
+            sourdict[hit] = sourseq
+    return outdict, sourdict
 
 
 @logfun
@@ -326,6 +337,7 @@ def extract_cds(hmmout, gefile):
         value -> CDS sequence
     """
     hmmout_seq = {}
+    sour_seq = {}
     fin = open(gefile)
 
     header, seq_line, flag = '', '', False
@@ -337,8 +349,9 @@ def extract_cds(hmmout, gefile):
     while line:
         if line[0:1] == '>':
             if flag:
-                cds = extract_cds_match(header, hmmout, seq_line)
+                cds, sourcds = extract_cds_match(header, hmmout, seq_line)
                 hmmout_seq.update(cds)
+                sour_seq.update(sourcds)
                 flag = False
             seq_line = ''
             header = line[1:].split()[0]
@@ -347,15 +360,16 @@ def extract_cds(hmmout, gefile):
             seq_line += line.strip()
         line = fin.readline()
     # Process last sequence in genome
-    cds = extract_cds_match(header, hmmout, seq_line)
+    cds, sourcds = extract_cds_match(header, hmmout, seq_line)
     hmmout_seq.update(cds)
+    sour_seq.update(sourcds)
 
     fin.close()
-    return hmmout_seq
+    return hmmout_seq, sour_seq
 
 
 @logfun
-def proc_nhmmer_out(file, EvalueLimit):
+def proc_nhmmer_out(file, EvalueLimit, SeqLengthLimit):
     """
     Function:
         proc_nhmmer_out
@@ -367,6 +381,7 @@ def proc_nhmmer_out(file, EvalueLimit):
         "env to", "sq len", "strand", "E-value", "score", "bias",
         "description of target"
         EvalueLimit, Sequence similarity threshold
+        SeqLengthLimit, Sequence length threshold
     Return:
         return type (hmmout) -> Dictionary
         key   -> gene_name, hit gene name
@@ -377,7 +392,7 @@ def proc_nhmmer_out(file, EvalueLimit):
         # Filter the header and tail
         linelist = [line for line in f if line[0:1] != '#']
 
-    hmmout = {}
+    hmmout, trunc = {}, {}
     for line in linelist:
         temp = line.split()
         # Extract information from NHMMER outfile
@@ -394,33 +409,36 @@ def proc_nhmmer_out(file, EvalueLimit):
         extend = EXTEND_LENGTH - abs(envto - envfr)
         if extend > 0:
             stop_extend = int(0.5 * extend)
-            start_extend = EXTEND_LENGTH - stop_extend
+            start_extend = extend - stop_extend
         else:
             stop_extend = 0
             start_extend = 0
         # sequence similarity filter
         if evalue > EvalueLimit: continue
         if sign == '+':
-            new_fr = max(envfr - start_extend - 1, 0)
+            new_fr = max(envfr - start_extend, 0)
             new_to = min(envto + stop_extend, slen)
-            hmmout[gene_name] = [
-                sca, envfr, envto, new_fr,
-                new_to, sign, evalue, slen, hmmlen
-            ]
         elif sign == '-':
             # The chain of antisense needs to be reversed
-            new_fr = max(envto - start_extend - 1, 0)
+            new_fr = max(envto - start_extend, 0)
             new_to = min(envfr + stop_extend, slen)
-            hmmout[gene_name] = [
-                sca, envto, envfr, new_fr,
-                new_to, sign, evalue, slen, hmmlen
-            ]
         else:
             # sign(strand) must be '+' or '-'
             logging.error("NHMMER tool output 'strand' "
                           + "column only '+' or '-'")
             raise StrandError(sign)
-    return hmmout
+        if abs(new_to - new_fr) < SeqLengthLimit:
+            trunc[gene_name] = [ 
+                sca, envfr, envto, new_fr,
+                new_to, sign, evalue, slen, hmmlen
+            ]
+        else:
+            hmmout[gene_name] = [
+                sca, envfr, envto, new_fr,
+                new_to, sign, evalue, slen, hmmlen
+            ]
+    logging.info(str(len(trunc))+' truncated gene(s)was funded')
+    return hmmout, trunc
 
 
 def find_stop_codons(seq, SeqLengthLimit):
@@ -497,7 +515,7 @@ def interrupt_stop_codon(cdslist):
 
 
 @logfun
-def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
+def find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit):
     """
     Function:
         find_cds
@@ -527,12 +545,15 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
     lengfilter = 0
     insertfilter = 0
     interrfilter = 0
+    func_gnames = []
+    pseunum = []
     for gname in hmmout_seq:
         iso = 1
         temp_pseu = []
         funcgene = False
         real_fr, real_to = '', ''
         raw_cds = hmmout_seq[gname]
+        sour_cds = sour_seq[gname]
         len_cds = len(raw_cds)
         [sca, _a, _b, fr, to, strand, _c, _d, _e] = hmmout[gname]
         starts = find_all('(?=(ATG))', raw_cds)
@@ -569,32 +590,36 @@ def find_cds(hmmout, hmmout_seq, SeqLengthLimit):
                                 hits, gname, iso, final_cds,
                                 real_fr, real_to, strand
                             ]
+                            func_gnames.append(gname)
                             funcgene = True
                             iso += 1
                 else:
                     # all cds fragment has interrupt stop codon
                     interrfilter += 1
-                    temp_pseu += [cds[2] for cds in cdslist]
+                    #temp_pseu += [cds[2] for cds in cdslist]
+                    
             else:
                 # all cds fragment can not be multiple by 3
                 insertfilter += 1
-                temp_pseu += [cds[2] for cds in cdslist]
+                #temp_pseu += [cds[2] for cds in cdslist]
         else:
             # all cds fragment length too short
             lengfilter += 1
             continue
         if not funcgene:
-            temp_pseu = [ps for ps in temp_pseu if 'N' not in ps]
-            if temp_pseu:
-                pseudos[gname] = max(temp_pseu, key=len)
-            elif 'N' in raw_cds:
-                # 'N' in CDS means sequencing was wrong
-                outliers[gname] = raw_cds
-            else:
-                pseudos[gname] = raw_cds
+            #temp_pseu = [ps for ps in temp_pseu if 'N' not in ps]
+            #if temp_pseu:
+           #     pseudos[gname] = max(temp_pseu, key=len)
+           # elif 'N' in raw_cds:
+           #     # 'N' in CDS means sequencing was wrong
+           #     outliers[gname] = raw_cds
+           # else:
+           #     pseudos[gname] = raw_cds
+            pseudos[gname] = sour_cds
         else:
             hit += 1
-        pseunum = (lengfilter, insertfilter, interrfilter)
+        pseunum.append((lengfilter, insertfilter, interrfilter))
+    pseu_names = [name for name in hmmout.keys() if name not in func_gnames]
     return cdsdict, pseudos, outliers, pseunum
 
 
@@ -612,35 +637,13 @@ def sequence_align(seqf, alignf):
     command = (MAFFT
                + " --localpair "
                + "--maxiterate 1000 "
+               + " --thread -1 "
                + "--quiet "
                + seqf
                + " > "
                + alignf
                )
     os.system(command)
-
-
-def ParseSeq(seqf):
-    """
-    Function:
-        ParseSeq
-        parse sequence file Class
-    Parameter:
-        seqf: sequence file class
-    Return:
-        return type -> List
-        seq_list, [(name1, seq1), (name2, seq2), ...]
-    """
-    seq_list = []
-    text = seqf.read().replace('\r', '')
-    seqs = text.split('>')[1:]
-    for seq in seqs:
-        lines = seq.split('\n')
-        name = lines[0] + "\n"
-        aads = ''.join(lines[1:]) + "\n"
-        aads = aads.replace('*', '')
-        seq_list.append((name, aads))
-    return seq_list
 
 
 def ReadSampleFasta(seqfile):
@@ -657,7 +660,15 @@ def ReadSampleFasta(seqfile):
     """
 
     with open(seqfile) as seqf:
-        seq_list = ParseSeq(seqf)
+        seq_list = []
+        text = seqf.read().replace('\r', '')
+        seqs = text.split('>')[1:]
+        for seq in seqs:
+            lines = seq.split('\n')
+            name = lines[0] + "\n"
+            aads = ''.join(lines[1:]) + "\n"
+            aads = aads.replace('*', '')
+            seq_list.append((name, aads))
     return seq_list
 
 
@@ -827,6 +838,9 @@ def tm_pattern(seq_list):
     nterms = []
     tm_lists = []
     nterm, tm_dict, icl1, icl2, ecl2, h8 = tm_cut(seq_list)
+    # if tm_dict none, do nothing
+    if len(tm_dict) == 0:
+        return pseu, nterms, tm_lists
     for k, tms in tm_dict.items():
         seqs = [tms[0], tms[1], tms[1],
                 tms[2], tms[2], tms[4],
@@ -838,14 +852,19 @@ def tm_pattern(seq_list):
         n = sum(1 for pat, seq in zip(PATTERNS, seqs) if re.search(pat, seq))
         if n < PATTERN_THRESHOLD:
             # DNA similarity but pattern not match, means missense mutation.
-            pseu.append(k)
+            pseu.append((n, k))
         else:
             nterms.append((k, nterm[k]))
             tm_lists.append((k, tms, n))
+    if len(tm_lists) == 0:
+        pseu = sorted(pseu, key=lambda x:x[0], reverse=True)
+        pseu = pseu[0][1]
+    else:
+        pseu = None
     return pseu, nterms, tm_lists
 
 
-def Nterm_length(nterms):
+def Nterm_length(nterms, tm_list):
     """
     Function:
         Nterm_length
@@ -858,77 +877,90 @@ def Nterm_length(nterms):
         pseu, pseudogene OR gene names list
     """
 
-    funcs, pseus = [], []
-    other, area_a = [], []
-    area_b1, area_b2 = [], []
-    area_c1, area_c2 = [], []
+    func, pseu = None, None
+    nterm_len = []
+    stand_nterm = 0
     for name, nterm in nterms:
-        length = len(nterm)
-        if 13 <= length <= 16:
-            area_c1.append((name, length))
-        elif 17 <= length <= 19:
-            area_b1.append((name, length))
-        elif 20 <= length <= 25:
-            area_a.append((name, length))
-        elif 26 <= length <= 35:
-            area_b2.append((name, length))
-        elif 36 <= length <= 47:
-            area_c2.append((name, length))
-        else:
-            other.append(name)
-
-    # Processing area A
-    if len(area_a) != 0:
-        a_shift = [(n, abs(l - 22)) for n, l in area_a]
-        a_name = sorted(a_shift, key=lambda x: x[1])[0][0]
-        funcs.append(a_name)
-    # Processing area B
-    elif len(area_b1) or len(area_b2):
-        if (len(area_b1) > 0) and (len(area_b2) > 0):
-            b2 = sorted(area_b2, key=lambda x: x[1])[0]
-            b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
-            if abs(b2[1] - 25) <= abs(b1[1] - 20):
-                funcs.append(b2[0])
-            else:
-                funcs.append(b1[0])
-        elif (len(area_b1) > 0) and (len(area_b2) == 0):
-            b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
-            funcs.append(b1[0])
-        else:
-            b2 = sorted(area_b2, key=lambda x: x[1])[0]
-            funcs.append(b2[0])
-    # Processing area C
-    elif len(area_c1) or len(area_c2):
-        if (len(area_c1) > 0) and (len(area_c2) > 0):
-            c2 = sorted(area_c2, key=lambda x: x[1])[0]
-            c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
-            if abs(c2[1] - 35) <= abs(c1[1] - 17):
-                funcs.append(c2[0])
-            else:
-                funcs.append(c1[0])
-        elif (len(area_c1) > 0) and (len(area_c2) == 0):
-            c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
-            funcs.append(c1[0])
-        else:
-            c2 = sorted(area_c2, key=lambda x: x[1])[0]
-            funcs.append(c2[0])
-    elif len(other):
-        other = str(other)
-        logging.info("{0}'s N-term out of range!".format(other))
+        leng = len(nterm)
+        nterm_len.append((name, leng))
+        if leng > 0: stand_nterm += 1
+    if stand_nterm:
+        nterm_len = [(name, abs(leng-23)) for name, leng in nterm_len]
+        func = sorted(nterm_len, key=lambda x:x[1])[0][0]
     else:
-        logging.info("process an empty list!")
+        tm_list_sort = sorted(tm_list, key=lambda x:x[2], reverse=True)
+        pseu = tm_list_sort[0][0]
+    #other, area_a = [], []
+    #area_b1, area_b2 = [], []
+    #area_c1, area_c2 = [], []
+    #for name, nterm in nterms:
+    #    length = len(nterm)
+    #    if 13 <= length <= 16:
+    #        area_c1.append((name, length))
+    #    elif 17 <= length <= 19:
+    #        area_b1.append((name, length))
+    #    elif 20 <= length <= 25:
+    #        area_a.append((name, length))
+    #    elif 26 <= length <= 35:
+    #        area_b2.append((name, length))
+    #    elif 36 <= length <= 47:
+    #        area_c2.append((name, length))
+    #    else:
+    #        other.append(name)
 
-    if len(funcs) == 0:
-        pseus = [name for name, _ in nterms]
-    return funcs, pseus
+    ## Processing area A
+    #if len(area_a) != 0:
+    #    a_shift = [(n, abs(l - 22)) for n, l in area_a]
+    #    a_name = sorted(a_shift, key=lambda x: x[1])[0][0]
+    #    funcs.append(a_name)
+    ## Processing area B
+    #elif len(area_b1) or len(area_b2):
+    #    if (len(area_b1) > 0) and (len(area_b2) > 0):
+    #        b2 = sorted(area_b2, key=lambda x: x[1])[0]
+    #        b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
+    #        if abs(b2[1] - 25) <= abs(b1[1] - 20):
+    #            funcs.append(b2[0])
+    #        else:
+    #            funcs.append(b1[0])
+    #    elif (len(area_b1) > 0) and (len(area_b2) == 0):
+    #        b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
+    #        funcs.append(b1[0])
+    #    else:
+    #        b2 = sorted(area_b2, key=lambda x: x[1])[0]
+    #        funcs.append(b2[0])
+    ## Processing area C
+    #elif len(area_c1) or len(area_c2):
+    #    if (len(area_c1) > 0) and (len(area_c2) > 0):
+    #        c2 = sorted(area_c2, key=lambda x: x[1])[0]
+    #        c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
+    #        if abs(c2[1] - 35) <= abs(c1[1] - 17):
+    #            funcs.append(c2[0])
+    #        else:
+    #            funcs.append(c1[0])
+    #    elif (len(area_c1) > 0) and (len(area_c2) == 0):
+    #        c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
+    #        funcs.append(c1[0])
+    #    else:
+    #        c2 = sorted(area_c2, key=lambda x: x[1])[0]
+    #        funcs.append(c2[0])
+    #elif len(other):
+    #    other = str(other)
+    #    logging.info("{0}'s N-term out of range!".format(other))
+    #else:
+    #    logging.info("process an empty list!")
+
+    #if len(funcs) == 0:
+    #    pseus = [name for name, _ in nterms]
+    return pseu, func
 
 
-def tm_gaps_filter(seq_list):
+def tm_gaps_filter(seq_list, nterms):
     """
     Function:
         tm_gaps_filter
         The sequence is filtered by the number of gaps in region TM
     Parameter:
+        nterms, N-term list (seq_name, n-term_sequences)
         seq_list, tms list (seq_name, tms), 'tms' is a tuple save s tms
     Return:
         return type -> list
@@ -936,18 +968,22 @@ def tm_gaps_filter(seq_list):
         pseu, pseudogene OR gene names list
     """
 
-    func, pseu = [], []
-    for name, tms, _ in seq_list:
+    funcs, pseus = [], []
+    pseu = None
+    for name, tms, npattern in seq_list:
         gaps = [tm.count('-') for tm in tms if tm.count('-') > 0]
         gap_tms = len(gaps)
         gap_total = sum(gaps)
         # no more than 2 tm contain gao, and total gap less than 5
         if (gap_tms <= TM_WITH_GAPS) and (gap_total <= TM_GAPS_TOTAL):
-            func.append(name)
-    if len(func) == 0:
-        # Too many gaps in TMs, means that codon ware deleted
-        pseu = [name for name, tms in seq_list]
-    return func, pseu
+            funcs.append(name)
+        else:
+            pseus.append((name, npattern))
+    if len(funcs) == 0:
+        # a series of fragment select the most npattern as pseuogene
+        pseu = sorted(pseus, key=lambda x:x[1], reverse=True)[0][0]
+    nterm_filter = [(name, nterm) for name, nterm in nterms if name in funcs]
+    return pseu, nterm_filter
 
 
 def calculate_offset(sum_d, nmatch):
@@ -992,7 +1028,7 @@ def Writer(outdir, filename, datalist):
         outf.writelines(datalist)
 
 
-def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout):
+def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout, trunc):
     """
     Function:
         Writer
@@ -1005,6 +1041,7 @@ def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout):
         outliers, find_cds() return
         hmmout_seq, extract_cds() return
         hmmout, proc_nhmmer_out() return
+        trunc, proc_nhmmer_out() return, truncated gene infomation
     Return:
         None
     """
@@ -1033,12 +1070,28 @@ def writer2file(outdir, prefix, funcs, pseudos, outliers, hmmout_seq, hmmout):
         summary_list.append(summary_line + "\n")
     outlier_list = ['>' + name + '\n' + line + '\n' for name, line in outliers.items()]
     pseudos_list = ['>' + name + '\n' + line + '\n' for name, line in pseudos.items()]
-
+    
+    count = 0
+    trunc_list = []
+    t_header = 'count\tsca\tfr\tto\treal_fr\treal_to\tstrand\tevalue\thmmlen\n'
+    for gname in trunc:
+        [sca, fr, to, newfr, newto, sign, evalue, _d, hmmlen] = trunc[gname]
+        trunc_line = [
+            count, sca,
+            fr, to,
+            newfr, newto,
+            sign, evalue,
+            hmmlen]
+        trunc_line = "\t".join([str(line) for line in trunc_line])
+        trunc_list.append(trunc_line + "\n")
     Writer(outdir, prefix + "_Pre-ORs_dna.fa", dna_list)
     Writer(outdir, prefix + "_Pre-ORs_pro.fa", pro_list)
     Writer(outdir, prefix + "_Pre-pseudos_dna.fa", pseudos_list)
     Writer(outdir, prefix + "_outliers_dna.fa", outlier_list)
     Writer(outdir, prefix + "_summary_cds.txt", summary_list)
+    Writer(outdir, prefix + "_truncated.txt", trunc_list)
+    pseufile = os.path.join(outdir, prefix + "_Pre-pseudos_dna.fa")
+    merge_pseudo(pseufile)
 
     # result write to log file
     num_cds = len(hmmout_seq)
@@ -1082,7 +1135,121 @@ def identity_writer(hitfile, outputdir, prefix, funcs, pseus):
     with open(pseu_file, 'w') as pseuf:
         pseus.extend(prepseu_list)
         pseuf.writelines(pseus)
-    return func_file, pseu_file
+    return func_file, pseu_file, prepseu
+
+
+def unredundant(outputdir, prefix, func_file, pseu_file, hitdna):
+    """
+    Function:
+        unredundant
+        sequence unredundance use CD-HIT
+    Parameter:
+        func_file, function olfactory file name.(Non redundant)
+        pseu_file, pseudogene olfactory file name.(Non redundant)
+        hitdna, Olfactory receptor DNA sequences file
+    Return: None
+    """
+
+    nonredun_func = os.path.join(outputdir, prefix+"_func_ORs_pro.fasta")
+    funcomm = (CDHIT  
+               + " -i " + func_file 
+               + " -c 1.0 -T 0"
+               + " -o " + nonredun_func
+              )
+    os.system(funcomm)
+
+    nonredun_pseu = os.path.join(outputdir, prefix+"_pseu_ORs.fasta")
+    pseucomm = (CDHIT 
+                + " -i " + pseu_file 
+                + " -c 1.0 -T 0"
+                + " -o " + nonredun_pseu
+               )
+    os.system(pseucomm)
+
+    # find and write functin ORs dna to file
+    nonredun_dna = os.path.join(outputdir, prefix+"_func_ORs_dna.fasta")
+    dnaseqs = ReadSampleFasta(hitdna)
+    dnadict = dict(dnaseqs) 
+    funcseqs = ReadSampleFasta(nonredun_func)
+    funcdnas = ['>'+n+dnadict[n] for n, _ in funcseqs]
+    with open(nonredun_dna, 'w') as outf:
+        outf.writelines(funcdnas)
+
+
+def merge_pseudo(pseufile):
+    """
+   Function:
+       merge_pseudo
+       merge pseudogene fragments to a sequences
+       filter fragment that was too short
+       write sequence to file
+    Parameter:
+       pseufile, pseudogene sequence file
+    Return: None
+    """
+    seqs = ReadSampleFasta(pseufile)
+    seqd = dict(seqs)
+    names = seqd.keys()
+    named = defaultdict(list)
+    for name in names:
+        ns = name.strip().split('_')
+        head = ns[0]
+        sign = ns[3]
+        if sign == '+':
+            start = int(ns[1])
+            end = int(ns[2])
+        else:
+            start = int(ns[2])
+            end = int(ns[1])
+        named[head].append((start, end, name))
+    merge = {}
+    for key in named:
+        frags = named[key]
+        length = len(frags)
+        if length == 1:
+            n = frags[0][2]
+            merge[n] = seqd[n]
+            continue
+        droup = []
+        for i in range(length):
+            s1, e1, n1 = frags[i]
+            n, seq = None, None
+            for j in range(i+1, length):
+                s2, e2, n2 = frags[j]
+                if (s1 < s2 < e1) and (e1 < e2):
+                    seq = seqd[n1][0:s2-s1-1] + seqd[n2][0:e2-s2]
+                    n = key + '_' + str(s1) + '_' + str(e2) + '+'
+                    droup.extend([n1, n2])
+                elif (s1 <s2) and (e2 < e1):
+                    seq = seq[n1]
+                    n = n1
+                    droup.extend([n1, n2])
+                elif (s2 < s1 < e2) and (e2 < e1):
+                    seq = seqd[n2][0:s1-s2-1] + seqd[n1][0:e1-s1]
+                    n = key + '_' + str(s2) + '_' + str(e1) + '+'
+                    droup.extend([n1, n2])
+                elif (s2 < s1) and (e1 < e2):
+                    seq = seqd[n2]
+                    n = n2
+                    droup.extend([n1, n2])
+                else:
+                    pass
+            if seq:
+                merge[n] = seq
+            else:
+                merge[n1] = seqd[n1]
+        for d in set(droup):
+            try:
+                del merge[d]
+            except KeyError:
+                pass
+    merge_filter = {}
+    for name, seq in merge.items():
+        if len(seq) < PSEUDO_LENG_LIMIT: continue
+        merge_filter[name] = seq
+    outlines = ['>'+k+v for k, v in merge_filter.items()]
+    with open(pseufile, 'w') as outf:
+        outf.writelines(outlines)
 
 
 def test_nhmmer_evalue(nhmmout):

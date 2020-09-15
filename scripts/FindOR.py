@@ -44,18 +44,18 @@ platform_info(verbose)
 
 if verbose:
     print("\033[1;32mProcess nhmmer output file...\033[0m")
-hmmout = proc_nhmmer_out(infile, EvalueLimit)
+hmmout, trunc = proc_nhmmer_out(infile, EvalueLimit, SeqLengthLimit)
 
 if verbose:
     print("\033[1;32mExtract cds from genomic file...\033[0m")
-hmmout_seq = extract_cds(hmmout, gefile)
+hmmout_seq, sour_seq = extract_cds(hmmout, gefile)
 
 if verbose:
     print("\033[1;32mFind ATG and STOP codons for each sequence...\033[0m")
-functional, pseudos, outliers, pseunum = find_cds(hmmout, hmmout_seq, SeqLengthLimit)
+functional, pseudos, outliers, pseunum = find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit)
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")
-writer2file(outputdir, prefix, functional, pseudos, outliers, hmmout_seq, hmmout)
+writer2file(outputdir, prefix, functional, pseudos, outliers, hmmout_seq, hmmout, trunc)
 
 logging.info("###Program FindOR.py finish###")

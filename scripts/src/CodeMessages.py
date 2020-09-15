@@ -43,6 +43,13 @@ Have you changed the {0} file name?
 Or, you move it to other directory. 
 """
 
+file_stype_error = """
+\033[1;31mFile Type Error\033[0m
+Input file this step is FindOR.py output file.
+It's mean that {0} is 'Protein' sequence FASTA file,
+and {1} is 'DNA' sequence FASTA file.
+Place check!
+"""
 
 class StrandError(Exception):
 
@@ -103,3 +110,12 @@ class FileNotExists(Exception):
 
 	def __str__(self):
 		return file_error.format(self.filen, self.dirname)
+
+class FileStypeError(Exception):
+
+	def __init__(self, hitpro, hitdna):
+		self.hitpro = hitpro
+		self.hitdna = hitdna
+
+	def __str__(self):
+		return file_stype_error.format(self.hitpro, self.hitdna)

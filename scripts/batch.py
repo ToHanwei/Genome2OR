@@ -80,6 +80,7 @@ for infile in files:
     profile = prefix + '_Pre-ORs_pro.fa'
     dnafile = prefix + "_Pre-ORs_dna.fa"
     profile = os.path.join(findoutdir, profile)
+    dnafile = os.path.join(findoutdir, dnafile)
     identitycom = ("time python IdentifyFunc.py "
                    + profile + " "
                    + dnafile

@@ -71,11 +71,14 @@ TM_GAPS_TOTAL = 5
 GOLD_POS = [34, 54, 91, 117, 124, 168, 216, 235, 282]
 
 # The threshold for matching the number of patterns
-PATTERN_THRESHOLD = 0
+PATTERN_THRESHOLD = 9
 
 # The extend length.
 # If CDS shorted than EXTEND_LENGTH will be extended to that length
-EXTEND_LENGTH = 1000
+EXTEND_LENGTH = 1200
+
+# 
+PSEUDO_LENG_LIMIT = 600
 
 # Codon mapping table
 CODON_TABLE = {
