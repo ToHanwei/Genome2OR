@@ -19,10 +19,10 @@ class ParseCommand(object):
                                          )
         # positional arguments
         parser.add_argument("input",
-                            help="String, nhmmer output file path.",
+                            help="String, nhmmer output file.",
                             )
         parser.add_argument('genome',
-                            help="String, Genomic data file path.",
+                            help="String, Genomic data file.",
                             )
 
         # optional arguments
@@ -76,10 +76,10 @@ class ParseCommand(object):
                             help="String, profile nhmmer need(hmm, [un]alignment file)"
                             )
         parser.add_argument('genome',
-                            help="String, genomic data file path.",
+                            help="String, genomic data file.",
                             )
         parser.add_argument("output",
-                            help="String, save nhmmer output file path.",
+                            help="String, save nhmmer output file.",
                             )
 
         # optional arguments
