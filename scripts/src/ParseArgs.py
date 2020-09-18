@@ -93,8 +93,7 @@ class ParseCommand(object):
                             )
         parser.add_argument('-c', '--cpus',
                             type=int,
-                            help="number of parallel CPU workers to use. \
-                                 (default='2/3 of all cores')",
+                            help="number of parallel (default='2/3 of all cores')",
                             default=int(cpu_count() * 2 / 3),
                             metavar='',
                             )
@@ -156,8 +155,7 @@ class ParseCommand(object):
                             )
         parser.add_argument('-c', '--cpus',
                             type=int,
-                            help="number of parallel CPU workers to use. \
-                                 (default='2/3 of all cores')",
+                            help="number of parallel (default='2/3 of all cores')",
                             default=int(cpu_count() * 2 / 3),
                             metavar='',
                             )
@@ -201,8 +199,15 @@ class ParseCommand(object):
                             default="Identity",
                             metavar='',
                             )
+        parser.add_argument('-c', '--cpus',
+                            type=int,
+                            help="number of parallel CPU workers to use. \
+                                 (default='2/3 of all cores')",
+                            default=int(cpu_count() * 2 / 3),
+                            metavar='',
+                            )
         parser.add_argument('-k', '--keepfile',
-                            help="bool, whether to keep intermediate file.(default:True)",
+                            help="Bool, whether to keep intermediate file.(default:True)",
                             default=True,
                             metavar='',
                             type=bool,

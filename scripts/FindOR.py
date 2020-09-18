@@ -52,10 +52,11 @@ hmmout_seq, sour_seq = extract_cds(hmmout, gefile)
 
 if verbose:
     print("\033[1;32mFind ATG and STOP codons for each sequence...\033[0m")
-functional, pseudos, outliers, pseunum = find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit)
+functional, pseudos, pseunum = find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit)
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")
-writer2file(outputdir, prefix, functional, pseudos, outliers, hmmout_seq, hmmout, trunc)
+#print(pseudos)
+writer2file(outputdir, prefix, functional, pseudos, hmmout_seq, hmmout, trunc, pseunum)
 
 logging.info("###Program FindOR.py finish###")

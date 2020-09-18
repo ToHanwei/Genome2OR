@@ -8,9 +8,10 @@ from src.config import *
 from src.Functions import logger
 from src.Functions import chmod
 from src.Functions import refact_hitfile
+from src.Functions import identify_filter
 from src.Functions import identity_writer
 from src.Functions import refact_list
-from src.Functions import tm_pattern
+from src.Functions import tm_prepare
 from src.Functions import unredundant
 from src.Functions import ReadSampleFasta
 from src.Functions import platform_info
@@ -30,6 +31,8 @@ args = Parse.identifyparse()
 hitpro = args.hitPROfile
 # hit DNA file input file
 hitdna = args.hitDNAfile
+# number of parallel 
+cpus = args.cpus
 # Result save directory
 outputdir = args.outputdir
 # output file prefix
@@ -54,46 +57,41 @@ template, hit_dict = refact_hitfile(hitpro)
 
 if verbose:
     print("\033[1;32mRecombination hit list...\033[0m")
-hit_list = refact_list(template, hit_dict)
-
+hit_list = refact_list(template, hit_dict, cpus)
 
 if verbose:
     print("\033[1;32mIdentity functions\\pseudogenes...\033[0m")
 pseus, funcs = [], []
+num_of_paeu = {"NTERM": 0, "GAP": 0}
 
-pseus_dict = dict(ReadSampleFasta(hitdna))
+pre_dnas_dict = dict(ReadSampleFasta(hitdna))
+
 for seq_list in hit_list:
-    pseu, func = None, None
-    assert len(seq_list) > 1, print("Input file this step is FindOR.py output file. Check place!")
-    # Some pseudogenes were filtered out by pattern matching
-    npattern_pseu, nterms, tm_list = tm_pattern(seq_list)
-    if tm_list:
-        # Some pseudogenoes were filtered out by TM gaps
-        gap_pseu, nterm_filter = tm_gaps_filter(tm_list, nterms)
-        if nterm_filter:
-            # Some pseudogenoes were filtered out by N-term length
-            nterm_pseu, function = Nterm_length(nterm_filter, tm_list)
-            if function:
-                func = function
-            else:
-                pseu = nterm_pseu
-        else:
-            pseu = gap_pseu
-    else:
-        pseu = npattern_pseu
+    assert len(seq_list) > 1, print("Input file is FindOR.py output file. Check place!")
+    # Prepare tm_list
+    nterms, tm_list = tm_prepare(seq_list)
     seq_dict = dict(seq_list)
+
+    # identity function ORs
+    func, pseu, ptype = identify_filter(seq_dict, tm_list, nterms)
     if func:
         func_seq = ">" + func + seq_dict[func].replace('-', '')
         funcs.append(func_seq)
     elif pseu:
-        pseu_seq = ">" + pseu + pseus_dict[pseu].replace('-', '')
+        pname = pseu.strip() + '_' + ptype + '\n'
+        pseu_seq = ">" + pname + pre_dnas_dict[pseu].replace('-', '')
         pseus.append(pseu_seq)
+        num_of_paeu[ptype] += 1
     else:
-        print("Somthing error")
+        print("Function either or pseudogene")
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")
-files = identity_writer(hitpro, outputdir, prefix, funcs, pseus)
+files = identity_writer(
+    hitpro, outputdir,
+    prefix, funcs,
+    pseus, num_of_paeu
+    )
 func_file, pseu_file, prepseu = files
 
 # Unredundance sequences and write DNA sequences to file.
@@ -101,6 +99,7 @@ if verbose:
     print("\033[1;32mCD-HIT filter redundant sequence...\033[0m")
 unredundant(outputdir, prefix, func_file, pseu_file, hitdna)
 
+# delect file, if keepfile=False
 if not keepfile:
    os.remove(hitpro)
    os.remove(hitdna)

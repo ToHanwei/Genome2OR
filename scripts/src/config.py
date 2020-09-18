@@ -7,21 +7,8 @@ TOOLNAME = "Genome2OR"
 VERSION = "Genome2OR 1.0"
 
 # Complementary base
-CompBase = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C',
-            'N': 'N', }
-
-# Olfactory receptor protein pattern. (out of use)
-PATTERNS_old = [
-    r'[YFC].....[GAS]N..[ILMV]',  # TM1
-    r'L..PMY..[LI]',  # TM2
-    r'[IL]....C..Q',  # TM3-1
-    r'M..DR..A',  # TM3-2
-    r'A[IV]..PL.Y',  # TM3-3
-    r'C.........C.........C',  # ECL2
-    r'SY..[IVL]',  # TM5
-    r'[KR]...T[CL]..H',  # TM6
-    r'P..NP..[YF]'  # TM7
-]
+CompBase = {'A': 'T', 'T': 'A', 'C': 'G',
+            'G': 'C', 'N': 'N', }
 
 # TM boundary, refer to OR5AN1(UniprotKB:Q8NGI8)
 TM_boundary = [
@@ -64,21 +51,11 @@ A2 = 26
 PEAK = 22
 
 # The region of transmembrane helix parameter
-TM_WITH_GAPS = 2
 TM_GAPS_TOTAL = 5
-
-# The standard location of the pattern (out of use)
-GOLD_POS = [34, 54, 91, 117, 124, 168, 216, 235, 282]
-
-# The threshold for matching the number of patterns
-PATTERN_THRESHOLD = 9
 
 # The extend length.
 # If CDS shorted than EXTEND_LENGTH will be extended to that length
 EXTEND_LENGTH = 1200
-
-# 
-PSEUDO_LENG_LIMIT = 600
 
 # Codon mapping table
 CODON_TABLE = {
