@@ -47,7 +47,7 @@ logger('IdentityFunc')
 # check platform
 platform_info(verbose)
 
-# change nhmmer permission
+# change tool permission
 chmod(MAFFT)
 chmod(CDHIT)
 

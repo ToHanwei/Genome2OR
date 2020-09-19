@@ -85,6 +85,7 @@ for infile in files:
                    + profile + " "
                    + dnafile
                    + " -o " + identityout
+                   + " -c " + cpus
                    + " -p " + prefix
                    )
     if verbose:

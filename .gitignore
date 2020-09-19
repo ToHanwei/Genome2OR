@@ -1,0 +1,38 @@
+# My config
+script/src/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
+.idle
+*.swp
+*.swo
+*.pkl
+Pipfile
+Pipfile.lock
+
+
+# Gradle files
+build/
+
+# Log Files
+*.log
+
+#Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST

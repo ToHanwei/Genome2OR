@@ -1240,17 +1240,6 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
     logging.info(interrpseo)
     logging.info("###The program finish###")
 
-    # record pseudogene number
-    if not os.path.exists("PseudoNumRecode.pkl"):
-        fwrite = open("PseudoNumRecode.pkl", 'wb')
-        pickle.dump({}, fwrite)
-        fwrite.close()
-    with open('PseudoNumRecode.pkl', 'rb') as pseudoNumR:
-        pseudoNum = pickle.load(pseudoNumR)
-    with open('PseudoNumRecode.pkl', 'wb') as pseudoNumW:
-        pseudoNum[prefix] = pseu_type_num
-        pickle.dump(pseudoNum, pseudoNumW)
-
 
 def identify_filter(tm_list, nterms):
     """

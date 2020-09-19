@@ -85,4 +85,6 @@ NHMMER = "../tools/nhmmer"
 MAFFT = "../tools/mafft"
 # cd-hit tool path
 CDHIT = "../tools/cd-hit"
+# hmmbuild tool path
+HMMBUILD = '../tools/hmmbuild'
 
