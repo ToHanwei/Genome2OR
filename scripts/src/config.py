@@ -50,6 +50,8 @@ A1 = 19
 A2 = 26
 PEAK = 22
 
+DIST_PEAK = 23
+
 # The region of transmembrane helix parameter
 TM_GAPS_TOTAL = 5
 

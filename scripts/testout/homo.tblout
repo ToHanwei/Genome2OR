@@ -1742,7 +1742,7 @@ ABSL01238847.1       -          Identity_func_ORs_Mammalia_0.7_dna_cut -        
 # Pipeline mode:   SEARCH
 # Query file:      ../template/Mammalia.hmm
 # Target file:     /public/database/genome/mammals/Homo_sapiens-GCA_000252825.1_HuRef_diploid_genomic.fna
-# Option settings: ../tools/nhmmer --tblout homo.tblout --noali --popen 0.02 --pextend 0.4 -E 1e-20 --dna --cpu 26 ../template/Mammalia.hmm /public/database/genome/mammals/Homo_sapiens-GCA_000252825.1_HuRef_diploid_genomic.fna 
+# Option settings: ../tools/nhmmer --tblout homo.tblout --noali --popen 0.02 --pextend 0.4 -E 1e-20 --dna --cpu 30 ../template/Mammalia.hmm /public/database/genome/mammals/Homo_sapiens-GCA_000252825.1_HuRef_diploid_genomic.fna 
 # Current dir:     /public/hanwei/Genome2OR_20-09/Genome2OR/scripts
-# Date:            Thu Sep 17 04:20:19 2020
+# Date:            Sat Sep 19 09:41:58 2020
 # [ok]

@@ -660,12 +660,12 @@ def ReadSampleFasta(seqfile):
         seq_list = []
         text = seqf.read().replace('\r', '')
         seqs = text.split('>')[1:]
-        for seq in seqs:
-            lines = seq.split('\n')
-            name = lines[0] + "\n"
-            aads = ''.join(lines[1:]) + "\n"
-            aads = aads.replace('*', '')
-            seq_list.append((name, aads))
+    for seq in seqs:
+        lines = seq.split('\n')
+        name = lines[0] + "\n"
+        aads = ''.join(lines[1:]) + "\n"
+        aads = aads.replace('*', '')
+        seq_list.append((name, aads))
     return seq_list
 
 
@@ -968,94 +968,110 @@ def tm_prepare(seq_list):
     return nterms, tm_lists
 
 
-def Nterm_length(nterms, tm_list):
+def Nterm_length(nterms):
     """
     Function:
         Nterm_length
         choose function OR gene through N-term length
     Parameter:
-        nterm_list, Every element is a (name, N-term)
+        nterms, Every element is a (name, N-term)
     Return:
-        return type -> list
-        funcs, function OR gene names list
-        pseu, pseudogene OR gene names list
+        suitable, a suitable OR gene name of a group
     """
 
-    func, pseu = None, None
-    nterm_len = []
-    stand_nterm = False
-    for name, nterm in nterms:
-        leng = len(nterm)
-        nterm_len.append((name, leng))
-        if leng > 0: stand_nterm = True
-    if stand_nterm:
-        nterm_len = [(name, abs(leng-23)) for name, leng in nterm_len]
-        func = sorted(nterm_len, key=lambda x:x[1])[0][0]
-    else:
-        tm_list_sort = sorted(tm_list, key=lambda x:x[2], reverse=True)
-        pseu = tm_list_sort[0][0]
-    #other, area_a = [], []
-    #area_b1, area_b2 = [], []
-    #area_c1, area_c2 = [], []
+    ntermlen = [(n, abs(len(t)-DIST_PEAK)) for n, t in nterms]
+    suitable = sorted(ntermlen, key=lambda x:x[1])[0][0]
+    return suitable
+    #func, pseu = None, None
     #for name, nterm in nterms:
-    #    length = len(nterm)
-    #    if 13 <= length <= 16:
-    #        area_c1.append((name, length))
-    #    elif 17 <= length <= 19:
-    #        area_b1.append((name, length))
-    #    elif 20 <= length <= 25:
-    #        area_a.append((name, length))
-    #    elif 26 <= length <= 35:
-    #        area_b2.append((name, length))
-    #    elif 36 <= length <= 47:
-    #        area_c2.append((name, length))
-    #    else:
-    #        other.append(name)
-
-    ## Processing area A
-    #if len(area_a) != 0:
-    #    a_shift = [(n, abs(l - 22)) for n, l in area_a]
-    #    a_name = sorted(a_shift, key=lambda x: x[1])[0][0]
-    #    funcs.append(a_name)
-    ## Processing area B
-    #elif len(area_b1) or len(area_b2):
-    #    if (len(area_b1) > 0) and (len(area_b2) > 0):
-    #        b2 = sorted(area_b2, key=lambda x: x[1])[0]
-    #        b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
-    #        if abs(b2[1] - 25) <= abs(b1[1] - 20):
-    #            funcs.append(b2[0])
-    #        else:
-    #            funcs.append(b1[0])
-    #    elif (len(area_b1) > 0) and (len(area_b2) == 0):
-    #        b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
-    #        funcs.append(b1[0])
-    #    else:
-    #        b2 = sorted(area_b2, key=lambda x: x[1])[0]
-    #        funcs.append(b2[0])
-    ## Processing area C
-    #elif len(area_c1) or len(area_c2):
-    #    if (len(area_c1) > 0) and (len(area_c2) > 0):
-    #        c2 = sorted(area_c2, key=lambda x: x[1])[0]
-    #        c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
-    #        if abs(c2[1] - 35) <= abs(c1[1] - 17):
-    #            funcs.append(c2[0])
-    #        else:
-    #            funcs.append(c1[0])
-    #    elif (len(area_c1) > 0) and (len(area_c2) == 0):
-    #        c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
-    #        funcs.append(c1[0])
-    #    else:
-    #        c2 = sorted(area_c2, key=lambda x: x[1])[0]
-    #        funcs.append(c2[0])
-    #elif len(other):
-    #    other = str(other)
-    #    logging.info("{0}'s N-term out of range!".format(other))
+    #    leng = len(nterm)
+    #    nterm_len.append((name, leng))
+    #    if leng > 0: stand_nterm = True
+    #if stand_nterm:
+    #    nterm_len = [(name, abs(leng-23)) for name, leng in nterm_len]
+    #    func = sorted(nterm_len, key=lambda x:x[1])[0][0]
     #else:
-    #    logging.info("process an empty list!")
+    #    tm_list_sort = sorted(tm_list, key=lambda x:x[2], reverse=True)
+    #    pseu = tm_list_sort[0][0]
+    #return pseu, func
 
-    #if len(funcs) == 0:
-    #    pseus = [name for name, _ in nterms]
-    return pseu, func
+
+#def Nterm_length(nterms, tm_list):
+#    """
+#    Function:
+#        Nterm_length
+#        choose function OR gene through N-term length
+#    Parameter:
+#        nterm_list, Every element is a (name, N-term)
+#    Return:
+#        return type -> list
+#        funcs, function OR gene names list
+#        pseu, pseudogene OR gene names list
+#    """
+#
+#    funcs = []
+#    other, area_a = [], []
+#    area_b1, area_b2 = [], []
+#    area_c1, area_c2 = [], []
+#    for name, nterm in nterms:
+#        length = len(nterm)
+#        if 13 <= length <= 16:
+#            area_c1.append((name, length))
+#        elif 17 <= length <= 19:
+#            area_b1.append((name, length))
+#        elif 20 <= length <= 25:
+#            area_a.append((name, length))
+#        elif 26 <= length <= 35:
+#            area_b2.append((name, length))
+#        elif 36 <= length <= 47:
+#            area_c2.append((name, length))
+#        else:
+#            other.append(name)
+#
+#    # Processing area A
+#    if len(area_a) != 0:
+#        a_shift = [(n, abs(l - 22)) for n, l in area_a]
+#        a_name = sorted(a_shift, key=lambda x: x[1])[0][0]
+#        funcs.append(a_name)
+#    # Processing area B
+#    elif len(area_b1) or len(area_b2):
+#        if (len(area_b1) > 0) and (len(area_b2) > 0):
+#            b2 = sorted(area_b2, key=lambda x: x[1])[0]
+#            b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
+#            if abs(b2[1] - 25) <= abs(b1[1] - 20):
+#                funcs.append(b2[0])
+#            else:
+#                funcs.append(b1[0])
+#        elif (len(area_b1) > 0) and (len(area_b2) == 0):
+#            b1 = sorted(area_b1, key=lambda x: x[1], reverse=True)[0]
+#            funcs.append(b1[0])
+#        else:
+#            b2 = sorted(area_b2, key=lambda x: x[1])[0]
+#            funcs.append(b2[0])
+#    # Processing area C
+#    elif len(area_c1) or len(area_c2):
+#        if (len(area_c1) > 0) and (len(area_c2) > 0):
+#            c2 = sorted(area_c2, key=lambda x: x[1])[0]
+#            c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
+#            if abs(c2[1] - 35) <= abs(c1[1] - 17):
+#                funcs.append(c2[0])
+#            else:
+#                funcs.append(c1[0])
+#        elif (len(area_c1) > 0) and (len(area_c2) == 0):
+#            c1 = sorted(area_c1, key=lambda x: x[1], reverse=True)[0]
+#            funcs.append(c1[0])
+#        else:
+#            c2 = sorted(area_c2, key=lambda x: x[1])[0]
+#            funcs.append(c2[0])
+#    elif len(other):
+#        other = str(other)
+#        logging.info("{0}'s N-term out of range!".format(other))
+#    else:
+#        logging.info("process an empty list!")
+#
+#    if len(funcs) == 0:
+#        pseus = [name for name, _ in nterms]
+#    return pseu, func
 
 
 def tm_gaps_filter(seq_list, nterms):
@@ -1076,7 +1092,6 @@ def tm_gaps_filter(seq_list, nterms):
     pseu = None
     for name, tms, npattern in seq_list:
         gaps = [tm.count('-') for tm in tms if tm.count('-') > 0]
-        gap_tms = len(gaps)
         gap_total = sum(gaps)
         # total gap less than 5
         if gap_total <= TM_GAPS_TOTAL:
@@ -1237,27 +1252,34 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
         pickle.dump(pseudoNum, pseudoNumW)
 
 
-def identify_filter(seq_dict, tm_list, nterms):
-    func, pseu, ptype = None, None, None
+def identify_filter(tm_list, nterms):
+    """
+    Functions:
+        identify_filter
+        Identify pseudogene from Pre-functional ORs
+    Parameter:
+        tm_list: TM region list
+        nterms: N-term region list
+    Return:
+        func: functional OR name
+        pseu: pseudogene OR name
+        ptype: pseudogene OR type(NTERM/GAP)
+    """
+    func, pseu = None, None
     if tm_list:
         # Some pseudogenoes were filtered out by TM gaps
         gap_pseu, nterm_filter = tm_gaps_filter(tm_list, nterms)
         if nterm_filter:
             # Some pseudogenoes were filtered out by N-term length
-            nterm_pseu, function = Nterm_length(nterm_filter, tm_list)
-            if function:
-                func = function
-            else:
-                pseu = nterm_pseu
-                ptype = "NTERM"
+            nterm_suitable = Nterm_length(nterm_filter)
+            func = nterm_suitable
         else:
             pseu = gap_pseu
-            ptype = "GAP"
-    return func, pseu, ptype
+    return func, pseu
 
 
 @logfun
-def identity_writer(hitfile, outputdir, prefix, funcs, pseus, num_of_pseu):
+def identity_writer(hitfile, outputdir, prefix, funcs, pseus, pasu_of_gap):
     """
     Functions:
         identity_writer
@@ -1268,7 +1290,7 @@ def identity_writer(hitfile, outputdir, prefix, funcs, pseus, num_of_pseu):
         prefix, output file prefix
         funcs, functions olfactory receptor list
         pseus, pseudo gene olfactory receptor list
-        num_of_pseu: number of pseudogene every type
+        pasu_of_gap: number of pseudogene cause by 'GAP'
     Return: None
     """
 
@@ -1280,29 +1302,24 @@ def identity_writer(hitfile, outputdir, prefix, funcs, pseus, num_of_pseu):
     prepseu = hitfile[:-14] + "Pre-pseudos_dna.fa"
     if not os.path.exists(prepseu):
         raise FileNotExists(prepseu, outputdir)
-    with open(prepseu) as prepseuf:
-        prepseu_list = prepseuf.readlines()
+    prepseu_list = ReadSampleFasta(prepseu)
+    prepseu_list = ['>'+k+'\n'+v+'\n' for k, v in prepseu_list]
     with open(pseu_file, 'w') as pseuf:
         prepseu_list.extend(pseus)
         pseuf.writelines(prepseu_list)
     func_OR_num = len(funcs)
     pseu_OR_num = len(prepseu_list)
-    ntermpseu = num_of_pseu["NTERM"]
-    gappseu = num_of_pseu["GAP"]
-    funcdoc = "\033[1;32m{}\033[0m functional ORs were discover.".format(func_OR_num)
-    pseudoc = "\033[1;32m{}\033[0m pseudogene ORs were discover.".format(pseu_OR_num)
-    ntermdoc = ("\033[0;32m{}\033[0m pseudogenes cause by no N-term."
-        .format(ntermpseu))
+    funcdoc = "\033[0;32m{}\033[0m functional ORs were discover.".format(func_OR_num)
+    pseudoc = "\033[0;32m{}\033[0m pseudogene ORs were discover.".format(pseu_OR_num)
     gapdoc = ("\033[0;32m{}\033[0m pseudogenes cause by TM has gaps(more than {})."
-        .format(gappseu, TM_GAPS_TOTAL))
+        .format(pasu_of_gap, TM_GAPS_TOTAL))
     logging.info(funcdoc)
     logging.info(pseudoc)
-    logging.info(ntermdoc)
     logging.info(gapdoc)
     return func_file, pseu_file, prepseu
 
 
-def unredundant(outputdir, prefix, func_file, pseu_file, hitdna):
+def unredundant(outputdir, prefix, func_file, pseu_file, hitdna, verbose):
     """
     Function:
         unredundant
@@ -1314,30 +1331,46 @@ def unredundant(outputdir, prefix, func_file, pseu_file, hitdna):
     Return: None
     """
 
+    logging.info("Remove redundant functional protein sequences")
     nonredun_func = os.path.join(outputdir, prefix+"_func_ORs_pro.fasta")
+    nonredun_dna = os.path.join(outputdir, prefix+"_func_ORs_dna.fasta")
     funcomm = (CDHIT
                + " -i " + func_file 
                + " -c 1.0 -T 0"
                + " -o " + nonredun_func
               )
+    if not verbose:
+        funcomm += ' > /dev/null'
     os.system(funcomm)
 
-    nonredun_pseu = os.path.join(outputdir, prefix+"_pseu_ORs.fasta")
-    pseucomm = (CDHIT 
-                + " -i " + pseu_file 
-                + " -c 1.0 -T 0"
-                + " -o " + nonredun_pseu
-               )
-    os.system(pseucomm)
-
+    logging.info("Remove redundant functional DNA sequences")
     # find and write functin ORs dna to file
-    nonredun_dna = os.path.join(outputdir, prefix+"_func_ORs_dna.fasta")
     dnaseqs = ReadSampleFasta(hitdna)
     dnadict = dict(dnaseqs) 
     funcseqs = ReadSampleFasta(nonredun_func)
     funcdnas = ['>'+n+dnadict[n] for n, _ in funcseqs]
     with open(nonredun_dna, 'w') as outf:
         outf.writelines(funcdnas)
+
+    logging.info("Remove redundant pseudogene sequences, DNA only")
+    nonredun_pseu = os.path.join(outputdir, prefix+"_pseu_ORs.fasta")
+    pseucomm = (CDHIT 
+                + " -i " + pseu_file 
+                + " -c 1.0 -T 0"
+                + " -o " + nonredun_pseu
+               )
+    if not verbose:
+        pseucomm += ' > /dev/null'
+    os.system(pseucomm)
+    func = ReadSampleFasta(nonredun_func)
+    pseu = ReadSampleFasta(nonredun_pseu)
+    logging.info('Eventually \033[1;32m{}\033[0m '.format(len(func))
+                 + 'functional olfactory receptors were discovered'
+                )
+    logging.info('Eventually \033[1;32m{}\033[0m '.format(len(pseu))
+                 + 'pseudogenes gene were discovered'
+                )
+    # unredund use CD-HIT tool
 
 
 def merge_pseudo(pseudos):
@@ -1433,7 +1466,7 @@ def merge_pseudo(pseudos):
             except KeyError:
                 pass
     # pseudos gene lines, for output
-    outlines = ['>'+k+v for k, v in merge.items()]
+    outlines = [k+v for k, v in merge.items()]
     
     # number of every pseudos type
     type_of_pseu = {

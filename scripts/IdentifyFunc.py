@@ -62,7 +62,7 @@ hit_list = refact_list(template, hit_dict, cpus)
 if verbose:
     print("\033[1;32mIdentity functions\\pseudogenes...\033[0m")
 pseus, funcs = [], []
-num_of_paeu = {"NTERM": 0, "GAP": 0}
+pasu_of_gap = 0
 
 pre_dnas_dict = dict(ReadSampleFasta(hitdna))
 
@@ -73,7 +73,7 @@ for seq_list in hit_list:
     seq_dict = dict(seq_list)
 
     # identity function ORs
-    func, pseu, ptype = identify_filter(seq_dict, tm_list, nterms)
+    func, pseu = identify_filter(tm_list, nterms)
     if func:
         func_seq = ">" + func + seq_dict[func].replace('-', '')
         funcs.append(func_seq)
@@ -81,7 +81,7 @@ for seq_list in hit_list:
         pname = pseu.strip() + '_' + ptype + '\n'
         pseu_seq = ">" + pname + pre_dnas_dict[pseu].replace('-', '')
         pseus.append(pseu_seq)
-        num_of_paeu[ptype] += 1
+        pasu_of_gap += 1
     else:
         print("Function either or pseudogene")
 
@@ -90,14 +90,14 @@ if verbose:
 files = identity_writer(
     hitpro, outputdir,
     prefix, funcs,
-    pseus, num_of_paeu
+    pseus, pasu_of_gap
     )
 func_file, pseu_file, prepseu = files
 
 # Unredundance sequences and write DNA sequences to file.
 if verbose:
     print("\033[1;32mCD-HIT filter redundant sequence...\033[0m")
-unredundant(outputdir, prefix, func_file, pseu_file, hitdna)
+unredundant(outputdir, prefix, func_file, pseu_file, hitdna, verbose)
 
 # delect file, if keepfile=False
 if not keepfile:
@@ -106,6 +106,6 @@ if not keepfile:
    os.remove(func_file)
    os.remove(pseu_file)
    os.remove(prepseu)
-   os.system("rm *clstr")
+   os.system("rm *.clstr")
 
 logging.info("###Program IdentityFunc.py finish###")
