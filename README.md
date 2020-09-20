@@ -136,18 +136,24 @@ http://zhaolab.shanghaitech.edu.cn/
 python IdentityFunc.py -h[--help, None]
 ```
 ```
-usage: IdentityFunc.py [-h] [-o] [-p] [-v] [-V] hitfile
+usage: IdentityFunc.py [-h] [-o] [-p] [-c] [-k] [-v] [-V]
+                       hitPROfile hitDNAfile
 
 Idntity Function OR
 
 positional arguments:
-    hitfile            FindOR.py script output file(protein sequence file). hit
-                       sequence from genome
+    hitPROfile         IdentityFunc.py script output file(protein sequence
+                       file). hit sequence from genome
+    hitDNAfile         IdentityFunc.py script output file(DNA sequence file).
+                       hit sequence from genome
 
 optional arguments:
     -h, --help         show this help message and exit
     -o , --outputdir   String, Result save directory.(default:../output)
     -p , --prefix      String, output file prefix.(default:Identity)
+    -c , --cpus        number of parallel CPU workers to use. (default='2/3 of
+                       all cores')
+    -k , --keepfile    Bool, whether to keep intermediate file.(default:True)
     -v, --verbose      Print verbose information.
     -V, --version      Show version message and exit.
 

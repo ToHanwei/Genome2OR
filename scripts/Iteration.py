@@ -131,8 +131,8 @@ def main():
             EvalueLimit,
             SeqLengthLimit
         )
-        logging.info('Iteration {} construct HMM profile'.format(_iter))
         if _iter < itera:
+            logging.info('Iteration {} construct HMM profile'.format(_iter))
             hmmfile = constru_hmm(dnafile)
     logging.info("###Program Iteration.py finish###")
 

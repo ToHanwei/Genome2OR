@@ -1219,8 +1219,8 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
     insert_cause_pseu = pseu_type_num['INDEL']
     interr_cause_pseu = pseu_type_num['INTER']
     cds = "\033[0;32m{}\033[0m OR fragments found by nhmmer.".format(num_cds)
-    funcdoc = "\033[1;32m{}\033[0m functional ORs were discover.".format(num_fun_OR)
-    pseudoc = "\033[1;32m{}\033[0m pseudogene ORs were discover.".format(num_pse_OR)
+    funcdoc = "\033[1;32m{}\033[0m potential functional ORs were discover.".format(num_fun_OR)
+    pseudoc = "\033[1;32m{}\033[0m potential pseudogene ORs were discover.".format(num_pse_OR)
     lengthpseo = ("\033[0;32m{}\033[0m pseudogenes cause by too short sequence length."
                 .format(length_cause_pseu))
     insertpseo = ("\033[0;32m{}\033[0m pseudogenes cause by insert or delect base."
