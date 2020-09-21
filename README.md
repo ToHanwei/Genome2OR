@@ -75,6 +75,7 @@ tasks and aids in understanding the data structure and correct the bias within a
 * [nhmmer.py](#nhmmer): Simplify running program nhmmer program.
 * [FindOR.py](#findor): Extract olfactory receptor cds from genome.
 * [IdentifyFunc.py](#identity): Recognition function OR gene
+* [Iteration.py](#iterate): Iterration annotated a species
 * [batch.py](#batch): Batch annotated genome.
 
 #### <span id='nhmmer'>nhmmer.py Usage</span>
@@ -156,6 +157,37 @@ optional arguments:
     -k , --keepfile    Bool, whether to keep intermediate file.(default:True)
     -v, --verbose      Print verbose information.
     -V, --version      Show version message and exit.
+
+http://zhaolab.shanghaitech.edu.cn/
+
+
+#### <span id='iterate'>Iteration.py Usage</span>
+```
+python Iteration.py -h[--help, None]
+```
+```
+usage: Iteration.py [-h] [-i] [-e] [-l] [-c] [-p] [-v] [-V]
+                    profile outputdir genome
+
+Iteration annotated a genome
+
+positional arguments:
+    profile               String, profile nhmmer need(hmm, [un]alignment file).
+                          Notice: A group of genomes share a profile.
+    outputdir             String, output directory.
+    genome                String, genomic data file.
+  
+optional arguments:
+    -h, --help            show this help message and exit
+    -i , --iteration      Int, Number of iterations.default=2
+    -e , --EvalueLimit    Float, Sequence similarity threshold. (default:1e-20)
+    -l , --SeqLengthLimit 
+                          Int, An artificially set OR's sequence length
+                          threshold.(default:868)
+    -c , --cpus           number of parallel (default='2/3 of all cores')
+    -p , --prefix         String, output file prefix.(default:Identity)
+    -v, --verbose         Print verbose information.
+    -V, --version         Show version message and exit.
 
 http://zhaolab.shanghaitech.edu.cn/
 

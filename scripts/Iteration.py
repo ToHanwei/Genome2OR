@@ -98,9 +98,7 @@ def main():
 
     Iterdoc = """
     ============================================
-                                              
                   Iteration {}                
-                                              
     ============================================
     """
 
@@ -108,12 +106,12 @@ def main():
     if len(sys.argv) == 1:
         os.system("python Iteration.py -h")
         sys.exit(1)
+    # get comandlines
+    pofile, outdir, genome, itera, cpus, prefix, verbose, EvalueLimit, SeqLengthLimit = CommandParse()
     # open logging
     logger('Iteration')
     # change tool permission
     chmod(HMMBUILD)
-    # get comandlines
-    pofile, outdir, genome, itera, cpus, prefix, verbose, EvalueLimit, SeqLengthLimit = CommandParse()
     # check platform
     platform_info(verbose)
     # iteration runing
