@@ -1,0 +1,3 @@
+count	sca	fr	to	real_fr	real_to	strand	evalue	hmmlen	len_cds
+1	FYBX02009567.1	253677	253428	254147	253238	-	3.6e-13	219	909
+2	FYBX02010328.1	354763	355472	354689	355646	+	7.1e-33	674	957

@@ -632,8 +632,9 @@ def sequence_align(seqf, alignf):
     """
 
     command = (MAFFT
-               + " --localpair "
-               + "--maxiterate 1000 "
+               # run linsi
+               #+ " --localpair "
+               #+ "--maxiterate 1000 "
                + " --thread -1 "
                + "--quiet "
                + seqf
@@ -842,26 +843,42 @@ def tm_cut(seq_list):
     """
     iaad = 0
     tm1, tm2, tm3, tm4, ecl2, tm5, tm6, tm7 = [], [], [], [], [], [], [], []
-    for i in range(len(seq_list[0][1])):
-        aad = seq_list[0][1][i]
+    template_seq = seq_list[0][1]
+    template_len = len(seq_list[0][1])
+    for i in range(template_len):
+        aad = template_seq[i]
         if aad != "-":
             iaad += 1
         else:
             continue
-        if iaad == TM_boundary[0]: tm1.append(i)
-        if iaad == TM_boundary[1]: tm1.append(i + 1)
-        if iaad == TM_boundary[2]: tm2.append(i)
-        if iaad == TM_boundary[3]: tm2.append(i + 1)
-        if iaad == TM_boundary[4]: tm3.append(i)
-        if iaad == TM_boundary[5]: tm3.append(i + 1)
-        if iaad == TM_boundary[6]: tm4.append(i)
-        if iaad == TM_boundary[7]: tm4.append(i + 1)
-        if iaad == TM_boundary[8]: tm5.append(i)
-        if iaad == TM_boundary[9]: tm5.append(i + 1)
-        if iaad == TM_boundary[10]: tm6.append(i)
-        if iaad == TM_boundary[11]: tm6.append(i + 1)
-        if iaad == TM_boundary[12]: tm7.append(i)
-        if iaad == TM_boundary[13]: tm7.append(i + 1)
+        if iaad == TM_boundary[0]:
+            tm1.append(i)
+        elif iaad == TM_boundary[1]:
+            tm1.append(i + 1)
+        elif iaad == TM_boundary[2]:
+            tm2.append(i)
+        elif iaad == TM_boundary[3]:
+            tm2.append(i + 1)
+        elif iaad == TM_boundary[4]:
+            tm3.append(i)
+        elif iaad == TM_boundary[5]:
+            tm3.append(i + 1)
+        elif iaad == TM_boundary[6]:
+            tm4.append(i)
+        elif iaad == TM_boundary[7]:
+            tm4.append(i + 1)
+        elif iaad == TM_boundary[8]:
+            tm5.append(i)
+        elif iaad == TM_boundary[9]:
+            tm5.append(i + 1)
+        elif iaad == TM_boundary[10]:
+            tm6.append(i)
+        elif iaad == TM_boundary[11]:
+            tm6.append(i + 1)
+        elif iaad == TM_boundary[12]:
+            tm7.append(i)
+        elif iaad == TM_boundary[13]:
+            tm7.append(i + 1)
     icl1, icl2, icl3 = [], [], []
     ecl1, ecl2, ecl3 = [], [], []
     name_list, cut_list, nterm_list = [], [], []
@@ -880,7 +897,9 @@ def tm_cut(seq_list):
         icl1.append(seq[tm1[1]:tm2[0]])
         icl2.append(seq[tm3[1]:tm4[0]])
         ecl2.append(seq[tm4[1]:tm5[0]])
-    nongap_list = [drop_gap(tms) for tms in zip(*cut_list)]
+    # 这里预留一个问题，故意设置一个报错，思考，是否删除序列与OR5AN1有共同gap的位点
+    assert 1 == 0, print('check the error, and think')
+    nongap_list = [drop_gap(tms) for tms in zip(*cut_list)
     nongap_cuts = list(zip(*nongap_list))
     cut_dict = dict(zip(name_list, nongap_cuts))
     nterm_dict = dict(zip(name_list, nterm_list))
@@ -1381,12 +1400,22 @@ def merge_pseudo(pseudos):
         head = ns[0]
         sign = ns[3]
         ptype = ns[4]
-        if sign == '+':
-            start = int(ns[1])
-            end = int(ns[2])
-        else:
-            start = int(ns[2])
-            end = int(ns[1])
+        try:
+            if sign == '+':
+                start = int(ns[1])
+                end = int(ns[2])
+            else:
+                start = int(ns[2])
+                end = int(ns[1])
+        except ValueError:
+            # scanfold title has _, place check
+            if sign == '+':
+                start = int(ns[2])
+                end = int(ns[3])
+            else:
+                start = int(ns[3])
+                end = int(ns[2])
+            
         # save to a dict which from the same scaford
         named[head].append((start, end, name, sign, ptype))
     merge = {}

@@ -1,0 +1,1 @@
+count	sca	fr	to	real_fr	real_to	strand	evalue	hmmlen	len_cds
