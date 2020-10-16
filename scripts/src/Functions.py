@@ -703,8 +703,15 @@ def refact_hitfile(hitfile):
         return type -> Dict
         hit_dict, output refactoring dict
     """
+    template = []
     with open(OR_TEMPLATE) as ORf:
-        template = ORf.readlines()
+        seqs = ORf.read().split('>')[1:]
+    for seq in seqs:
+        lines = seq.split('\n')
+        header = '>' + lines[0] + '\n'
+        seq = ''.join(lines[1:]) + '\n'
+        template.append(header)
+        template.append(seq)
 
     hit_dict = defaultdict(list)
     seqlist = ReadSampleFasta(hitfile)
@@ -898,8 +905,8 @@ def tm_cut(seq_list):
         icl2.append(seq[tm3[1]:tm4[0]])
         ecl2.append(seq[tm4[1]:tm5[0]])
     # 这里预留一个问题，故意设置一个报错，思考，是否删除序列与OR5AN1有共同gap的位点
-    assert 1 == 0, print('check the error, and think')
-    nongap_list = [drop_gap(tms) for tms in zip(*cut_list)
+    #assert 1 == 0, print('check the error, and think')
+    nongap_list = [drop_gap(tms) for tms in zip(*cut_list)]
     nongap_cuts = list(zip(*nongap_list))
     cut_dict = dict(zip(name_list, nongap_cuts))
     nterm_dict = dict(zip(name_list, nterm_list))
