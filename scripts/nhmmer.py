@@ -41,6 +41,10 @@ platform_info(verbose)
 # change nhmmer permission
 chmod(NHMMER)
 
+if os.path.isdir(output):
+    output = os.path.join(output, 'nhmmer_out.tblout')
+    print("You input is folder, write data to {}".format(output))
+
 # Run the nhmmer program
 if verbose:
     print("\n\033[1;32mNHMMER program is running... \033[0m\n")
