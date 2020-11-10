@@ -1,0 +1,46 @@
+2020-11-10 Tuesday 09:38:52 Functions.py[line:63] INFO ###nhmmer program starts running###
+2020-11-10 Tuesday 09:38:52 Functions.py[line:35] INFO function platform_info() is running
+2020-11-10 Tuesday 09:38:52 Functions.py[line:39] INFO platform_info use 0.005 seconds
+2020-11-10 Tuesday 09:38:52 Functions.py[line:35] INFO function run_nhmmer() is running
+2020-11-10 Tuesday 09:39:20 Functions.py[line:39] INFO run_nhmmer use 27.570 seconds
+2020-11-10 Tuesday 09:39:20 nhmmer.py[line:56] INFO ###Program nhmmer.py finish###
+2020-11-10 Tuesday 09:40:30 Functions.py[line:63] INFO ###FindOR program starts running###
+2020-11-10 Tuesday 09:40:30 Functions.py[line:35] INFO function platform_info() is running
+2020-11-10 Tuesday 09:40:30 Functions.py[line:39] INFO platform_info use 0.005 seconds
+2020-11-10 Tuesday 09:40:30 Functions.py[line:35] INFO function proc_nhmmer_out() is running
+2020-11-10 Tuesday 09:40:30 Functions.py[line:449] INFO [0;32m0[0m truncated gene(s) was discovered
+2020-11-10 Tuesday 09:40:30 Functions.py[line:39] INFO proc_nhmmer_out use 0.005 seconds
+2020-11-10 Tuesday 09:40:30 Functions.py[line:35] INFO function extract_cds() is running
+2020-11-10 Tuesday 09:40:38 Functions.py[line:39] INFO extract_cds use 8.108 seconds
+2020-11-10 Tuesday 09:40:38 Functions.py[line:35] INFO function find_cds() is running
+2020-11-10 Tuesday 09:40:38 Functions.py[line:39] INFO find_cds use 0.307 seconds
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1231] INFO Merge pseudogene fragement
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1258] INFO ###The result as follows###
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1259] INFO Danio processing completed
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1260] INFO [0;32m193[0m OR fragments found by nhmmer.
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1261] INFO [1;32m278[0m potential functional ORs were discover.
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1262] INFO [0;32m0[0m pseudogenes fragment were merged
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1263] INFO [1;32m24[0m potential pseudogene ORs were discover.
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1264] INFO [0;32m0[0m pseudogenes cause by too short sequence length.
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1265] INFO [0;32m0[0m pseudogenes cause by insert or delect base.
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1266] INFO [0;32m24[0m pseudogenes cause by contains termination codons.
+2020-11-10 Tuesday 09:40:38 Functions.py[line:1267] INFO ###The program finish###
+2020-11-10 Tuesday 09:40:38 FindOR.py[line:62] INFO ###Program FindOR.py finish###
+2020-11-10 Tuesday 09:41:39 Functions.py[line:63] INFO ###IdentityFunc program starts running###
+2020-11-10 Tuesday 09:41:39 Functions.py[line:35] INFO function platform_info() is running
+2020-11-10 Tuesday 09:41:39 Functions.py[line:39] INFO platform_info use 0.005 seconds
+2020-11-10 Tuesday 09:41:39 Functions.py[line:35] INFO function refact_hitfile() is running
+2020-11-10 Tuesday 09:41:39 Functions.py[line:39] INFO refact_hitfile use 0.019 seconds
+2020-11-10 Tuesday 09:41:39 Functions.py[line:35] INFO function refact_list() is running
+2020-11-10 Tuesday 09:41:42 Functions.py[line:39] INFO refact_list use 2.963 seconds
+2020-11-10 Tuesday 09:41:42 Functions.py[line:35] INFO function identity_writer() is running
+2020-11-10 Tuesday 09:41:42 Functions.py[line:1331] INFO [0;32m169[0m functional ORs were discover.
+2020-11-10 Tuesday 09:41:42 Functions.py[line:1332] INFO [0;32m24[0m pseudogene ORs were discover.
+2020-11-10 Tuesday 09:41:42 Functions.py[line:1333] INFO [0;32m0[0m pseudogenes cause by TM has gaps(more than 5).
+2020-11-10 Tuesday 09:41:42 Functions.py[line:39] INFO identity_writer use 0.005 seconds
+2020-11-10 Tuesday 09:41:42 Functions.py[line:1349] INFO Remove redundant functional protein sequences
+2020-11-10 Tuesday 09:41:43 Functions.py[line:1361] INFO Remove redundant functional DNA sequences
+2020-11-10 Tuesday 09:41:43 Functions.py[line:1370] INFO Remove redundant pseudogene sequences, DNA only
+2020-11-10 Tuesday 09:41:43 Functions.py[line:1383] INFO Eventually [1;32m129[0m functional olfactory receptors were discovered
+2020-11-10 Tuesday 09:41:43 Functions.py[line:1386] INFO Eventually [1;32m19[0m pseudogenes gene were discovered
+2020-11-10 Tuesday 09:41:43 IdentifyFunc.py[line:111] INFO ###Program IdentityFunc.py finish###

@@ -73,7 +73,7 @@ for seq_list in hit_list:
     seq_dict = dict(seq_list)
 
     # identity function ORs
-    func, pseu = identify_filter(tm_list, nterms)
+    func, pseu, ptype = identify_filter(tm_list, nterms)
     if func:
         func_seq = ">" + func + seq_dict[func].replace('-', '')
         funcs.append(func_seq)

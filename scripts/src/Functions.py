@@ -1280,7 +1280,7 @@ def identify_filter(tm_list, nterms):
         pseu: pseudogene OR name
         ptype: pseudogene OR type(NTERM/GAP)
     """
-    func, pseu = None, None
+    func, pseu, ptype = None, None, None
     if tm_list:
         # Some pseudogenoes were filtered out by TM gaps
         gap_pseu, nterm_filter = tm_gaps_filter(tm_list, nterms)
@@ -1288,9 +1288,11 @@ def identify_filter(tm_list, nterms):
             # Some pseudogenoes were filtered out by N-term length
             nterm_suitable = Nterm_length(nterm_filter)
             func = nterm_suitable
+            ptype = 'NTERM'
         else:
             pseu = gap_pseu
-    return func, pseu
+            ptype = 'GAP'
+    return func, pseu, ptype
 
 
 @logfun
