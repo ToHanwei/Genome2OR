@@ -598,6 +598,8 @@ def find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit):
                             func_gnames.append(gname)
                             funcgene = True
                             iso += 1
+                        else:
+                            pseutype = "INTER"
                 else:
                     # all cds fragment has interrupt stop codon
                     pseutype = "INTER"
@@ -1232,7 +1234,6 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
     pseudos_list, pseu_type_num = merge_pseudo(pseudos)
     Writer(outdir, prefix + "_Pre-ORs_dna.fa", dna_list)
     Writer(outdir, prefix + "_Pre-ORs_pro.fa", pro_list)
-    Writer(outdir, prefix + "_Pre-pseudos_dna.fa", pseudos_list)
     Writer(outdir, prefix + "_summary_cds.txt", summary_list)
     Writer(outdir, prefix + "_truncated.txt", trunc_list)
 
@@ -1318,7 +1319,8 @@ def identity_writer(hitfile, outputdir, prefix, funcs, pseus, pasu_of_gap):
 
     prepseu = hitfile[:-14] + "Pre-pseudos_dna.fa"
     if not os.path.exists(prepseu):
-        raise FileNotExists(prepseu, outputdir)
+        #raise FileNotExists(prepseu, outputdir)
+        open(prepseu, 'w').write('')
     prepseu_list = ReadSampleFasta(prepseu)
     prepseu_list = ['>'+k+'\n'+v+'\n' for k, v in prepseu_list]
     with open(pseu_file, 'w') as pseuf:

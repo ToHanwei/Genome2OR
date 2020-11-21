@@ -56,7 +56,6 @@ functional, pseudos, pseunum = find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthL
 
 if verbose:
     print("\033[1;32mWrite data to file...\033[0m")
-#print(pseudos)
 writer2file(outputdir, prefix, functional, pseudos, hmmout_seq, hmmout, trunc, pseunum)
 
 logging.info("###Program FindOR.py finish###")
