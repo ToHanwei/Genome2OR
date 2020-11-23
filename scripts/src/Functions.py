@@ -1461,7 +1461,7 @@ def merge_pseudo(pseudos):
                     droup.extend([n1, n2])
                 # [m, n] + [m+x, n-p] => [m, n]
                 elif (s1 <s2) and (e2 < e1):
-                    seq = seq[n1]
+                    seq = pseudos[n1]
                     n = n1
                     droup.extend([n1, n2])
                 # [m-x, n-p] + [m, n] => [m-x, n]
