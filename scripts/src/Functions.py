@@ -1514,7 +1514,11 @@ def merge_pseudo(pseudos):
     }
     ptyles = [k.split('_')[-1].strip() for k in merge.keys()]
     for pt in ptyles:
-        type_of_pseu[pt] += 1
+        try:
+            type_of_pseu[pt] += 1
+        except KeyError:
+            # it's mean pseudo is zero
+            pass
     pseu_type_num = {}
     pseu_type_num['INTER'] = (
         type_of_pseu['INTER']
