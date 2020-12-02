@@ -1232,6 +1232,7 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
     # writer sequence to file
     logging.info("Merge pseudogene fragement")
     pseudos_list, pseu_type_num = merge_pseudo(pseudos)
+    Writer(outdir, prefix + "_Pre-pseudos_dna.fa", pseudos_list)
     Writer(outdir, prefix + "_Pre-ORs_dna.fa", dna_list)
     Writer(outdir, prefix + "_Pre-ORs_pro.fa", pro_list)
     Writer(outdir, prefix + "_summary_cds.txt", summary_list)
@@ -1289,7 +1290,7 @@ def identify_filter(tm_list, nterms):
             # Some pseudogenoes were filtered out by N-term length
             nterm_suitable = Nterm_length(nterm_filter)
             func = nterm_suitable
-            ptype = 'NTERM'
+            #ptype = 'NTERM'
         else:
             pseu = gap_pseu
             ptype = 'GAP'
