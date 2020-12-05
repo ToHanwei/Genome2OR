@@ -792,7 +792,9 @@ def refact_list(template, hit_dict, cpus):
         for job in jobs:
             job.join()
         while not queue.empty():
+            lock.acquire()
             seq_lists.append(queue.get())
+            lock.release()
     return seq_lists
 
 #@logfun
