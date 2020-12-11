@@ -1358,7 +1358,7 @@ def unredundant(outputdir, prefix, func_file, pseu_file, hitdna, verbose):
     nonredun_dna = os.path.join(outputdir, prefix+"_func_ORs_dna.fasta")
     funcomm = (CDHIT
                + " -i " + func_file 
-               + " -c 1.0 -T 0"
+               + " -c 1.0 -T 0 -M 0"
                + " -o " + nonredun_func
               )
     if not verbose:
@@ -1378,7 +1378,7 @@ def unredundant(outputdir, prefix, func_file, pseu_file, hitdna, verbose):
     nonredun_pseu = os.path.join(outputdir, prefix+"_pseu_ORs.fasta")
     pseucomm = (CDHIT 
                 + " -i " + pseu_file 
-                + " -c 1.0 -T 0"
+                + " -c 1.0 -T 0 -M 0"
                 + " -o " + nonredun_pseu
                )
     if not verbose:
