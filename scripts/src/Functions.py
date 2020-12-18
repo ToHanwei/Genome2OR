@@ -1325,7 +1325,7 @@ def identity_writer(hitfile, outputdir, prefix, funcs, pseus, pasu_of_gap):
         #raise FileNotExists(prepseu, outputdir)
         open(prepseu, 'w').write('')
     prepseu_list = ReadSampleFasta(prepseu)
-    prepseu_list = ['>'+k+'\n'+v+'\n' for k, v in prepseu_list]
+    prepseu_list = ['>'+k+v for k, v in prepseu_list]
     with open(pseu_file, 'w') as pseuf:
         prepseu_list.extend(pseus)
         pseuf.writelines(prepseu_list)
