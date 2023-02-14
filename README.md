@@ -14,11 +14,11 @@ Annotate Olfactory receptor CDS from genome
 
 ## Cite
 * Cite us </br>
-[Welcome to our paper](https://link.springer.com/article/10.1007/s11427-021-2081-6).
----
-Han W, Wu Y, Zeng L, Zhao S. Building the Chordata Olfactory Receptor Database using more than 400,000 receptors annotated by Genome2OR. Sci China Life Sci. 2022 Dec;65(12):2539-2551. doi: 10.1007/s11427-021-2081-6. Epub 2022 Jun 10. PMID: 35696018.
-    ---
-    
+[Welcome to our paper](https://link.springer.com/article/10.1007/s11427-021-2081-6). </br>
+Han W, Wu Y, Zeng L, Zhao S. Building the Chordata Olfactory Receptor Database using more than 400,000 receptors annotated by Genome2OR. Sci China Life Sci. 2022 Dec;65(12):2539-2551. doi: 10.1007/s11427-021-2081-6. Epub 2022 Jun 10. PMID: 35696018. </br>
+[Article](./data/s11427-021-2081-6.pdf) </br>
+[Support information](./data/11427_2021_2081_MOESM1_ESM.pdf) </br>
+
 * Resource </br>
 Welcome to "[Chordata Olfactory Receptor Database(CORD)](https://cord.ihuman.shanghaitech.edu.cn/#/home)". You will be able to obtain a large amount of data on olfactory receptors in chordata.
 
