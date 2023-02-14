@@ -14,13 +14,13 @@ Annotate Olfactory receptor CDS from genome
 
 ## Cite
 * Cite us
-    [Welcome to our paper](https://link.springer.com/article/10.1007/s11427-021-2081-6).
-    ---
-    Han W, Wu Y, Zeng L, Zhao S. Building the Chordata Olfactory Receptor Database using more than 400,000 receptors annotated by Genome2OR. Sci China Life Sci. 2022 Dec;65(12):2539-2551. doi: 10.1007/s11427-021-2081-6. Epub 2022 Jun 10. PMID: 35696018.
+[Welcome to our paper](https://link.springer.com/article/10.1007/s11427-021-2081-6).
+---
+Han W, Wu Y, Zeng L, Zhao S. Building the Chordata Olfactory Receptor Database using more than 400,000 receptors annotated by Genome2OR. Sci China Life Sci. 2022 Dec;65(12):2539-2551. doi: 10.1007/s11427-021-2081-6. Epub 2022 Jun 10. PMID: 35696018.
     ---
     
 * Resource
-    Welcome to "[Chordata Olfactory Receptor Database(CORD)](https://cord.ihuman.shanghaitech.edu.cn/#/home)". You will be able to obtain a large amount of data on olfactory receptors in chordata.
+Welcome to "[Chordata Olfactory Receptor Database(CORD)](https://cord.ihuman.shanghaitech.edu.cn/#/home)". You will be able to obtain a large amount of data on olfactory receptors in chordata.
 
 ## Abstract
 [Genome2OR](https://github.com/ToHanwei/Genome2OR.git) is a genetic annotation tool based on 
@@ -47,31 +47,31 @@ tasks and aids in understanding the data structure and correct the bias within a
    python nhmmer.py ../template/Mammalia.hmm genome.fasta nhmmer_out.tblout -v
     ```
     * Explain
-        1. The "Mammalia.hmm" file is the "HMM profile" for mammalia. This file provided by us. Of course, you can also use the NHMMER tool to construct it yourself according to your needs. Generally speaking, we do not recommend doing this unless you konw why you need to construct this file anew.
-        2. You can find more species of "HMM profile" in "the directory YouDir/Genome2OR/template" if needed. To ensure the quality of annotation, please select the appropriate "HMM profile" for the species you need to annotate.
-        3. The "genome.fasta" file is the genome file that you need to  annotate. This file is in the FASTA file format.
-        4. The "nhmmer_out.tblout" file is the output file. You will find it in the current working directory.
+    1. The "Mammalia.hmm" file is the "HMM profile" for mammalia. This file provided by us. Of course, you can also use the NHMMER tool to construct it yourself according to your needs. Generally speaking, we do not recommend doing this unless you konw why you need to construct this file anew.
+    2. You can find more species of "HMM profile" in "the directory YouDir/Genome2OR/template" if needed. To ensure the quality of annotation, please select the appropriate "HMM profile" for the species you need to annotate.
+    3. The "genome.fasta" file is the genome file that you need to  annotate. This file is in the FASTA file format.
+    4. The "nhmmer_out.tblout" file is the output file. You will find it in the current working directory.
 
 2. STEP 2: Execute FindOR.py
     ```
    python FindOR.py nhmmer_out.tblout genome.fasta -o ../output -v 
     ```
     * Explain
-        1. The "nhmmer_out.tblout" file here is the output file of the "STEP 1".
-        2. The "genome.fasta" file is the genome file that you need to  annotate. This file is the same as the file with the same name in the "STEP 1".
-        3. The "../output" is the directory where the output files are saved.
-        4. After the program is finished running, you will find five output files with the prefix "ORannotation" in the "../output" directory.
+    1. The "nhmmer_out.tblout" file here is the output file of the "STEP 1".
+    2. The "genome.fasta" file is the genome file that you need to  annotate. This file is the same as the file with the same name in the "STEP 1".
+    3. The "../output" is the directory where the output files are saved.
+    4. After the program is finished running, you will find five output files with the prefix "ORannotation" in the "../output" directory.
    
 3. STEP 3: Execute IdentityFunc.py
     ```
    python IdentifyFunc.py ../output/ORannotation_Pre-ORs_pro.fa ../output/ORannotation_Pre-ORs_dna.fa -o ../output -p Identity -v
     ```
     * Explain
-        1. The "../output/ORannotation_Pre-ORs_pro.fa" file here is the output file of the "STEP 2".
-        2. The "../output/ORannotation_Pre-ORs_dna.fa" file here is the output file of the "STEP 2".
-        3. The "../output" is the directory where the output files are saved.
-        4. After the program is finished running, you will find seven output files with the prefix "Identity" in the "../output" directory.
-        5. In the output directory, the file "Identity_redundant_func_ORs.fasta" contains annotated functional olfactory receptor protein sequences, the file "Identity_redundant_pseu_ORs.fasta" contatins annotated pseudogene sequences, and the file "ORannotation_truncated.txt" records truncated genes.
+    1. The "../output/ORannotation_Pre-ORs_pro.fa" file here is the output file of the "STEP 2".
+    2. The "../output/ORannotation_Pre-ORs_dna.fa" file here is the output file of the "STEP 2".
+    3. The "../output" is the directory where the output files are saved.
+    4. After the program is finished running, you will find seven output files with the prefix "Identity" in the "../output" directory.
+    5. In the output directory, the file "Identity_redundant_func_ORs.fasta" contains annotated functional olfactory receptor protein sequences, the file "Identity_redundant_pseu_ORs.fasta" contatins annotated pseudogene sequences, and the file "ORannotation_truncated.txt" records truncated genes.
 
 
 ## Download script
