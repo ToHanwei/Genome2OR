@@ -1,5 +1,5 @@
-HMMER3/f [3.2.1 | June 2018]
-NAME  Identity_func_ORs_Lepidosauria_0.7_dna_cut
+LEPIDOSAURIA_HMM_STRING = """HMMER3/f [3.2.1 | June 2018]
+NAME  Lepidosauria_HMM_profile
 LENG  939
 MAXL  1022
 ALPH  DNA
@@ -2838,3 +2838,4 @@ HMM          A        C        G        T
           1.38629  1.38629  1.38629  1.38629
           0.00192  6.25819        *  1.46634  0.26236  0.00000        *
 //
+"""

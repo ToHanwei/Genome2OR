@@ -1,5 +1,5 @@
-HMMER3/f [3.2.1 | June 2018]
-NAME  Identity_func_ORs_Amphibia_0.7_dna_cut
+AMPHIBIA_HMM_STRING = """HMMER3/f [3.2.1 | June 2018]
+NAME  Amphibia_HMM_profile
 LENG  930
 MAXL  1012
 ALPH  DNA
@@ -2811,3 +2811,5 @@ HMM          A        C        G        T
           1.38629  1.38629  1.38629  1.38629
           0.00154  6.47918        *  1.46634  0.26236  0.00000        *
 //
+"""
+

@@ -1,5 +1,5 @@
-HMMER3/f [3.2.1 | June 2018]
-NAME  Identity_func_ORs_Crocodylia_0.9_dna_cut
+CROCODYLIA_HMM_STRING = """HMMER3/f [3.2.1 | June 2018]
+NAME  Crocodylia_HMM_profile
 LENG  936
 MAXL  1041
 ALPH  DNA
@@ -2829,3 +2829,6 @@ HMM          A        C        G        T
           1.38629  1.38629  1.38629  1.38629
           0.00410  5.49842        *  1.46634  0.26236  0.00000        *
 //
+"""
+
+

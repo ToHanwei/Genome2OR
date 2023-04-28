@@ -1,14 +1,24 @@
 #!coding:utf-8
 
+import os
+import sys
+
+from shutil import which
+from os.path import dirname
+from os.path import abspath
+
 # The name of this tool
 TOOLNAME = "Genome2OR"
 
 # The version
-VERSION = "Genome2OR 1.0"
+VERSION = "Genome2OR 1.2.3"
 
 # Complementary base
-CompBase = {'A': 'T', 'T': 'A', 'C': 'G',
-            'G': 'C', 'N': 'N', }
+CompBase = {
+    'A': 'T', 'T': 'A',
+    'C': 'G', 'G': 'C',
+    'N': 'N',
+    }
 
 # TM boundary, refer to OR5AN1(UniprotKB:Q8NGI8)
 TM_boundary = [
@@ -59,6 +69,9 @@ TM_GAPS_TOTAL = 5
 # If CDS shorted than EXTEND_LENGTH will be extended to that length
 EXTEND_LENGTH = 1200
 
+# the limit of pseudogene and low-quality sequences
+LENGTHLIMIT = 100
+
 # Codon mapping table
 CODON_TABLE = {
     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'CGT': 'R',
@@ -76,15 +89,133 @@ CODON_TABLE = {
     'TGG': 'W', 'TAG': '*', 'TGA': '*', 'TAA': '*'
 }
 
-# Olfactory receptor template sequence
-OR_TEMPLATE = "../template/template.fasta"
 
-# nhmmer tool path 
-NHMMER = "../tools/nhmmer"
-# mafft tool path
-MAFFT = "../tools/mafft"
-# cd-hit tool path
-CDHIT = "../tools/cd-hit"
-# hmmbuild tool path
-HMMBUILD = '../tools/hmmbuild'
 
+class DependToolError(Exception):
+    def __init__(self, tool):
+        self.tool = "Dependency tool {} not found.".format(tool)
+
+    def __str__(self):
+        return self.tool
+
+
+def getAbsPath():
+    """
+    Get absolute path to resource.
+    """
+    #return abs_path
+    absPaht = ""
+    if getattr(sys, 'frozen', False):
+        absPath = dirname(abspath(sys.executable))
+    elif __file__:
+        absPath = dirname(abspath(__file__))
+    
+    SCRIPT_PATH = dirname(absPath)
+    TEMPLATE_PATH = os.path.join(dirname(SCRIPT_PATH), "template")
+    return SCRIPT_PATH, TEMPLATE_PATH
+
+SCRIPT_PATH, TEMPLATE_PATH = getAbsPath()
+
+
+# define nhmmer tool path 
+PYTHON = which("python")
+if not PYTHON:
+    raise DependToolError("python")
+
+NHMMER = which("nhmmer")
+if not NHMMER:
+    raise DependToolError("nhmmer")
+
+# define mafft tool path
+MAFFT = which("mafft")
+if not MAFFT:
+    raise DependToolError("mafft")
+
+# define cd-hit tool path
+CDHIT = which("cd-hit")
+if not CDHIT:
+    raise DependToolError("cd-hit")
+
+# define hmmbuild tool path
+HMMBUILD = which('hmmbuild')
+if not HMMBUILD:
+    raise DependToolError("hmmbuild")
+
+
+
+GENOME2OR_MESSAGE = """\033[0;32m
+    ____ _____ _   _  ___  __  __ _____ ____   ___  ____  
+   / ___| ____| \ | |/ _ \|  \/  | ____|___ \ / _ \|  _ \ 
+  | |  _|  _| |  \| | | | | |\/| |  _|   __) | | | | |_) |
+  | |_| | |___| |\  | |_| | |  | | |___ / __/| |_| |  _ < 
+   \____|_____|_| \_|\___/|_|  |_|_____|_____|\___/|_| \_|
+                                                          
+\033[0m
+"""
+
+BATCH_MESSAGE = """\033[0;32m
+                ____    _  _____ ____ _   _ 
+               | __ )  / \|_   _/ ___| | | |
+               |  _ \ / _ \ | || |   | |_| |
+               | |_) / ___ \| || |___|  _  |
+               |____/_/   \_\_| \____|_| |_|
+                                            
+\033[0m
+"""
+
+FINDOR_MESSAGE = """\033[0;32m
+             _____ ___ _   _ ____   ___  ____  
+            |  ___|_ _| \ | |  _ \ / _ \|  _ \ 
+            | |_   | ||  \| | | | | | | | |_) |
+            |  _|  | || |\  | |_| | |_| |  _ < 
+            |_|   |___|_| \_|____/ \___/|_| \_|
+                                               
+\033[0m
+"""
+
+IDENTIFYFUNC_MESSAGE = """\033[0;32m
+      ___ ____  _____ _   _ _____ ___ _______   _______ _   _ _   _  ____ 
+     |_ _|  _ \| ____| \ | |_   _|_ _|  ___\ \ / /  ___| | | | \ | |/ ___|
+      | || | | |  _| |  \| | | |  | || |_   \ V /| |_  | | | |  \| | |    
+      | || |_| | |___| |\  | | |  | ||  _|   | | |  _| | |_| | |\  | |___ 
+     |___|____/|_____|_| \_| |_| |___|_|     |_| |_|    \___/|_| \_|\____|
+                                                                          
+\033[0m
+"""
+
+ITERATION_MESSAGE = """\033[0;32m
+     ___ _____ _____ ____      _  _____ ___ ___  _   _ 
+    |_ _|_   _| ____|  _ \    / \|_   _|_ _/ _ \| \ | |
+     | |  | | |  _| | |_) |  / _ \ | |  | | | | |  \| |
+     | |  | | | |___|  _ <  / ___ \| |  | | |_| | |\  |
+    |___| |_| |_____|_| \_\/_/   \_\_| |___\___/|_| \_|
+                                                       
+\033[0m
+"""
+
+ITERBATH_MESSAGE = """\033[0;32m
+     ___ _____ _____ ____  ____    _  _____ ____ _   _ 
+    |_ _|_   _| ____|  _ \| __ )  / \|_   _/ ___| | | |
+     | |  | | |  _| | |_) |  _ \ / _ \ | || |   | |_| |
+     | |  | | | |___|  _ <| |_) / ___ \| || |___|  _  |
+    |___| |_| |_____|_| \_\____/_/   \_\_| \____|_| |_|
+                                                       
+\033[0m
+"""
+
+NHMMER_MESSAGE = """\033[0;32m
+           _   _ _   _ __  __ __  __ _____ ____  
+          | \ | | | | |  \/  |  \/  | ____|  _ \ 
+          |  \| | |_| | |\/| | |\/| |  _| | |_) |
+          | |\  |  _  | |  | | |  | | |___|  _ < 
+          |_| \_|_| |_|_|  |_|_|  |_|_____|_| \_|
+                                                 
+\033[0m
+"""
+
+
+ITERDOC = """\033[0;32m
+       =============================================
+                     ITERATION {}                  
+       =============================================\033[0m
+"""

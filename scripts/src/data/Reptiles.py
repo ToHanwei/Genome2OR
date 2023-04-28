@@ -1,5 +1,5 @@
-HMMER3/f [3.2.1 | June 2018]
-NAME  Identity_func_ORs_reptiles_dna_0.7_cut
+REPTILES_HMM_STRING = """HMMER3/f [3.2.1 | June 2018]
+NAME  Reptiles_HMM_profile
 LENG  933
 MAXL  1033
 ALPH  DNA
@@ -2820,3 +2820,4 @@ HMM          A        C        G        T
           1.38629  1.38629  1.38629  1.38629
           0.00323  5.73587        *  1.46634  0.26236  0.00000        *
 //
+"""

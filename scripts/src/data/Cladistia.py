@@ -1,5 +1,5 @@
-HMMER3/f [3.2.1 | June 2018]
-NAME  Identity_func_ORs_Cladistia_dna_cut
+CLADISTIA_HMM_STRING = """HMMER3/f [3.2.1 | June 2018]
+NAME  Cladistia_HMM_profile
 LENG  939
 MAXL  1041
 ALPH  DNA
@@ -2838,3 +2838,6 @@ HMM          A        C        G        T
           1.38629  1.38629  1.38629  1.38629
           0.00342  5.67952        *  1.46634  0.26236  0.00000        *
 //
+"""
+
+

@@ -2,16 +2,20 @@
 
 import re
 import os
-import stat
 import sys
+import stat
 import time
 import pickle
 import logging
 import tempfile
 import platform
+
 from multiprocessing import Process
 from multiprocessing import Queue
 from multiprocessing import Lock
+from multiprocessing import cpu_count
+from subprocess import Popen
+from subprocess import PIPE
 from collections import Counter
 from collections import defaultdict
 
@@ -20,6 +24,7 @@ from src.CodeMessages import NtermError
 from src.CodeMessages import FileNotExists
 from src.CodeMessages import StrandError
 from src.CodeMessages import LengthError
+from src.CodeMessages import ProfileError
 from src.CodeMessages import PlatformError
 from src.CodeMessages import FastaFormatError
 from src.CodeMessages import VersionWarning
@@ -32,11 +37,15 @@ def logfun(func):
         """Record the running time of the function"""
         fname = func.__name__
         start = time.time()
-        logging.info('function %s() is running' % fname)
+        logging.info(
+            'The currently running function is: {}'.format(fname)
+        )
         temp = func(*args, **kwargs)
         end = time.time()
         runtime = end - start
-        logging.info('{} use {:.3f} seconds'.format(fname, runtime))
+        logging.info(
+            'The {} running:{:.3f}s'.format(fname, runtime)
+        )
         return temp
 
     return logtimer
@@ -53,14 +62,71 @@ def logger(script):
     )
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s '
-                                  + '%(filename)s:'
-                                  + '%(levelname)s '
-                                  + '%(message)s'
-                                  )
+    formatter = logging.Formatter(
+        '%(asctime)s '
+        + '%(filename)s:'
+        + '%(levelname)s '
+        + '%(message)s'
+    )
     console.setFormatter(formatter)
     logging.getLogger().addHandler(console)
     logging.info("###" + script + " program starts running###")
+
+
+def tempFileHmm(profile):
+    """
+    Function:
+        Get HMM profile string
+    Parameter:
+        profile, string, HMM profile name
+    Return:
+        hmm_string, string, HMM profile string
+    """
+    hmm_string = None
+    if profile == "Actinopteri":
+        from src.data.Actinopteri import ACTINOPTERI_HMM_STRING
+        hmm_string = ACTINOPTERI_HMM_STRING
+    elif profile == "Amphibia":
+        from src.data.Amphibia import AMPHIBIA_HMM_STRING
+        hmm_string = AMPHIBIA_HMM_STRING
+    elif profile == "Aves":
+        from src.data.Aves import AVES_HMM_STRING
+        hmm_string = AVES_HMM_STRING
+    elif profile == "Branchiostoma_floridae":
+        from src.data.Branchiostoma_floridae import BRANCHIOSTOMA_HMM_STRING
+        hmm_string = BRANCHIOSTOMA_HMM_STRING
+    elif profile == "Chondrichthyes":
+        from src.data.Chondrichthyes import CHONDRICHTHYES_HMM_STRING
+        hmm_string = CHONDRICHTHYES_HMM_STRING
+    elif profile == "Cladistia":
+        from src.data.Cladistia import CLADISTIA_HMM_STRING
+        hmm_string = CLADISTIA_HMM_STRING
+    elif profile == "Coelacanthimorpha":
+        from src.data.Coelacanthimorpha import COELACANTHIMORPHA_HMM_STRING
+        hmm_string = COELACANTHIMORPHA_HMM_STRING
+    elif profile == "Crocodylia":
+        from src.data.Crocodylia import CROCODYLIA_HMM_STRING
+        hmm_string = CROCODYLIA_HMM_STRING
+    elif profile == "Hyperoartia":
+        from src.data.Hyperoartia import HYPEROARTIA_HMM_STRING
+        hmm_string = HYPEROARTIA_HMM_STRING
+    elif profile == "Lepidosauria":
+        from src.data.Lepidosauria import LEPIDOSAURIA_HMM_STRING
+        hmm_string = LEPIDOSAURIA_HMM_STRING
+    elif profile == "Mammalia":
+        from src.data.Mammalia import MAMMALIA_HMM_STRING
+        hmm_string = MAMMALIA_HMM_STRING
+    elif profile == "Myxini":
+        from src.data.Myxini import MYXINI_HMM_STRING
+        hmm_string = MYXINI_HMM_STRING
+    elif profile == "Reptiles":
+        from src.data.Reptiles import REPTILES_HMM_STRING
+        hmm_string = REPTILES_HMM_STRING
+    elif profile == "Testudines":
+        from src.data.Testudines import TESTUDINES_HMM_STRING
+        hmm_string = TESTUDINES_HMM_STRING
+
+    return hmm_string
 
 
 @logfun
@@ -80,25 +146,37 @@ def run_nhmmer(evalue, cpus, output, profile, genome, verbose):
         return type -> int
         generate an output file and return exit status
     """
+    
+    hmm_string = tempFileHmm(profile)
+    if hmm_string:
+        # temporary file name
+        temp_file = tempfile.NamedTemporaryFile('w+t')
+        temp_name = temp_file.name
+        temp_file.write(hmm_string)
+        temp_file.seek(0)
+    else:
+        # get the path of HMM profile
+        if os.path.exists(profile):
+            temp_name = profile
+        else:
+            logging.error(ProfileError(profile))
+            sys.exit()
 
-    commandline = ("time "
-                   + NHMMER
-                   + " -E "
-                   + str(evalue)
-                   + " --dna --cpu "
-                   + str(cpus)
-                   + " --noali"
-                   + " --popen 0.02"  # default 0.02
-                   + " --pextend 0.4"  # default 0.4
-                   + " --tblout "
-                   + output
-                   + " " + profile
-                   + " " + genome
-                   )
-    if not verbose:
-        commandline += " > /dev/null"
-    code = os.system(commandline)
-    return code
+    commandline = [
+        NHMMER,
+        "--dna",
+        "--noali",
+        "-E", str(evalue),
+        "--cpu", str(cpus),
+        "--popen", "0.02",   # default 0.02
+        "--pextend", "0.4",  # default 0.4
+        "--tblout", output,
+        "--acc",
+        temp_name,
+        genome,
+    ]
+    code, outext = excuteCommand(args=commandline, pipe=PIPE)
+    return code, outext
 
 
 @logfun
@@ -114,31 +192,54 @@ def platform_info(verbose):
     """
     system_type = platform.system()
     if verbose:
+        system_base = "The operating system you are currently using is "
         if system_type == 'Windows':
-            print("The system you use is Windows.")
+            sys.stdout.write(
+                system_base + "Windows.\n"
+            )
         elif system_type == 'Linux':
-            print("The system you use is Linux.")
+            sys.stdout.write(
+                system_base + "Linux.\n"
+            )
         elif system_type == 'Darwin':
-            print("The system you use is Darwin.")
+            sys.stdout.write(
+                system_base + "Darwin.\n"
+            )
         elif system_type == 'Java':
-            print("The system you use is Java.")
+            sys.stdout.write(
+                system_base + "Java.\n"
+            )
         else:
-            print("Other unknown systems ")
+            sys.stdout.write(
+                "Other unknown systems.\n"
+            )
 
     python_version = platform.python_version()
     version = python_version.split(".")[0]
     if verbose:
+        version_base = "The version you are currently using is "
         if version == "3":
-            print("Python3 is used.")
+            sys.stdout.write(
+                version_base + "Python3.\n"
+            )
         elif version == "2":
-            print("Python2 is used.")
-    # check platform
+            sys.stdout.write(
+                version_base + "Python2\n"
+            )
+    check_base = "We recommend that you use "
+    # check the opreation system
     if system_type != "Linux":
-        logging.error("Platform error, use Linux only")
-        raise PlatformError(system_type)
+        logging.error(
+            check_base + "Linux"
+        )
+        logging.error(PlatformError(system_type))
+        sys.exit()
+    # check the version of python
     if version != '3':
-        logging.warning("This program is best run on python3")
-        print(VersionWarning(version))
+        logging.warning(
+            check_base + "python3"
+        )
+        sys.stdout.write(VersionWarning(version))
 
 
 def reverse_complement(string):
@@ -202,9 +303,8 @@ def dna_translation(dna_seq):
     i = 0
     len_dna = len(dna_seq)
     if len_dna % 3 != 0:
-        logging.error("The length of CDS({0}) is not divisible by 3."
-                      .format(len_dna))
-        raise LengthError(len_dna)
+        logging.error(LengthError(len_dna))
+        sys.exit()
     plen = len(dna_seq) / 3
     while i < plen:
         n = dna_seq[3 * i: 3 * (i + 1)]
@@ -346,9 +446,8 @@ def extract_cds(hmmout, gefile):
     header, seq_line, flag = '', '', False
     line = genomef.readline()
     if line[0] != '>':
-        logging.error("Your genome start with '{0}', FASTA format?"
-                      .format(line[0]))
-        raise FastaFormatError(line[0])
+        logging.error(FastaFormatError(line[0]))
+        sys.exit()
     while line:
         if line[0] == '>':
             if flag:
@@ -358,6 +457,7 @@ def extract_cds(hmmout, gefile):
                 flag = False
             seq_line = ''
             header = line[1:].split()[0]
+            header = header.replace("_", "@#@")
         else:
             flag = True
             seq_line += line.strip()
@@ -399,7 +499,7 @@ def proc_nhmmer_out(file, EvalueLimit, SeqLengthLimit):
     for line in linelist:
         temp = line.strip().split()
         # Extract information from NHMMER outfile
-        sca = temp[0]
+        sca = temp[0].replace("_", "@#@")     # update 20230214
         hmmfr = int(temp[4])
         hmmto = int(temp[5])
         envfr = int(temp[8])
@@ -419,7 +519,7 @@ def proc_nhmmer_out(file, EvalueLimit, SeqLengthLimit):
             stop_extend = 0
             start_extend = 0
         # sequence similarity filter
-        if evalue > EvalueLimit: continue
+        if evalue > float(EvalueLimit): continue
         if sign == '+':
             new_fr = max(envfr - start_extend, 0)
             new_to = min(envto + stop_extend, slen)
@@ -429,12 +529,11 @@ def proc_nhmmer_out(file, EvalueLimit, SeqLengthLimit):
             new_to = min(envfr + stop_extend, slen)
         else:
             # sign(strand) must be '+' or '-'
-            logging.error("NHMMER tool output 'strand' "
-                          + "column only '+' or '-'")
-            raise StrandError(sign)
+            logging.error(StrandError(sign))
+            sys.exit()
         fraglen = abs(new_to - new_fr) 
         # fraglen equal to EXTEND_LENGTH, otherwise truncat
-        if fraglen < SeqLengthLimit:
+        if fraglen < int(SeqLengthLimit):
             trunc[gene_name] = [ 
                 sca, envfr, envto, new_fr,
                 new_to, sign, evalue, slen, hmmlen
@@ -468,6 +567,7 @@ def find_stop_codons(seq, SeqLengthLimit):
     stop_taa = find_all('(?=(TAA))', seq)
     stops = stop_tag + stop_tga + stop_taa
     # Filter stop long enough
+    SeqLengthLimit = int(SeqLengthLimit)
     stops = sorted(i for i in stops if i > SeqLengthLimit)
     return stops
 
@@ -483,7 +583,23 @@ def cds_length_filter(cdslist, SeqLengthLimit):
         return type -> list
         Filtered cdslist
     """
+    SeqLengthLimit = int(SeqLengthLimit)
     filterlist = [cds for cds in cdslist if len(cds[2]) >= SeqLengthLimit]
+    return filterlist
+
+
+def cds_quality_filter(cdslist):
+    """
+    Function:
+        cds_quality_filter
+        Filter out low-quality sequences
+    Parameter:
+        cdslist, cds list from a DNA fragment
+    Return:
+        return type -> list
+        Filtered cdslist
+    """
+    filterlist = [cds for cds in cdslist if "N" not in cds[2]]
     return filterlist
 
 
@@ -544,18 +660,20 @@ def find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit):
     """
 
     hit = 1
-    pseutype = ''
     funcdict = {}
     pseudos = {}
+    low_quality = {}
     lengfilter = 0
     insertfilter = 0
     interrfilter = 0
+    lowfilter = 0
     func_gnames = []
-    pseunum = []
+    SeqLengthLimit = int(SeqLengthLimit)
     for gname in hmmout_seq:
         iso = 1
+        pseutype = 'UnKnown'
         temp_pseu = []
-        funcgene = False
+        pseugene = True
         real_fr, real_to = '', ''
         raw_cds = hmmout_seq[gname]
         sour_cds = sour_seq[gname]
@@ -565,24 +683,27 @@ def find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit):
         starts = sorted(i for i in starts if i < len_cds - SeqLengthLimit)
         stops = find_stop_codons(raw_cds, SeqLengthLimit)
         cdslist = [(i, j, raw_cds[i:j]) for i in starts for j in stops]
-        # Determine if all CDS's meet the length limit
-        cdslist = cds_length_filter(cdslist, SeqLengthLimit)
+        # Filter out low-quality sequences
+        cdslist = cds_quality_filter(cdslist)
         if cdslist:
-            # Insert or delete codon (pseudogene)
-            cdslist = insert_filter(cdslist)
+            # Determine if all CDS's meet the length limit
+            cdslist = cds_length_filter(cdslist, SeqLengthLimit)
             if cdslist:
-                # Interrupting stop codon (pseudogene)
-                cdslist = interrupt_stop_codon(cdslist)
+                # Insert or delete codon (pseudogene)
+                cdslist = insert_filter(cdslist)
                 if cdslist:
-                    for cds in cdslist:
-                        iatg, istop, cds_seq = cds
-                        if strand == '+':
-                            real_fr = int(fr) + iatg
-                            real_to = int(fr) + istop + 3
-                        elif strand == '-':
-                            real_fr = int(to) - iatg
-                            real_to = int(to) - istop - 3
-                        if 'N' not in cds_seq:
+                    # Interrupting stop codon (pseudogene)
+                    cdslist = interrupt_stop_codon(cdslist)
+                    if cdslist:
+                        for cds in cdslist:
+                            iatg, istop, cds_seq = cds
+                            if strand == '+':
+                                real_fr = int(fr) + iatg
+                                real_to = int(fr) + istop + 3
+                            elif strand == '-':
+                                real_fr = int(to) - iatg
+                                real_to = int(to) - istop - 3
+                            
                             hits = "hit" + str(hit)
                             new_name = (sca + '_'
                                         + str(real_fr) + '_'
@@ -591,35 +712,58 @@ def find_cds(hmmout, hmmout_seq, sour_seq, SeqLengthLimit):
                                         + str(iso)
                                         )
                             final_cds = raw_cds[iatg:(istop + 3)]
+                            
                             funcdict[new_name] = [
                                 hits, gname, iso, final_cds,
                                 real_fr, real_to, strand
                             ]
                             func_gnames.append(gname)
-                            funcgene = True
+                            pseugene = False
                             iso += 1
-                        else:
-                            pseutype = "INTER"
+                            #if 'N' not in cds_seq:
+                            #    hits = "hit" + str(hit)
+                            #    new_name = (sca + '_'
+                            #                + str(real_fr) + '_'
+                            #                + str(real_to) + '_'
+                            #                + strand + '_iso'
+                            #                + str(iso)
+                            #                )
+                            #    final_cds = raw_cds[iatg:(istop + 3)]
+                            #    funcdict[new_name] = [
+                            #        hits, gname, iso, final_cds,
+                            #        real_fr, real_to, strand
+                            #    ]
+                            #    func_gnames.append(gname)
+                            #    funcgene = True
+                            #    iso += 1
+                            #else:
+                            #    pseutype = "LOWQUALITY"
+                            #    lowfilter += 1
+                    else:
+                        # all cds fragment has interrupt stop codon
+                        pseutype = "INTER"
+                        interrfilter += 1
+                        
                 else:
-                    # all cds fragment has interrupt stop codon
-                    pseutype = "INTER"
-                    interrfilter += 1
-                    
+                    # all cds fragment can not be multiple by 3
+                    pseutype = "INDEL"
+                    insertfilter += 1
             else:
-                # all cds fragment can not be multiple by 3
-                pseutype = "INDEL"
-                insertfilter += 1
+                # all cds fragment length too short
+                pseutype = "SHORT"
+                lengfilter += 1
         else:
-            # all cds fragment length too short
-            pseutype = "SHORT"
-            lengfilter += 1
-        if not funcgene:
+            # low-quality sequences
+            new_gname = gname + "_LOWQUALITY"
+            if len(sour_cds) >= LENGTHLIMIT:
+                low_quality[new_gname] = sour_cds
+            pseugene = False
+        if pseugene:
             new_gname = gname + '_' + pseutype
             pseudos[new_gname] = sour_cds
         else:
             hit += 1
-    pseunum = (lengfilter, insertfilter, interrfilter)
-    return funcdict, pseudos, pseunum
+    return funcdict, pseudos, low_quality
 
 
 def sequence_align(seqf, alignf):
@@ -633,17 +777,17 @@ def sequence_align(seqf, alignf):
     Return: None
     """
 
+    # run linsi
+    #+ " --localpair "
+    #+ "--maxiterate 1000 "
     command = (MAFFT
-               # run linsi
-               #+ " --localpair "
-               #+ "--maxiterate 1000 "
                + " --thread -1 "
                + "--quiet "
                + seqf
                + " > "
                + alignf
                )
-    os.system(command)
+    excuteCommand(args=command, shell=True)
 
 
 def ReadSampleFasta(seqfile):
@@ -659,8 +803,8 @@ def ReadSampleFasta(seqfile):
         seq_list, [(name1, seq1), (name2, seq2), ...]
     """
 
+    seq_list = []
     with open(seqfile) as seqf:
-        seq_list = []
         text = seqf.read().replace('\r', '')
         seqs = text.split('>')[1:]
     for seq in seqs:
@@ -705,22 +849,22 @@ def refact_hitfile(hitfile):
         return type -> Dict
         hit_dict, output refactoring dict
     """
-    template = []
-    with open(OR_TEMPLATE) as ORf:
-        seqs = ORf.read().split('>')[1:]
-    for seq in seqs:
-        lines = seq.split('\n')
-        header = '>' + lines[0] + '\n'
-        seq = ''.join(lines[1:]) + '\n'
-        template.append(header)
-        template.append(seq)
+    #template = []
+    #with open(OR_TEMPLATE) as ORf:
+    #    seqs = ORf.read().split('>')[1:]
+    #for seq in seqs:
+    #    lines = seq.split('\n')
+    #    header = '>' + lines[0] + '\n'
+    #    seq = ''.join(lines[1:]) + '\n'
+    #    template.append(header)
+    #    template.append(seq)
 
     hit_dict = defaultdict(list)
     seqlist = ReadSampleFasta(hitfile)
     for header, seq in seqlist:
         key = header.split('_')[0]
         hit_dict[key].append((header, seq))
-    return template, hit_dict
+    return hit_dict
 
 
 def tempfile_align(seqs, template, queue, lock):
@@ -757,48 +901,8 @@ def tempfile_align(seqs, template, queue, lock):
     lock.release()
 
 
-@logfun
-def refact_list(template, hit_dict, cpus):
-    """
-    Function:
-        refact_list
-        Reorganization of the sequence list.
-        Note: Return a generator.
-    Parameter:
-        template, OR template sequence list
-        hit_dict, hit OR sequence list
-        cpus, number of parallel
-    Return:
-        return type -> list
-        seq_list, sequence alignment list
-    """
-
-    seq_lists = []
-    keys = list(hit_dict.keys())
-    num_of_jobs = len(keys)
-    for i in range(0, num_of_jobs, cpus):
-        batch_jobs = keys[i:i+cpus]
-        queue = Queue()
-        lock = Lock()
-        jobs = []
-        for hit in batch_jobs:
-            seqs = hit_dict[hit]
-            p = Process(
-                target=tempfile_align,
-                args=(seqs, template, queue, lock)
-            )
-            p.start()
-            jobs.append(p)
-        for job in jobs:
-            job.join()
-        while not queue.empty():
-            lock.acquire()
-            seq_lists.append(queue.get())
-            lock.release()
-    return seq_lists
-
 #@logfun
-#def refact_list(template, hit_dict):
+#def refact_list(template, hit_dict, cpus):
 #    """
 #    Function:
 #        refact_list
@@ -807,34 +911,74 @@ def refact_list(template, hit_dict, cpus):
 #    Parameter:
 #        template, OR template sequence list
 #        hit_dict, hit OR sequence list
+#        cpus, number of parallel
 #    Return:
 #        return type -> list
 #        seq_list, sequence alignment list
 #    """
 #
 #    seq_lists = []
-#    for hit, seqs in hit_dict.items():
-#        templist = []
-#        for head, seq in seqs:
-#            head = ">" + head
-#            templist.extend([head, seq])
-#        aligns = template + templist
-#        # temporary OR sequence file name
-#        TempOR = tempfile.NamedTemporaryFile('w+t')
-#        TempName = TempOR.name
-#        TempOR.writelines(aligns)
-#        TempOR.seek(0)
-#        # temporary OR alignment file name
-#        TempAlign = TempName + '.fas'
-#        sequence_align(TempName, TempAlign)
-#        seq_list = ReadSampleFasta(TempAlign)
-#        # drop some template OR sequence, retain OR5AN1 only
-#        index = int(len(template) / 2)
-#        seq_list = seq_list[0:1] + seq_list[index:]
-#        os.remove(TempAlign)
-#        TempOR.close()
-#        seq_lists.append(seq_list)
+#    keys = list(hit_dict.keys())
+#    num_of_jobs = len(keys)
+#    for i in range(0, num_of_jobs, cpus):
+#        batch_jobs = keys[i:i+cpus]
+#        queue = Queue()
+#        lock = Lock()
+#        jobs = []
+#        for hit in batch_jobs:
+#            seqs = hit_dict[hit]
+#            p = Process(
+#                target=tempfile_align,
+#                args=(seqs, template, queue, lock)
+#            )
+#            p.start()
+#            jobs.append(p)
+#        for job in jobs:
+#            job.join()
+#        while not queue.empty():
+#            lock.acquire()
+#            seq_lists.append(queue.get())
+#            lock.release()
 #    return seq_lists
+
+@logfun
+def refact_list(template, hit_dict):
+    """
+    Function:
+        refact_list
+        Reorganization of the sequence list.
+        Note: Return a generator.
+    Parameter:
+        template, OR template sequence list
+        hit_dict, hit OR sequence list
+    Return:
+        return type -> list
+        seq_list, sequence alignment list
+    """
+
+    seq_lists = []
+    for hit, seqs in hit_dict.items():
+        templist = []
+        for head, seq in seqs:
+            head = ">" + head
+            templist.extend([head, seq])
+        aligns = template + templist
+        # temporary OR sequence file name
+        TempOR = tempfile.NamedTemporaryFile('w+t')
+        TempName = TempOR.name
+        TempOR.writelines(aligns)
+        TempOR.seek(0)
+        # temporary OR alignment file name
+        TempAlign = TempName + '.fas'
+        sequence_align(TempName, TempAlign)
+        seq_list = ReadSampleFasta(TempAlign)
+        # drop some template OR sequence, retain OR5AN1 only
+        index = int(len(template) / 2)
+        seq_list = seq_list[0:1] + seq_list[index:]
+        os.remove(TempAlign)
+        TempOR.close()
+        seq_lists.append(seq_list)
+    return seq_lists
 
 
 def tm_cut(seq_list):
@@ -1177,7 +1321,7 @@ def Writer(outdir, filename, datalist):
         outf.writelines(datalist)
 
 
-def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseunum):
+def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, low_quality):
     """
     Function:
         Writer
@@ -1190,6 +1334,7 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
         hmmout_seq, extract_cds() return
         hmmout, proc_nhmmer_out() return
         trunc, proc_nhmmer_out() return, truncated gene infomation
+        low_quality, find_cds() return, low quality sequence dict
     Return:
         None
     """
@@ -1204,8 +1349,14 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
         header = [hit, sca, str(real_fr), str(real_to), sign, 'iso' + str(iso)]
         header = "_".join(header)
         seq = dna_translation(cds)
-        dna_list.append('>' + header + '\n' + cds + '\n')
-        pro_list.append('>' + header + '\n' + seq + '\n')
+        dna_list.append(
+            '>' + header 
+            + '\n' + cds 
+            + '\n')
+        pro_list.append(
+            '>' + header 
+            + '\n' + seq 
+            + '\n')
         count += 1
         summary_line = [
             count, sca,
@@ -1216,7 +1367,14 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
         ]
         summary_line = "\t".join([str(line) for line in summary_line])
         summary_list.append(summary_line + "\n")
-    
+    low_quality_list = []
+    for head in low_quality:
+        low_line = ">"
+        low_line += head
+        low_line += "\n"
+        low_line += low_quality[head]
+        low_line += "\n"
+        low_quality_list.append(low_line)
     count = 0
     t_header = 'count\tsca\tfr\tto\treal_fr\treal_to\tstrand\tevalue\thmmlen\n'
     trunc_list = [t_header]
@@ -1232,33 +1390,81 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
         trunc_list.append(trunc_line + "\n")
 
     # writer sequence to file
-    logging.info("Merge pseudogene fragement")
+    dna_file = prefix + "_Pre-ORs_dna.fa"
+    pro_file = prefix + "_Pre-ORs_pro.fa"
+    tru_file = prefix + "_truncated.txt"
+    sum_file = prefix + "_summary_cds.txt"
+    pse_file = prefix + "_Pre-pseudos_dna.fa"
+    low_file = prefix + "_Pre-low-quality_dna.fa"
+    merge_info = "Merge pseudogene fragement"
+    dna_info = (
+        "Write the DNA sequence of putative functional "
+        + "olfactory receptor genes into the file: {}."
+    .format(dna_file))
+    pro_info = (
+        "Write the protein sequence of putative functional "
+        + "olfactory receptor genes into the file: {}."
+    .format(pro_file))
+    tru_info = (
+        "Write the truncated sequence information to file: {}"
+        .format(tru_file))
+    sum_info = (
+        "Write the summary information to file: {}"
+        .format(sum_file))
+    pse_info = (
+        "Write the pseugenes into the file: {}."
+        .format(pse_file))
+    low_info = (
+        "Write the low-quality sequences to file: {}"
+        .format(tru_file))
+    logging.info(merge_info)
     pseudos_list, pseu_type_num = merge_pseudo(pseudos)
-    Writer(outdir, prefix + "_Pre-pseudos_dna.fa", pseudos_list)
-    Writer(outdir, prefix + "_Pre-ORs_dna.fa", dna_list)
-    Writer(outdir, prefix + "_Pre-ORs_pro.fa", pro_list)
-    Writer(outdir, prefix + "_summary_cds.txt", summary_list)
-    Writer(outdir, prefix + "_truncated.txt", trunc_list)
+    logging.info(dna_info)
+    Writer(outdir, dna_file, dna_list)
+    logging.info(pro_info)
+    Writer(outdir, pro_file, pro_list)
+    logging.info(tru_info)
+    Writer(outdir, tru_file, trunc_list)
+    logging.info(sum_info)
+    Writer(outdir, sum_file, summary_list)
+    logging.info(pse_info)
+    Writer(outdir, pse_file, pseudos_list)
+    logging.info(low_info)
+    Writer(outdir, low_file, low_quality_list)
 
     # result write to log file
     num_cds = len(hmmout_seq)
     num_fun_OR = len(funcs)
     num_pse_OR = len(pseudos_list)
-    merge_pse_num = sum(pseunum) - num_pse_OR
+    num_low_OR = len(low_quality_list)
+    merge_pse_num = len(pseudos) - num_pse_OR
     length_cause_pseu = pseu_type_num['SHORT']
     insert_cause_pseu = pseu_type_num['INDEL']
     interr_cause_pseu = pseu_type_num['INTER']
-    cds = "\033[0;32m{}\033[0m OR fragments found by nhmmer.".format(num_cds)
-    funcdoc = "\033[1;32m{}\033[0m potential functional ORs were discover.".format(num_fun_OR)
-    pseudoc = "\033[1;32m{}\033[0m potential pseudogene ORs were discover.".format(num_pse_OR)
-    lengthpseo = ("\033[0;32m{}\033[0m pseudogenes cause by too short sequence length."
-                .format(length_cause_pseu))
-    insertpseo = ("\033[0;32m{}\033[0m pseudogenes cause by insert or delect base."
-                .format(insert_cause_pseu))
-    interrpseo = ("\033[0;32m{}\033[0m pseudogenes cause by contains termination codons."
-                .format(interr_cause_pseu))
-    mergedpseo = ("\033[0;32m{}\033[0m pseudogenes fragment were merged"
-                .format(merge_pse_num))
+    cds = (
+        "\033[0;32m{}\033[0m OR fragments found by nhmmer."
+        .format(num_cds))
+    funcdoc = (
+        "\033[1;32m{}\033[0m potential functional ORs were discover."
+        .format(num_fun_OR))
+    pseudoc = (
+        "\033[1;32m{}\033[0m potential pseudogene ORs were discover."
+        .format(num_pse_OR))
+    lengthpseo = (
+        "\033[0;32m{}\033[0m pseudogenes cause by too short sequence length."
+        .format(length_cause_pseu))
+    insertpseo = (
+        "\033[0;32m{}\033[0m pseudogenes cause by insert or delect base."
+        .format(insert_cause_pseu))
+    interrpseo = (
+        "\033[0;32m{}\033[0m pseudogenes cause by contains termination codons."
+        .format(interr_cause_pseu))
+    lowpseo = (
+        "\033[0;32m{}\033[0m low-quality sequences cause by contains \"N\"."
+        .format(num_low_OR))
+    mergedpseo = (
+        "\033[0;32m{}\033[0m pseudogenes fragment were merged"
+        .format(merge_pse_num))
     logging.info("###The result as follows###")
     logging.info(prefix + " processing completed")
     logging.info(cds)
@@ -1268,6 +1474,7 @@ def writer2file(outdir, prefix, funcs, pseudos, hmmout_seq, hmmout, trunc, pseun
     logging.info(lengthpseo)
     logging.info(insertpseo)
     logging.info(interrpseo)
+    logging.info(lowpseo)
     logging.info("###The program finish###")
 
 
@@ -1299,100 +1506,147 @@ def identify_filter(tm_list, nterms):
     return func, pseu, ptype
 
 
-@logfun
-def identity_writer(hitfile, outputdir, prefix, funcs, pseus, pasu_of_gap):
+def merge_pseudogene(hitfile, outputdir, pseus):
     """
     Functions:
-        identity_writer
-        IdentityFunc.py module writer
+        merge_pseudogene
+        Merge the pseudogenes sequences generated from step 2 and 3.
     Parameter:
         hitfile, OR sequence annotated from genome
         outputdir, Result save directory
-        prefix, output file prefix
-        funcs, functions olfactory receptor list
         pseus, pseudo gene olfactory receptor list
-        pasu_of_gap: number of pseudogene cause by 'GAP'
-    Return: None
+    Return: 
+        pseugenes list    
     """
-
-    func_file = os.path.join(outputdir, prefix + "_redundant_func_ORs.fasta")
-    pseu_file = os.path.join(outputdir, prefix + "_redundant_pseu_ORs.fasta")
-    with open(func_file, 'w') as funcf:
-        funcf.writelines(funcs)
-
     prepseu = hitfile[:-14] + "Pre-pseudos_dna.fa"
     if not os.path.exists(prepseu):
-        #raise FileNotExists(prepseu, outputdir)
-        open(prepseu, 'w').write('')
+        raise FileNotExists(prepseu, None)
     prepseu_list = ReadSampleFasta(prepseu)
-    prepseu_list = ['>'+k+v for k, v in prepseu_list]
-    with open(pseu_file, 'w') as pseuf:
-        prepseu_list.extend(pseus)
-        pseuf.writelines(prepseu_list)
-    func_OR_num = len(funcs)
-    pseu_OR_num = len(prepseu_list)
-    funcdoc = "\033[0;32m{}\033[0m functional ORs were discover.".format(func_OR_num)
-    pseudoc = "\033[0;32m{}\033[0m pseudogene ORs were discover.".format(pseu_OR_num)
-    gapdoc = ("\033[0;32m{}\033[0m pseudogenes cause by TM has gaps(more than {})."
-        .format(pasu_of_gap, TM_GAPS_TOTAL))
-    logging.info(funcdoc)
-    logging.info(pseudoc)
-    logging.info(gapdoc)
-    return func_file, pseu_file, prepseu
+    prepseu_list = [
+        '>'+k+v for k, v in prepseu_list if len(v.strip()) >= LENGTHLIMIT
+    ]
+    prepseu_list.extend(pseus)
+    return prepseu_list
 
 
-def unredundant(outputdir, prefix, func_file, pseu_file, hitdna, verbose):
+#@logfun
+#def identity_writer(hitfile, outputdir, prefix, funcs, pseus, pasu_of_gap):
+#    """
+#    Functions:
+#        identity_writer
+#        IdentityFunc.py module writer
+#    Parameter:
+#        hitfile, OR sequence annotated from genome
+#        outputdir, Result save directory
+#        prefix, output file prefix
+#        funcs, functions olfactory receptor list
+#        pseus, pseudo gene olfactory receptor list
+#        pasu_of_gap: number of pseudogene cause by 'GAP'
+#    Return: None
+#    """
+#
+#    pseu_file = os.path.join(outputdir, prefix + "_redundant_pseu_ORs.fasta")
+#    low_file = os.path.join(outputdir, prefix + "_redundant_low-quality.fasta")
+#
+#    prepseu = hitfile[:-14] + "Pre-pseudos_dna.fa"
+#    #if not os.path.exists(prepseu):
+#        #raise FileNotExists(prepseu, outputdir)
+#        #open(prepseu, 'w').write('')
+#    prepseu_list = ReadSampleFasta(prepseu)
+#    prepseu_list = ['>'+k+v for k, v in prepseu_list]
+#    with open(pseu_file, 'w') as pseuf:
+#        prepseu_list.extend(pseus)
+#        pseuf.writelines(prepseu_list)
+#    func_OR_num = len(funcs)
+#    pseu_OR_num = len(prepseu_list)
+#    funcdoc = "\033[0;32m{}\033[0m functional ORs were discover.".format(func_OR_num)
+#    pseudoc = "\033[0;32m{}\033[0m pseudogene ORs were discover.".format(pseu_OR_num)
+#    gapdoc = ("\033[0;32m{}\033[0m pseudogenes cause by TM has gaps(more than {})."
+#        .format(pasu_of_gap, TM_GAPS_TOTAL))
+#    logging.info(funcdoc)
+#    logging.info(pseudoc)
+#    logging.info(gapdoc)
+#    return pseu_file, low_file, prepseu
+
+def run_CDHIT(inputfile, outputfile, message, verbose):
     """
-    Function:
-        unredundant
-        sequence unredundance use CD-HIT
+    Function
+        run_CDHIT
+        excetw cd-hit program
     Parameter:
-        func_file, function olfactory file name.(Non redundant)
-        pseu_file, pseudogene olfactory file name.(Non redundant)
-        hitdna, Olfactory receptor DNA sequences file
-    Return: None
+        inputfile, input file path
+        outputfile, output file path
+        message, show message
+        verbose, show version message and exit [true]
+    Return None
     """
-
-    logging.info("Remove redundant functional protein sequences")
-    nonredun_func = os.path.join(outputdir, prefix+"_func_ORs_pro.fasta")
-    nonredun_dna = os.path.join(outputdir, prefix+"_func_ORs_dna.fasta")
-    funcomm = (CDHIT
-               + " -i " + func_file 
+    logging.info(message)
+    command = (CDHIT
+               + " -i " + inputfile
                + " -c 1.0 -T 0 -M 0"
-               + " -o " + nonredun_func
+               + " -o " + outputfile
               )
     if not verbose:
-        funcomm += ' > /dev/null'
-    os.system(funcomm)
+        command += ' > /dev/null'
+    excuteCommand(args=command, shell=True)
+    
 
-    logging.info("Remove redundant functional DNA sequences")
-    # find and write functin ORs dna to file
-    dnaseqs = ReadSampleFasta(hitdna)
-    dnadict = dict(dnaseqs) 
-    funcseqs = ReadSampleFasta(nonredun_func)
-    funcdnas = ['>'+n+dnadict[n] for n, _ in funcseqs]
-    with open(nonredun_dna, 'w') as outf:
-        outf.writelines(funcdnas)
 
-    logging.info("Remove redundant pseudogene sequences, DNA only")
-    nonredun_pseu = os.path.join(outputdir, prefix+"_pseu_ORs.fasta")
-    pseucomm = (CDHIT 
-                + " -i " + pseu_file 
-                + " -c 1.0 -T 0 -M 0"
-                + " -o " + nonredun_pseu
-               )
-    if not verbose:
-        pseucomm += ' > /dev/null'
-    os.system(pseucomm)
-    func = ReadSampleFasta(nonredun_func)
-    pseu = ReadSampleFasta(nonredun_pseu)
-    logging.info('Eventually \033[1;32m{}\033[0m '.format(len(func))
-                 + 'functional olfactory receptors were discovered'
-                )
-    logging.info('Eventually \033[1;32m{}\033[0m '.format(len(pseu))
-                 + 'pseudogenes gene were discovered'
-                )
-    # unredund use CD-HIT tool
+#def unredundant(outputdir, prefix, func_file, pseu_file, hitdna, verbose):
+#    """
+#    Function:
+#        unredundant
+#        sequence unredundance use CD-HIT
+#    Parameter:
+#        func_file, function olfactory file name.(Non redundant)
+#        pseu_file, pseudogene olfactory file name.(Non redundant)
+#        hitdna, Olfactory receptor DNA sequences file
+#    Return: None
+#    """
+#
+#    logging.info("Remove redundant functional protein sequences")
+#    nonredun_func = os.path.join(outputdir, prefix+"_func_ORs_pro.fasta")
+#    nonredun_dna = os.path.join(outputdir, prefix+"_func_ORs_dna.fasta")
+#    funcomm = (CDHIT
+#               + " -i " + func_file 
+#               + " -c 1.0 -T 0 -M 0"
+#               + " -o " + nonredun_func
+#              )
+#    if not verbose:
+#        funcomm += ' > /dev/null'
+#    excuteCommand(args=funcomm, shell=True)
+#
+#    logging.info("Remove redundant functional DNA sequences")
+#    # find and write functin ORs dna to file
+#    dnaseqs = ReadSampleFasta(hitdna)
+#    dnadict = dict(dnaseqs) 
+#    funcseqs = ReadSampleFasta(nonredun_func)
+#    funcdnas = ['>'+n+dnadict[n] for n, _ in funcseqs]
+#    with open(nonredun_dna, 'w') as outf:
+#        outf.writelines(funcdnas)
+#
+#    logging.info("Remove redundant pseudogene sequences, DNA only")
+#    nonredun_pseu = prefix+"_pseu_ORs.fasta"
+#    nonredun_pseu = os.path.join(outputdir, nonredun_pseu)
+#    pseucomm = (CDHIT 
+#                + " -i " + pseu_file 
+#                + " -c 1.0 -T 0 -M 0"
+#                + " -o " + nonredun_pseu
+#               )
+#    if not verbose:
+#        pseucomm += ' > /dev/null'
+#    excuteCommand(args=pseucomm, shell=True)
+#    func = ReadSampleFasta(nonredun_func)
+#    pseu = ReadSampleFasta(nonredun_pseu)
+#    logging.info(
+#        'Eventually \033[1;32m{}\033[0m '.format(len(func))
+#        + 'functional olfactory receptors were discovered'
+#    )
+#    logging.info(
+#        'Eventually \033[1;32m{}\033[0m '.format(len(pseu))
+#        + 'pseudogenes gene were discovered'
+#    )
+#    # unredund use CD-HIT tool
 
 
 def merge_pseudo(pseudos):
@@ -1576,13 +1830,200 @@ def chmod(path):
         logging.error(path + " not exists!")
         sys.exit()
     elif os.path.isfile(path):
-        os.chmod(path, stat.S_IRWXO + stat.S_IRWXG + stat.S_IRWXU)
+        os.chmod(
+            path, stat.S_IRWXO
+            + stat.S_IRWXG
+            + stat.S_IRWXU
+        )
     elif os.path.isdir(path):
         for _file in os.listdir(path):
-            os.chmod(_file, stat.S_IRWXO + stat.S_IRWXG + stat.S_IRWXU)
+            os.chmod(
+                _file, stat.S_IRWXO
+                + stat.S_IRWXG
+                + stat.S_IRWXU
+            )
     else:
         logging.info("chmod() nothing to do.")
 
 
+def countSeq(inpath):
+    """
+    Function:
+        Count the number of sequences
+    Parameter:
+        inpath, str, the path of sequence file
+    Return:
+        count, int, the number of sequence
+    """
+    with open(inpath) as openf:
+        readf = openf.read()
+    count = readf.count(">")
+    return count
+
+
+def printSummary(pseupath, funcpath, lowpath, truncpath):
+    npseu = countSeq(pseupath)
+    nfunc = countSeq(funcpath)
+    nlow = countSeq(lowpath)
+    with open(truncpath) as truncf:
+        ntrunc = len(truncf.readlines())
+    ntrunc -= 1 # not count head line
+    ntotal = npseu + nfunc
+    ratio = round(npseu / ntotal, 5)
+    
+    summary, s, gap = "SUMMARY", "-", 4
+    counter = [nfunc, npseu, ntotal, ratio, nlow, ntrunc]
+    header = [
+        "#Functional", "#Pseudogenes", 
+        "#Total ORs", "Pseudogene ratio", 
+        "#Low quality", "#Truncated"
+    ]
+    
+    hlen = [len(h) for h in header]
+    clen = [len(str(c)) for c in counter]
+    sep = [max(h, c)+gap for h, c in zip(hlen, clen)]
+    
+    sys.stdout.write("\n")
+    sys.stdout.write(
+        f"+{s*(sum(sep)+5)}+\n"
+    )
+    sys.stdout.write(
+        f"|{summary:^{sum(sep)+5}s}|\n"
+    )
+    sys.stdout.write(
+        f"|{s*sep[0]}+{s*sep[1]}+{s*sep[2]}"
+        + f"+{s*sep[3]}+{s*sep[4]}+{s*sep[5]}|\n"
+    )
+    sys.stdout.write(
+        f"|{header[0]:^{sep[0]}s}|{header[1]:^{sep[1]}s}"
+        + f"|{header[2]:^{sep[2]}s}|{header[3]:^{sep[3]}s}"
+        + f"|{header[4]:^{sep[4]}s}|{header[5]:^{sep[5]}s}|\n"
+    )
+    sys.stdout.write(
+        f"|{s*sep[0]}+{s*sep[1]}+{s*sep[2]}"
+        + f"+{s*sep[3]}+{s*sep[4]}+{s*sep[5]}|\n"
+    )
+    sys.stdout.write(
+        f"|{counter[0]:^{sep[0]}d}|{counter[1]:^{sep[1]}d}"
+        + f"|{counter[2]:^{sep[2]}d}|{counter[3]:^{sep[3]}.2%}"
+        + f"|{counter[4]:^{sep[4]}d}|{counter[5]:^{sep[5]}d}|\n"
+    )
+    sys.stdout.write(
+        f"+{s*sep[0]}+{s*sep[1]}+{s*sep[2]}"
+        + f"+{s*sep[3]}+{s*sep[4]}+{s*sep[5]}+\n"
+    )
+    sys.stdout.write("\n")
+    
+
+
+def existsDirectory(dirpath):
+    """
+    Function:
+        Check if the directory path exists, \
+        and create the directory if it doesn't exist.
+    Parameter:
+        dirpath, Specified directory path.
+    
+    """
+    if not os.path.exists(dirpath):
+        os.mkdir(dirpath)
+
+
+def parseNhmmerOut(instr):
+    """
+    Function:
+        Simplify the output of the nhmmer program.
+    Parameter:
+        instr, str, output of nhmmer program.
+    """
+    # Text in the output of the nhmmer program
+    division = "Internal pipeline statistics summary:"
+    pattern = "Query: .*" + division
+    output = re.sub(
+        pattern,
+        division,
+        instr,
+        flags=re.DOTALL
+    )
+    
+    return output.strip()
+
+
+def removeSuffixFile(indir, suffix):
+    """
+    Function:
+        Delete all files with a specified \
+        suffix in the specified directory
+    Parameter:
+        indir, Specified directory path.
+        suffix, Specified suffix name.
+    """
+    for _file in os.listdir(indir):
+        if not _file.endswith(suffix):
+            continue
+        remove_path = os.path.join(
+            indir,
+            _file
+        )
+        os.remove(remove_path)
+
+
+def excuteCommand(args, pipe=None, shell=False):
+    """
+    Function:
+        excute system command
+    Parameter:
+        args, a list, command list
+    """
+    excute_cmd = Popen(
+        args=args,
+        bufsize= -1,
+        stdin=pipe,
+        stdout=pipe,
+        stderr=pipe,
+        shell=shell,
+    )
+    outext, _ = excute_cmd.communicate()
+    excute_cmd.wait()
+    return (
+        excute_cmd.returncode,
+        outext.decode() if outext else None,
+    )
+
+
+def getCpus(ncpus):
+    """
+    Function:
+        Get the number of CPU cores, with 0, 
+        all CPUs will be used.
+    Return:
+        ncpus, number of cpu cores
+    """
+    try:
+        ncpus = int(ncpus)
+    except ValueError:
+        ncpus = int(cpu_count() * 2 / 3)
+    if ncpus < 1:
+        ncpus = int(cpu_count())
+    return ncpus
+
+
+def boolean_string(s):
+    """
+    Function:
+        Convert string to boolean
+    Parameter:
+        s, string
+    Return:
+        bool, True/False
+    """
+    s = s.capitalize()
+    if s not in {"False", "True"}:
+        raise ValueError("Not a vaild boolean string")
+    return s == "True"
+
+
 if __name__ == "__main__":
     platform_info(True)
+
+

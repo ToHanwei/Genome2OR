@@ -1,9 +1,0 @@
-#!/bin/bash 
-#BSUB -J Actinopteri_250
-#BSUB -e Actinopteri_250.err      
-#BSUB -o Actinopteri_250.out
-#BSUB -q zhaolabcpu
-#BSUB -n 36  
-#BSUB -m c008
-
-python batch.py ../template/Actinopteri.hmm /public/database/genome/fishes Actinopteri_nhmm Actinopteri_find_250 Actinopteri_iden_250 -l 750 -e 1e-20 -c 36 -v 

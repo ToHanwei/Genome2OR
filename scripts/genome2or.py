@@ -5,11 +5,12 @@ import sys
 import logging
 
 from src.config import PYTHON
+from src.config import NHMMER
+from src.config import CDHIT
+from src.config import MAFFT
 from src.config import HMMBUILD
-from src.config import ITERDOC
-from src.config import ITERATION_MESSAGE
+from src.config import GENOME2OR_MESSAGE
 from src.ParseArgs import ParseCommand
-from src.Functions import logfun
 from src.Functions import logger
 from src.Functions import chmod
 from src.Functions import getCpus
@@ -27,15 +28,13 @@ def CommandParse():
     Parse command line
     """
     Parse = ParseCommand()
-    args = Parse.Iteraparse()
+    args = Parse.genome2or()
     # profile nhmmer need(hmm, [un]alignment file)
     pofile = args.profile
     # output dir
     outdir = args.outputdir
     # genomic data file
     genome = args.genome
-    # number of iteration
-    itera = args.iteration
     # number of parallel CPU workers to use
     cpus = args.cpus
     keepfile = str(args.keepfile)
@@ -49,9 +48,9 @@ def CommandParse():
     SeqLengthLimit = str(args.SeqLengthLimit)
     return (
         pofile, outdir, genome,
-        itera, cpus, prefix,
-        verbose, EvalueLimit,
-        SeqLengthLimit, keepfile
+        cpus, prefix, verbose, 
+        EvalueLimit, keepfile,
+        SeqLengthLimit
     )
 
 
@@ -101,42 +100,34 @@ def CommanRun(
     identify.run()
     return dnafile
 
-@logfun
-def constru_hmm(dnafile):
-    prefix = os.path.splitext(dnafile)[0]
-    alignf = prefix + '.msa'
-    hmmfile = prefix + '.hmm'
-    sequence_align(dnafile, alignf)
-    command = [HMMBUILD, hmmfile, alignf]
-    excuteCommand(command)
-    return hmmfile
-
 
 def main():
 
-    sys.stdout.write(ITERATION_MESSAGE)
-
-    # correct input error
+    sys.stdout.write(GENOME2OR_MESSAGE)
+    
     if len(sys.argv) == 1:
         sys.argv.append("-h")
-
+    
     # get comandlines
     (
         pofile, outdir, genome,
-        itera, cpus, prefix,
-        verbose, EvalueLimit,
-        SeqLengthLimit, keepfile
+        cpus, prefix, verbose, 
+        EvalueLimit, keepfile,
+        SeqLengthLimit
     ) = CommandParse()
 
     # open logging
-    logger('Iterative annotation')
+    logger('genome2or')
 
     # change tool permission
     chmod(HMMBUILD)
+    chmod(NHMMER)
+    chmod(MAFFT)
+    chmod(CDHIT)
 
     # check platform
     platform_info(verbose)
-    
+
     # check CPU cores
     cpus = getCpus(cpus)
     cpus = str(cpus)
@@ -145,25 +136,18 @@ def main():
     # and create the directory if it doesn't exist.
     existsDirectory(outdir)
 
-    # iteration runing
-    hmmfile = pofile
-    for _iter in range(1, itera+1):
-        sys.stdout.write(ITERDOC.format(_iter))
-        prefix_i = prefix + '_itera' + str(_iter)
-        dnafile = CommanRun(
-            hmmfile,
-            outdir,
-            prefix_i,
-            genome,
-            cpus,
-            verbose,
-            EvalueLimit,
-            SeqLengthLimit,
-            keepfile
-        )
-        if _iter < itera:
-            logging.info('Iteration {} construct HMM profile'.format(_iter))
-            hmmfile = constru_hmm(dnafile)
+    # main runing
+    dnafile = CommanRun(
+        pofile,
+        outdir,
+        prefix,
+        genome,
+        cpus,
+        verbose,
+        EvalueLimit,
+        SeqLengthLimit,
+        keepfile
+    )
     logging.info("###The Iteration.py has completed.###\n")
 
 

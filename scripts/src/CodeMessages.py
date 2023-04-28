@@ -51,71 +51,89 @@ and {1} is 'DNA' sequence FASTA file.
 Place check!
 """
 
+profile_error = """
+\033[1;31mProfile Error\033[0m
+The {0} option is incorrect. You can choose one of "Actinopteri", "Amphibia", "Aves", "Branchiostoma_floridae", "Chondrichthyes", "Cladistia", "Coelacanthimorpha", "Crocodylia", "Hyperoartia", "Lepidosauria", "Mammalia", "Myxini", "Reptiles", "Testudines", or provide the path to a better HMM profile file. However, we do not generally recommend doing so unless there is no corresponding option for the species you need to annotate in the list we provide. If you are sure that you have entered a file path, please check if the path is correct.
+"""
+
+
 class StrandError(Exception):
 
-	def __init__(self, sing):
-		self.sing = sing
+    def __init__(self, sing):
+        self.sing = str(sing) + "\n"
 
-	def __str__(self):
-		return standmes.format(self.sing)
+    def __str__(self):
+        return standmes.format(self.sing)
 
 
 class LengthError(Exception):
 
-	def __init__(self, length):
-		self.length = length
+    def __init__(self, length):
+        self.length = str(length)+"\n"
 
-	def __str__(self):
-		return lengthmes.format(self.length)
+    def __str__(self):
+        return lengthmes.format(self.length)
 
 
 class PlatformError(Exception):
 
-	def __init__(self, system):
-		self.system = system
+    def __init__(self, system):
+        self.system = str(system) + "\n"
 
-	def __str__(self):
-		return platformmes.format(self.system)
+    def __str__(self):
+        return platformmes.format(self.system)
 
 
 class VersionWarning(Exception):
 
-	def __init__(self, version):
-		self.version = str(version)
+    def __init__(self, version):
+        self.version = str(version) + "\n"
 
-	def __str__(self):
-		return versionmes.format(self.version)
+    def __str__(self):
+        return versionmes.format(self.version)
 
 
 class FastaFormatError(Exception):
 
-	def __init__(self, word):
-		self.word = word
+    def __init__(self, word):
+        self.word = str(word) + "\n"
 
-	def __str__(self):
-		return fastaerror.format(self.word)
+    def __str__(self):
+        return fastaerror.format(self.word)
 
 
 class NtermError(Exception):
 
-	def __str__(self):
-		return ntermerror
+    def __str__(self):
+        return ntermerror
 
 
 class FileNotExists(Exception):
 
-	def __init__(self, filen, dirname):
-		self.filen = filen
-		self.dirname = dirname
+    def __init__(self, filen, dirname):
+        self.filen = filen
+        self.dirname = dirname
 
-	def __str__(self):
-		return file_error.format(self.filen, self.dirname)
+    def __str__(self):
+        if self.dirname is None:
+            self.dirname = "Working"
+        return file_error.format(self.filen, self.dirname)
 
 class FileStypeError(Exception):
 
-	def __init__(self, hitpro, hitdna):
-		self.hitpro = hitpro
-		self.hitdna = hitdna
+    def __init__(self, hitpro, hitdna):
+        self.hitpro = hitpro
+        self.hitdna = hitdna
 
-	def __str__(self):
-		return file_stype_error.format(self.hitpro, self.hitdna)
+    def __str__(self):
+        return file_stype_error.format(self.hitpro, self.hitdna)
+
+class ProfileError(Exception):
+
+    def __init__(self, path):
+        self.path = path
+
+    def __str__(self):
+        return profile_error.format(self.path)
+
+

@@ -1,5 +1,5 @@
-HMMER3/f [3.2.1 | June 2018]
-NAME  Identity_func_ORs_Mammalia_0.7_dna_cut
+MAMMALIA_HMM_STRING = """HMMER3/f [3.2.1 | June 2018]
+NAME  Mammalia_HMM_profile
 LENG  930
 MAXL  1007
 ALPH  DNA
@@ -2811,3 +2811,4 @@ HMM          A        C        G        T
           1.38629  1.38629  1.38629  1.38629
           0.00122  6.71157        *  1.46634  0.26236  0.00000        *
 //
+"""
