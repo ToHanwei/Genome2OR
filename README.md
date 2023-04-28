@@ -6,10 +6,7 @@ Annotate Olfactory receptor CDS from genome
 ## Contents Index
 * [Cite](#cite)
 * [Abstract](#abstract)
-* [Quick start](#quick-start)
-* [Download script](#download-script)
-* [Usage](#usage)
-* [Example](#example)
+* [Installation](#installation)
 * [Contact us](#contact-us)
 
 ## Cite
