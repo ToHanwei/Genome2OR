@@ -60,8 +60,10 @@ usage: genome2or.py [-h] [-e] [-l] [-c] [-p] [-k] [-v] [-V] profile outputdir ge
 Annotating Olfactory Receptor Genes in Vertebrate Genomes in One Step.
 
 positional arguments:
-  profile               Select an HMM profile for the annotated species from the following options: 		   						 "Actinopteri", "Amphibia", "Aves", "Branchiostoma_floridae", "Chondrichthyes", 							"Cladistia", "Coelacanthimorpha", "Crocodylia", "Hyperoartia", "Lepidosauria", 								"Mammalia", "Myxini", "Reptiles", "Testudines".
-                        Alternativa, provide the path to a HMM profile file. However, we do not generally 							recommend doing so unless there is no corresponding option for the species you need 						to annotate in the list we provide.
+  profile               Select an HMM profile for the annotated species from the following options: "Actinopteri", "Amphibia", "Aves", "Branchiostoma_floridae",
+                        "Chondrichthyes", "Cladistia", "Coelacanthimorpha", "Crocodylia", "Hyperoartia", "Lepidosauria", "Mammalia", "Myxini", "Reptiles", "Testudines".
+                        Alternativa, provide the path to a HMM profile file. However, we do not generally recommend doing so unless there is no corresponding option for the
+                        species you need to annotate in the list we provide.
   outputdir             String. Directory path where the output files are stored.[default:Current directory]
   genome                String. File path of the genome to be annotated.
 
@@ -103,8 +105,10 @@ usage: Iteration.py [-h] [-i] [-e] [-l] [-c] [-p] [-k] [-v] [-V] profile outputd
 Iterative annotation of olfactory receptor genes in the genome.
 
 positional arguments:
-  profile               Select an HMM profile for the annotated species from the following options: 								"Actinopteri", "Amphibia", "Aves", "Branchiostoma_floridae", "Chondrichthyes", 								"Cladistia", "Coelacanthimorpha", "Crocodylia", "Hyperoartia", "Lepidosauria", 								"Mammalia", "Myxini", "Reptiles", "Testudines".
-                        Alternativa, provide the path to a HMM profile file. However, we do not generally 							recommend doing so unless there is no corresponding option for the species you need 						to annotate in the list we provide.
+  profile               Select an HMM profile for the annotated species from the following options: "Actinopteri", "Amphibia", "Aves", "Branchiostoma_floridae",
+                        "Chondrichthyes", "Cladistia", "Coelacanthimorpha", "Crocodylia", "Hyperoartia", "Lepidosauria", "Mammalia", "Myxini", "Reptiles", "Testudines".
+                        Alternativa, provide the path to a HMM profile file. However, we do not generally recommend doing so unless there is no corresponding option for the
+                        species you need to annotate in the list we provide.
   outputdir             String. Directory path where the output files are stored.[default:Current directory]
   genome                String. File path of the genome to be annotated.
 
