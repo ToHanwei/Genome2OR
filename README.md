@@ -135,7 +135,7 @@ For batch annotation, you can use the following simple shell script to achieve i
 ```bash
 GenomeDir="Path to the directory where you store your genome"
 for genome in `ls $GenomeDir`; do
-	genome2or Actinopteri outputdir $genome -e 1e-10 -c 4 -p ${genome%.*}
+	genome2or Actinopteri outputdir $GenomeDir/$genome -e 1e-10 -c 4 -p ${genome%.*}
 done
 ```
 
@@ -146,7 +146,7 @@ Or you want to use iterations for batch annotation.
 ```bash
 GenomeDir="Path to the directory where you store your genome"
 for genome in `ls $GenomeDir`; do
-	Iteration Actinopteri outputdir $genome -i 3 -e 1e-10 -c 4 -p ${genome%.*}
+	Iteration Actinopteri outputdir $GenomeDir/$genome -i 3 -e 1e-10 -c 4 -p ${genome%.*}
 done
 ```
 
